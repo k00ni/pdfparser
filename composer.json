@@ -4,8 +4,15 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Prinsfrank\\Pdfparser\\": "src/"
+            "Prinsfrank\\PdfParser\\": "src/"
         }
     },
-    "require": {}
+    "autoload-dev": {
+        "psr-4": {
+            "PrinsFrank\\PdfParser\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    }
 }
