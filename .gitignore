@@ -1,0 +1,6 @@
+# Composer
+/vendor/
+composer.lock
+
+# Sample files
+/_samples/pdf/*

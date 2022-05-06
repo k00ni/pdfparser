@@ -1,0 +1,11 @@
+{
+    "name": "prinsfrank/pdfparser",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Prinsfrank\\Pdfparser\\": "src/"
+        }
+    },
+    "require": {}
+}
