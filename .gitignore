@@ -2,5 +2,8 @@
 /vendor/
 composer.lock
 
+# PHPUnit
+.phpunit.result.cache
+
 # Sample files
 /_samples/pdf/*
