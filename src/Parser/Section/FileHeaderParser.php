@@ -9,7 +9,7 @@ use PrinsFrank\PdfParser\Enum\Version;
 use PrinsFrank\PdfParser\Exception\UnsupportedFileFormatException;
 use PrinsFrank\PdfParser\Exception\UnsupportedPdfVersionException;
 
-class FileHeaderParser implements SectionParser
+class FileHeaderParser
 {
     /**
      * @throws UnsupportedFileFormatException

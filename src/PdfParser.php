@@ -16,9 +16,9 @@ final class PdfParser
     public function parse(string $fileContent): Document
     {
         $document = new Document($fileContent);
-        foreach ([FileHeaderParser::class, TrailerSectionParser::class] as $parserFQN) {
-            $parserFQN::parse($document);
-        }
+
+        FileHeaderParser::parse($document);
+        TrailerSectionParser::parse($document);
 
         return $document;
     }

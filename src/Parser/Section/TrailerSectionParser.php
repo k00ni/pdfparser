@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Parser\Section;
 
 use PrinsFrank\PdfParser\Document\Document;
-use PrinsFrank\PdfParser\Document\Trailer;
+use PrinsFrank\PdfParser\Document\Trailer\Trailer;
 use PrinsFrank\PdfParser\Enum\Marker;
 use PrinsFrank\PdfParser\Exception\MarkerNotFoundException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
@@ -18,7 +18,7 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
  * trailer followed by a series of key-value pairs enclosed in double angle brackets (<<...>>) (using LESS-THAN SIGNs
  * (3ch) and GREATER-THAN SIGNs (3Eh)).
  */
-class TrailerSectionParser implements SectionParser
+class TrailerSectionParser
 {
     /**
      * @throws MarkerNotFoundException
