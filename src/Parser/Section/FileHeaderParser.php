@@ -21,7 +21,7 @@ class FileHeaderParser implements SectionParser
             throw new UnsupportedFileFormatException();
         }
 
-        $versionString = mb_substr($document->content, mb_strlen(Marker::VERSION->value), Version::length());
+        $versionString = substr($document->content, strlen(Marker::VERSION->value), Version::length());
         $version = Version::tryFrom($versionString);
         if ($version === null) {
             throw new UnsupportedPdfVersionException($versionString);
