@@ -8,15 +8,15 @@ use PrinsFrank\PdfParser\Enum\Version;
 final class Document
 {
     public readonly string $content;
-    public readonly int $fileLength;
+    public readonly int    $contentLength;
 
     public readonly Version $version;
     public readonly Trailer $trailer;
 
     public function __construct(string $content)
     {
-        $this->content = $content;
-        $this->fileLength = strlen($content);
+        $this->content       = $content;
+        $this->contentLength = strlen($content);
     }
 
     public function setTrailer(Trailer $trailer): void
