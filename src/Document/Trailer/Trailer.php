@@ -11,10 +11,10 @@ use PrinsFrank\PdfParser\Document\Document;
  */
 final class Trailer
 {
-    private readonly Document $document;
-    private readonly int      $eofMarkerPos;
-    private readonly int      $startXrefMarkerPos;
-    private readonly int      $byteOffsetLastCrossReferenceSection;
+    public readonly Document $document;
+    public readonly int      $eofMarkerPos;
+    public readonly int      $startXrefMarkerPos;
+    public readonly int      $byteOffsetLastCrossReferenceSection;
 
     public function __construct(Document $document)
     {

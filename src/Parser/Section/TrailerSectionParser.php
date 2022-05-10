@@ -46,6 +46,7 @@ class TrailerSectionParser
         }
         $trailer->setByteOffsetLastCrossReferenceSection((int) $byteOffsetLastCrossReferenceSection);
 
+        FileTrailerDictionaryParser::parse($trailer);
         $document->setTrailer($trailer);
     }
 }
