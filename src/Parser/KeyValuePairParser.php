@@ -3,54 +3,95 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Parser;
 
-use PrinsFrank\PdfParser\Enum\DictionaryKey;
-
 class KeyValuePairParser
 {
+    private const CONTEXT_ROOT                = 0;
+    private const CONTEXT_KEY                 = 1;
+    private const CONTEXT_KEY_VALUE_SEPARATOR = 2;
+    private const CONTEXT_VALUE               = 3;
+
     public static function parse(string $content): array
     {
         $keyValuePairs = [];
-        $buffer = $key = '';
         $depth = 0;
-        $inKey = false;
+        $valueBuffer = $keyBuffer = [$depth => ''];
+        $context = [$depth =>self::CONTEXT_ROOT];
+        $previousChar = null;
         foreach (str_split($content) as $char) {
+            $codePointChar = ord($char);
             if ($char === '/') {
-                if ($inKey === true && trim($key) !== '') {
-                    $keyValuePairs[$key] = true;
-                } else if (trim($key) !== '') {
-                    $keyValuePairs[$key] = trim($buffer);
+                if ($context[$depth] === self::CONTEXT_ROOT) {
+                    $context[$depth] = self::CONTEXT_KEY;
+                } elseif ($context[$depth] === self::CONTEXT_KEY) {
+                    $valueBuffer[$depth] = '';
+                    $context[$depth] = self::CONTEXT_VALUE;
+                } elseif ($context[$depth] === self::CONTEXT_VALUE) {
+                    $keyValuePairs = static::assignNested($keyValuePairs, $depth, $keyBuffer, $valueBuffer);
+                    $keyBuffer[$depth] = '';
+                    $valueBuffer[$depth] = '';
+                    $context[$depth] = self::CONTEXT_KEY;
                 }
-
-                $buffer = '';
-                $inKey = true;
-                $key = '';
-            } else if ($inKey === true && ctype_alpha($char) === false) {
-                $buffer = $char;
-                $inKey = false;
-            } else if ($inKey === true) {
-                $key .= $char;
-            } else {
-                $buffer .= $char;
+            } else if ($context[$depth] === self::CONTEXT_KEY && (($codePointChar >= 65 && $codePointChar <= 90) || ($codePointChar >= 97 && $codePointChar <= 122)) === false) {
+                $context[$depth] = self::CONTEXT_KEY_VALUE_SEPARATOR;
+            } else if ($context[$depth] === self::CONTEXT_KEY_VALUE_SEPARATOR) {
+                $context[$depth] = self::CONTEXT_VALUE;
             }
 
-            if (str_ends_with($buffer, '<<')) {
+            if ($char === '<' && $previousChar === '<') {
                 $depth++;
-                $buffer = '';
-
-                continue;
+                $valueBuffer[$depth] = '';
+                $keyBuffer[$depth] = '';
+                $context[$depth] = self::CONTEXT_ROOT;
             }
 
-            if (str_ends_with($buffer, '>>')) {
+            if ($char === '>' && $previousChar === '>') {
+                $keyValuePairs = static::assignNested($keyValuePairs, $depth, $keyBuffer, $valueBuffer);
+                unset($valueBuffer[$depth], $keyBuffer[$depth], $context[$depth]);
                 $depth--;
-                $keyValuePairs[$key] = trim($buffer);
-                $buffer = '';
-
-                continue;
             }
 
-            echo '(' . $char . ', ' . $depth . ', Inkey: ' . ($inKey === true ? 'true' : 'false' ) .'), ' . $buffer . ', Key buffer: "' .  $key . '"' . PHP_EOL;
+            switch ($context[$depth]) {
+                case self::CONTEXT_KEY:
+                    $keyBuffer[$depth] .= $char;
+                    break;
+                case self::CONTEXT_VALUE:
+                case self::CONTEXT_KEY_VALUE_SEPARATOR:
+                    $valueBuffer[$depth] .= $char;
+                    break;
+            }
+
+            $previousChar = $char;
         }
 
+        if (trim($valueBuffer[$depth]) !== '' && trim($keyBuffer[$depth]) !== '') {
+            $keyValuePairs = static::assignNested($keyValuePairs, $depth, $keyBuffer, $valueBuffer);
+        }
+
+        return $keyValuePairs;
+    }
+
+    private static function assignNested(mixed $keyValuePairs, int $depth, array $keyBuffer, array $valueBuffer)
+    {
+        $currentKey = trim($keyBuffer[$depth]);
+        $value = trim($valueBuffer[$depth], " \t\n\r\0\x0B<>");
+        if ($value === '' || $currentKey === '') {
+            return $keyValuePairs;
+        }
+
+        if ($depth === 1) {
+            $keyValuePairs[$currentKey] = $value;
+
+            return $keyValuePairs;
+        }
+
+        $pointer = &$keyValuePairs;
+        $pointerDepth = 1;
+        while ($pointerDepth < $depth) {
+            $pointer = &$keyValuePairs[trim($keyBuffer[$pointerDepth])];
+            $pointerDepth++;
+        }
+
+        $pointer[$currentKey] = $value;
         return $keyValuePairs;
     }
 }
