@@ -24,7 +24,7 @@ class TrailerSectionParser
      * @throws MarkerNotFoundException
      * @throws ParseFailureException
      */
-    public static function parse(Document $document): void
+    public static function parse(Document $document): Trailer
     {
         $trailer = new Trailer($document);
 
@@ -46,7 +46,6 @@ class TrailerSectionParser
         }
         $trailer->setByteOffsetLastCrossReferenceSection((int) $byteOffsetLastCrossReferenceSection);
 
-        FileTrailerDictionaryParser::parse($trailer);
-        $document->setTrailer($trailer);
+        return $trailer;
     }
 }

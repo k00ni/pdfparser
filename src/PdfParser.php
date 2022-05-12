@@ -5,7 +5,8 @@ namespace PrinsFrank\PdfParser;
 
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
-use PrinsFrank\PdfParser\Parser\Section\FileHeaderParser;
+use PrinsFrank\PdfParser\Parser\Section\CrossReferenceTableParser;
+use PrinsFrank\PdfParser\Parser\Section\VersionParser;
 use PrinsFrank\PdfParser\Parser\Section\TrailerSectionParser;
 
 final class PdfParser
@@ -17,9 +18,8 @@ final class PdfParser
     {
         $document = new Document($fileContent);
 
-        FileHeaderParser::parse($document);
-        TrailerSectionParser::parse($document);
-
-        return $document;
+        return $document->setVersion(VersionParser::parse($document))
+            ->setTrailer(TrailerSectionParser::parse($document))
+            ->setCrossReferenceTable(CrossReferenceTableParser::parse($document));
     }
 }

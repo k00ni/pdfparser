@@ -9,13 +9,13 @@ use PrinsFrank\PdfParser\Enum\Version;
 use PrinsFrank\PdfParser\Exception\UnsupportedFileFormatException;
 use PrinsFrank\PdfParser\Exception\UnsupportedPdfVersionException;
 
-class FileHeaderParser
+class VersionParser
 {
     /**
      * @throws UnsupportedFileFormatException
      * @throws UnsupportedPdfVersionException
      */
-    public static function parse(Document $document): void
+    public static function parse(Document $document): Version
     {
         if (str_starts_with($document->content, Marker::VERSION->value) === false) {
             throw new UnsupportedFileFormatException();
@@ -27,6 +27,6 @@ class FileHeaderParser
             throw new UnsupportedPdfVersionException($versionString);
         }
 
-        $document->setVersion($version);
+        return $version;
     }
 }
