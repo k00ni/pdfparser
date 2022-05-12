@@ -5,10 +5,14 @@ namespace PrinsFrank\PdfParser\Tests\Feature;
 
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Enum\Version;
+use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\PdfParser;
 
 class ParsedResultTest extends TestCase
 {
+    /**
+     * @throws PdfParserException
+     */
     public function testSimpleDocument(): void
     {
         $parser = new PdfParser();
@@ -17,6 +21,9 @@ class ParsedResultTest extends TestCase
         static::assertEquals(Version::V1_5, $parsedDocument->version);
     }
 
+    /**
+     * @throws PdfParserException
+     */
     public function testVeryBigDocument(): void
     {
         $parser = new PdfParser();

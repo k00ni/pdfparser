@@ -1,18 +1,21 @@
 <?php
 declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Parser;
+namespace PrinsFrank\PdfParser\Parser\Dictionary;
 
-class KeyValuePairParser
+use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryFactory;
+
+class DictionaryParser
 {
     private const CONTEXT_ROOT                = 0;
     private const CONTEXT_KEY                 = 1;
     private const CONTEXT_KEY_VALUE_SEPARATOR = 2;
     private const CONTEXT_VALUE               = 3;
 
-    public static function parse(string $content): array
+    public static function parse(string $content): Dictionary
     {
-        $keyValuePairs = [];
+        $dictionaryArray = [];
         $depth = 0;
         $valueBuffer = $keyBuffer = [$depth => ''];
         $context = [$depth =>self::CONTEXT_ROOT];
@@ -26,7 +29,7 @@ class KeyValuePairParser
                     $valueBuffer[$depth] = '';
                     $context[$depth] = self::CONTEXT_VALUE;
                 } elseif ($context[$depth] === self::CONTEXT_VALUE) {
-                    $keyValuePairs = static::assignNested($keyValuePairs, $depth, $keyBuffer, $valueBuffer);
+                    $dictionaryArray = static::assignNested($dictionaryArray, $depth, $keyBuffer, $valueBuffer);
                     $keyBuffer[$depth] = '';
                     $valueBuffer[$depth] = '';
                     $context[$depth] = self::CONTEXT_KEY;
@@ -45,7 +48,7 @@ class KeyValuePairParser
             }
 
             if ($char === '>' && $previousChar === '>') {
-                $keyValuePairs = static::assignNested($keyValuePairs, $depth, $keyBuffer, $valueBuffer);
+                $dictionaryArray = static::assignNested($dictionaryArray, $depth, $keyBuffer, $valueBuffer);
                 unset($valueBuffer[$depth], $keyBuffer[$depth], $context[$depth]);
                 $depth--;
             }
@@ -64,34 +67,34 @@ class KeyValuePairParser
         }
 
         if (trim($valueBuffer[$depth]) !== '' && trim($keyBuffer[$depth]) !== '') {
-            $keyValuePairs = static::assignNested($keyValuePairs, $depth, $keyBuffer, $valueBuffer);
+            $dictionaryArray = static::assignNested($dictionaryArray, $depth, $keyBuffer, $valueBuffer);
         }
 
-        return $keyValuePairs;
+        return DictionaryFactory::fromArray($dictionaryArray);
     }
 
-    private static function assignNested(mixed $keyValuePairs, int $depth, array $keyBuffer, array $valueBuffer)
+    private static function assignNested(mixed $dictionaryArray, int $depth, array $keyBuffer, array $valueBuffer): array
     {
         $currentKey = trim($keyBuffer[$depth]);
         $value = trim($valueBuffer[$depth], " \t\n\r\0\x0B<>");
         if ($value === '' || $currentKey === '') {
-            return $keyValuePairs;
+            return $dictionaryArray;
         }
 
         if ($depth === 1) {
-            $keyValuePairs[$currentKey] = $value;
+            $dictionaryArray[$currentKey] = $value;
 
-            return $keyValuePairs;
+            return $dictionaryArray;
         }
 
-        $pointer = &$keyValuePairs;
+        $pointer = &$dictionaryArray;
         $pointerDepth = 1;
         while ($pointerDepth < $depth) {
-            $pointer = &$keyValuePairs[trim($keyBuffer[$pointerDepth])];
+            $pointer = &$dictionaryArray[trim($keyBuffer[$pointerDepth])];
             $pointerDepth++;
         }
 
         $pointer[$currentKey] = $value;
-        return $keyValuePairs;
+        return $dictionaryArray;
     }
 }

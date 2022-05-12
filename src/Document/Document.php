@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document;
 
-use PrinsFrank\PdfParser\Document\CrossReferenceTable\CrossReferenceTable;
+use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceSource;
 use PrinsFrank\PdfParser\Document\Trailer\Trailer;
 use PrinsFrank\PdfParser\Enum\Version;
 
@@ -12,9 +12,9 @@ final class Document
     public readonly string $content;
     public readonly int    $contentLength;
 
-    public readonly Version             $version;
-    public readonly CrossReferenceTable $crossReferenceTable;
-    public readonly Trailer             $trailer;
+    public readonly Version              $version;
+    public readonly CrossReferenceSource $crossReferenceSource;
+    public readonly Trailer              $trailer;
 
     public function __construct(string $content)
     {
@@ -36,9 +36,9 @@ final class Document
         return $this;
     }
 
-    public function setCrossReferenceTable(CrossReferenceTable $crossReferenceTable): self
+    public function setCrossReferenceSource(CrossReferenceSource $crossReferenceSource): self
     {
-        $this->crossReferenceTable = $crossReferenceTable;
+        $this->crossReferenceSource = $crossReferenceSource;
 
         return $this;
     }

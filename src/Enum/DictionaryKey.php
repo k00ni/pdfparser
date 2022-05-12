@@ -65,4 +65,9 @@ enum DictionaryKey: string
     case VIEWER_PREFERENCES = 'ViewerPreferences';
     case W                  = 'W';
     case XREFSTM            = 'XRefStm';
+
+    public static function tryFromKeyString(string $keyString): ?static
+    {
+        return self::tryFrom(ltrim($keyString, '/'));
+    }
 }
