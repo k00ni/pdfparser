@@ -14,18 +14,6 @@ class CrossReferenceTableParser
         $trailer = $document->trailer;
         $content = substr($document->content, $trailer->byteOffsetLastCrossReferenceSection, $trailer->startXrefMarkerPos - $trailer->byteOffsetLastCrossReferenceSection);
         $dictionary = KeyValuePairParser::parse($content);
-        var_dump($dictionary);exit;
-
-        $startStream = strpos($content, 'stream');
-        $endStream = strpos($content, 'endstream');
-        $stream = substr($content, $startStream + strlen('stream'), $endStream - $startStream - strlen('stream'));
-
-        echo($content) . PHP_EOL;
-        echo(123). PHP_EOL;
-        echo($stream). PHP_EOL;
-        echo(123). PHP_EOL;
-        echo(bin2hex(gzuncompress(trim($stream)))). PHP_EOL;
-        exit;
 
         return new CrossReferenceTable();
     }
