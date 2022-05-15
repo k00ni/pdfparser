@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Dictionary;
 
+use PrinsFrank\PdfParser\Exception\ParseFailureException;
+
 class DictionaryParser
 {
     private const CONTEXT_ROOT                = 0;
@@ -10,6 +12,9 @@ class DictionaryParser
     private const CONTEXT_KEY_VALUE_SEPARATOR = 2;
     private const CONTEXT_VALUE               = 3;
 
+    /**
+     * @throws ParseFailureException
+     */
     public static function parse(string $content): Dictionary
     {
         $dictionaryArray = [];

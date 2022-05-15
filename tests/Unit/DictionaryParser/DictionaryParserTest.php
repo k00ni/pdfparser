@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Tests\Unit\Parser;
 
 use PHPUnit\Framework\TestCase;
-use PrinsFrank\PdfParser\Parser\Dictionary\DictionaryParser;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 
 /**
- * @coversDefaultClass \PrinsFrank\PdfParser\Parser\Dictionary\DictionaryParser
+ * @coversDefaultClass \PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser
  */
 class DictionaryParserTest extends TestCase
 {

@@ -10,8 +10,10 @@ enum DictionaryKey: string
     case AUTH_EVENT         = 'AuthEvent';
     case CF                 = 'CF';
     case CFM                = 'CFM';
+    case COLUMNS            = 'Columns';
     case COLLECTION         = 'Collection';
     case COUNT              = 'Count';
+    case DECODE_PARAMS      = 'DecodeParms';
     case DESTS              = 'Dests';
     case EFF                = 'EFF';
     case ENCRYPT_METADATA   = 'EncryptMetadata';
@@ -45,6 +47,7 @@ enum DictionaryKey: string
     case PARENT             = 'Parent';
     case PERMS              = 'Perms';
     case PIECE_INFO         = 'PieceInfo';
+    case PREDICTOR          = 'Predictor';
     case PREVIOUS           = 'Prev';
     case R                  = 'R';
     case RECIPIENTS         = 'Recipients';
@@ -66,8 +69,8 @@ enum DictionaryKey: string
     case W                  = 'W';
     case XREFSTM            = 'XRefStm';
 
-    public static function tryFromKeyString(string $keyString): ?static
+    public static function fromKeyString(string $keyString): self
     {
-        return self::tryFrom(ltrim($keyString, '/'));
+        return self::from(ltrim($keyString, '/'));
     }
 }

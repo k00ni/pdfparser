@@ -4,11 +4,12 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry;
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\DictionaryValueType;
 
 class DictionaryEntry
 {
     public readonly DictionaryKey $key;
-    public readonly string $value;
+    public readonly DictionaryValueType $value;
 
     public function setKey(DictionaryKey $key): self
     {
@@ -17,7 +18,7 @@ class DictionaryEntry
         return $this;
     }
 
-    public function setValue(string $value): self
+    public function setValue(DictionaryValueType $value): self
     {
         $this->value = $value;
 
