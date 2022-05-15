@@ -1,15 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Parser\Section;
+namespace PrinsFrank\PdfParser\Document\CrossReference;
 
-use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceSource;
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\CrossReferenceStream;
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\CrossReferenceTable;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Document;
-use PrinsFrank\PdfParser\Enum\Marker;
-use PrinsFrank\PdfParser\Filter\Decode\FlateDecode;
-use PrinsFrank\PdfParser\Parser\Dictionary\DictionaryParser;
+use PrinsFrank\PdfParser\Document\Filter\Decode\FlateDecode;
+use PrinsFrank\PdfParser\Document\Generic\Marker;
 
 class CrossReferenceSourceParser
 {

@@ -1,11 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Parser\Section;
+namespace PrinsFrank\PdfParser\Document\Version;
 
 use PrinsFrank\PdfParser\Document\Document;
-use PrinsFrank\PdfParser\Enum\Marker;
-use PrinsFrank\PdfParser\Enum\Version;
+use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Exception\UnsupportedFileFormatException;
 use PrinsFrank\PdfParser\Exception\UnsupportedPdfVersionException;
 

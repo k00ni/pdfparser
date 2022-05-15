@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Enum;
+namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey;
 
 enum DictionaryKey: string
 {

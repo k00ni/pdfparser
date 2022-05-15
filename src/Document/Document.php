@@ -5,7 +5,7 @@ namespace PrinsFrank\PdfParser\Document;
 
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceSource;
 use PrinsFrank\PdfParser\Document\Trailer\Trailer;
-use PrinsFrank\PdfParser\Enum\Version;
+use PrinsFrank\PdfParser\Document\Version\Version;
 
 final class Document
 {

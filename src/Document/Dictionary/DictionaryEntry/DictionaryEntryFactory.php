@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry;
 
-use PrinsFrank\PdfParser\Enum\DictionaryKey;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 
 class DictionaryEntryFactory
 {

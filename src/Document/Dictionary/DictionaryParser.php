@@ -1,10 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Parser\Dictionary;
-
-use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryFactory;
+namespace PrinsFrank\PdfParser\Document\Dictionary;
 
 class DictionaryParser
 {

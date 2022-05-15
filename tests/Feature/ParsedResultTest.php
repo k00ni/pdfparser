@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Tests\Feature;
 
 use PHPUnit\Framework\TestCase;
-use PrinsFrank\PdfParser\Enum\Version;
+use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\PdfParser;
 

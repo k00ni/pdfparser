@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Filter\Decode;
+namespace PrinsFrank\PdfParser\Document\Filter\Decode;
 
 interface FilterDecoder
 {

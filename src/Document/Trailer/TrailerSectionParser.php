@@ -1,11 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Parser\Section;
+namespace PrinsFrank\PdfParser\Document\Trailer;
 
 use PrinsFrank\PdfParser\Document\Document;
-use PrinsFrank\PdfParser\Document\Trailer\Trailer;
-use PrinsFrank\PdfParser\Enum\Marker;
+use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Exception\MarkerNotFoundException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 

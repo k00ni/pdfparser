@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser;
 
+use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceSourceParser;
 use PrinsFrank\PdfParser\Document\Document;
+use PrinsFrank\PdfParser\Document\Trailer\TrailerSectionParser;
+use PrinsFrank\PdfParser\Document\Version\VersionParser;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
-use PrinsFrank\PdfParser\Parser\Section\CrossReferenceSourceParser;
-use PrinsFrank\PdfParser\Parser\Section\VersionParser;
-use PrinsFrank\PdfParser\Parser\Section\TrailerSectionParser;
 
 final class PdfParser
 {
