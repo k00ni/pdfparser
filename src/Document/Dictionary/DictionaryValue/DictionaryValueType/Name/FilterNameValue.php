@@ -27,7 +27,7 @@ enum FilterNameValue: string implements NameValue
     /**
      * @throws ParseFailureException
      */
-    public function decode(self $filter, string $content): ?string
+    public static function decode(self $filter, string $content): ?string
     {
         return match($filter) {
             self::FLATE_DECODE => FlateDecode::decode($content),
