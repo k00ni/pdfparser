@@ -13,6 +13,8 @@ enum DictionaryKey: string
     case COLUMNS            = 'Columns';
     case COLLECTION         = 'Collection';
     case COUNT              = 'Count';
+    case CREATOR            = 'Creator';
+    case CREATION_DATE      = 'CreationDate';
     case DECODE_PARAMS      = 'DecodeParms';
     case DESTS              = 'Dests';
     case EFF                = 'EFF';
@@ -31,6 +33,7 @@ enum DictionaryKey: string
     case LENGTH             = 'Length';
     case MARK_INFO          = 'MarkInfo';
     case METADATA           = 'Metadata';
+    case MOD_DATE           = 'ModDate';
     case N                  = 'N';
     case NAMES              = 'Names';
     case NEEDS_RENDERING    = 'NeedsRendering';
@@ -49,6 +52,8 @@ enum DictionaryKey: string
     case PIECE_INFO         = 'PieceInfo';
     case PREDICTOR          = 'Predictor';
     case PREVIOUS           = 'Prev';
+    case PRODUCER           = 'Producer';
+    case PTEX_FULL_BANNER   = 'PTEX.Fullbanner';
     case R                  = 'R';
     case RECIPIENTS         = 'Recipients';
     case REQUIREMENTS       = 'Requirements';
@@ -60,6 +65,7 @@ enum DictionaryKey: string
     case STRUCT_TREE_ROOT   = 'StructTreeRoot';
     case SUB_FILTER         = 'SubFilter';
     case THREADS            = 'Threads';
+    case TRAPPED            = 'Trapped';
     case TYPE               = 'Type';
     case U                  = 'U';
     case URI                = 'URI';
