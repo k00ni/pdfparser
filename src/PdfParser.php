@@ -8,6 +8,7 @@ use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Trailer\TrailerSectionParser;
 use PrinsFrank\PdfParser\Document\Version\VersionParser;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
+use PrinsFrank\PdfParser\Document\Object\ObjectParser;
 
 final class PdfParser
 {
@@ -20,6 +21,7 @@ final class PdfParser
 
         return $document->setVersion(VersionParser::parse($document))
             ->setTrailer(TrailerSectionParser::parse($document))
-            ->setCrossReferenceSource(CrossReferenceSourceParser::parse($document));
+            ->setCrossReferenceSource(CrossReferenceSourceParser::parse($document))
+            ->setObjects(...ObjectParser::parse($document));
     }
 }

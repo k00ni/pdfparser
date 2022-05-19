@@ -6,12 +6,15 @@ namespace PrinsFrank\PdfParser\Document;
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceSource;
 use PrinsFrank\PdfParser\Document\Trailer\Trailer;
 use PrinsFrank\PdfParser\Document\Version\Version;
+use PrinsFrank\PdfParser\Document\Object\PDFObject;
 
 final class Document
 {
     public readonly string $content;
     public readonly int    $contentLength;
 
+    /** @var PDFObject[] */
+    public readonly array $objects;
     public readonly Version              $version;
     public readonly CrossReferenceSource $crossReferenceSource;
     public readonly Trailer              $trailer;
@@ -39,6 +42,13 @@ final class Document
     public function setCrossReferenceSource(CrossReferenceSource $crossReferenceSource): self
     {
         $this->crossReferenceSource = $crossReferenceSource;
+
+        return $this;
+    }
+
+    public function setObjects(PDFObject ...$objects): self
+    {
+        $this->objects = $objects;
 
         return $this;
     }
