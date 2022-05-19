@@ -11,6 +11,7 @@ class DictionaryParser
     private const CONTEXT_KEY                 = 1;
     private const CONTEXT_KEY_VALUE_SEPARATOR = 2;
     private const CONTEXT_VALUE               = 3;
+    private const CONTEXT_VALUE_GROUPED       = 4;
 
     /**
      * @throws ParseFailureException
@@ -41,6 +42,10 @@ class DictionaryParser
                     $context[$depth] = self::CONTEXT_KEY_VALUE_SEPARATOR;
                 } else if ($context[$depth] === self::CONTEXT_KEY_VALUE_SEPARATOR) {
                     $context[$depth] = self::CONTEXT_VALUE;
+                } else if ($context[$depth] === self::CONTEXT_VALUE && $char === '(') {
+                    $context[$depth] = self::CONTEXT_VALUE_GROUPED;
+                } else if ($context[$depth] === self::CONTEXT_VALUE_GROUPED && $char === ')') {
+                    $context[$depth] = self::CONTEXT_VALUE;
                 }
             }
 
@@ -62,6 +67,7 @@ class DictionaryParser
                     $keyBuffer[$depth] .= $char;
                     break;
                 case self::CONTEXT_VALUE:
+                case self::CONTEXT_VALUE_GROUPED:
                 case self::CONTEXT_KEY_VALUE_SEPARATOR:
                     $valueBuffer[$depth] .= $char;
                     break;
