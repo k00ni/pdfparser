@@ -32,6 +32,8 @@ class DictionaryValue
             DictionaryKey::COLUMNS,
             DictionaryKey::PREDICTOR,
             DictionaryKey::PREVIOUS,
+            DictionaryKey::N,
+            DictionaryKey::FIRST,
             DictionaryKey::SIZE => IntegerValue::fromValue($valueString),
             DictionaryKey::INFO,
             DictionaryKey::ROOT => ReferenceValue::fromValue($valueString),
