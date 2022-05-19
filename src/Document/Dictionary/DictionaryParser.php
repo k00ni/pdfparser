@@ -23,23 +23,25 @@ class DictionaryParser
         $context = [$depth =>self::CONTEXT_ROOT];
         $previousChar = null;
         foreach (str_split($content) as $char) {
-            $codePointChar = ord($char);
-            if ($char === '/') {
-                if ($context[$depth] === self::CONTEXT_ROOT) {
-                    $context[$depth] = self::CONTEXT_KEY;
-                } elseif ($context[$depth] === self::CONTEXT_KEY) {
-                    $valueBuffer[$depth] = '';
+            if ($depth > 0) {
+                $codePointChar = ord($char);
+                if ($char === '/') {
+                    if ($context[$depth] === self::CONTEXT_ROOT) {
+                        $context[$depth] = self::CONTEXT_KEY;
+                    } elseif ($context[$depth] === self::CONTEXT_KEY) {
+                        $valueBuffer[$depth] = '';
+                        $context[$depth]     = self::CONTEXT_VALUE;
+                    } elseif ($context[$depth] === self::CONTEXT_VALUE) {
+                        $dictionaryArray     = static::assignNested($dictionaryArray, $depth, $keyBuffer, $valueBuffer);
+                        $keyBuffer[$depth]   = '';
+                        $valueBuffer[$depth] = '';
+                        $context[$depth]     = self::CONTEXT_KEY;
+                    }
+                } else if ($context[$depth] === self::CONTEXT_KEY && (($codePointChar >= 65 && $codePointChar <= 90) || ($codePointChar >= 97 && $codePointChar <= 122) || $codePointChar === 46) === false) {
+                    $context[$depth] = self::CONTEXT_KEY_VALUE_SEPARATOR;
+                } else if ($context[$depth] === self::CONTEXT_KEY_VALUE_SEPARATOR) {
                     $context[$depth] = self::CONTEXT_VALUE;
-                } elseif ($context[$depth] === self::CONTEXT_VALUE) {
-                    $dictionaryArray = static::assignNested($dictionaryArray, $depth, $keyBuffer, $valueBuffer);
-                    $keyBuffer[$depth] = '';
-                    $valueBuffer[$depth] = '';
-                    $context[$depth] = self::CONTEXT_KEY;
                 }
-            } else if ($context[$depth] === self::CONTEXT_KEY && (($codePointChar >= 65 && $codePointChar <= 90) || ($codePointChar >= 97 && $codePointChar <= 122)) === false) {
-                $context[$depth] = self::CONTEXT_KEY_VALUE_SEPARATOR;
-            } else if ($context[$depth] === self::CONTEXT_KEY_VALUE_SEPARATOR) {
-                $context[$depth] = self::CONTEXT_VALUE;
             }
 
             if ($char === '<' && $previousChar === '<') {
