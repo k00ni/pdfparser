@@ -47,7 +47,7 @@ class CrossReferenceSourceParser
         $byteLengthRecord2 = ($wValue[1] ?? 0) * 2;
         $byteLengthRecord3 = ($wValue[2] ?? 0) * 2;
         $crossReferenceStream = new CrossReferenceStream();
-        foreach (str_split(ObjectStreamContentParser::parse($content, $dictionary), $byteLengthRecord1 + $byteLengthRecord2 + $byteLengthRecord3) as $referenceRow) {
+        foreach (str_split(bin2hex(ObjectStreamContentParser::parse($content, $dictionary)), $byteLengthRecord1 + $byteLengthRecord2 + $byteLengthRecord3) as $referenceRow) {
             $crossReferenceStream->addData(
                 new CrossReferenceData(
                     substr($referenceRow, 0, $byteLengthRecord1),
