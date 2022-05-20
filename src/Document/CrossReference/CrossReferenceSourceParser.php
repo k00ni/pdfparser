@@ -10,7 +10,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Document;
-use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamParser;
+use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamContent\ObjectStreamContentParser;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class CrossReferenceSourceParser
@@ -47,7 +47,7 @@ class CrossReferenceSourceParser
         $byteLengthRecord2 = ($wValue[1] ?? 0) * 2;
         $byteLengthRecord3 = ($wValue[2] ?? 0) * 2;
         $crossReferenceStream = new CrossReferenceStream();
-        foreach (str_split(ObjectStreamParser::parse($content, $dictionary), $byteLengthRecord1 + $byteLengthRecord2 + $byteLengthRecord3) as $referenceRow) {
+        foreach (str_split(ObjectStreamContentParser::parse($content, $dictionary), $byteLengthRecord1 + $byteLengthRecord2 + $byteLengthRecord3) as $referenceRow) {
             $crossReferenceStream->addData(
                 new CrossReferenceData(
                     substr($referenceRow, 0, $byteLengthRecord1),

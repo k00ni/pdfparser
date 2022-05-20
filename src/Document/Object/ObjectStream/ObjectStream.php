@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Object;
+namespace PrinsFrank\PdfParser\Document\Object\ObjectStream;
 
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 
-class PDFObject
+class ObjectStream
 {
     public readonly string     $content;
     public readonly Dictionary $dictionary;

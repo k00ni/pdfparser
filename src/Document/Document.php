@@ -4,9 +4,10 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document;
 
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceSource;
+use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStream;
+use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamContent\PDFObject;
 use PrinsFrank\PdfParser\Document\Trailer\Trailer;
 use PrinsFrank\PdfParser\Document\Version\Version;
-use PrinsFrank\PdfParser\Document\Object\PDFObject;
 
 final class Document
 {
@@ -46,7 +47,7 @@ final class Document
         return $this;
     }
 
-    public function setObjects(PDFObject ...$objects): self
+    public function setObjectStreams(ObjectStream ...$objects): self
     {
         $this->objects = $objects;
 

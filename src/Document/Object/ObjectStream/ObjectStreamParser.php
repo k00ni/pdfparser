@@ -3,32 +3,39 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Object\ObjectStream;
 
-use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\FilterNameValue;
-use PrinsFrank\PdfParser\Document\Generic\Marker;
+use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\CrossReferenceStreamType;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
+use PrinsFrank\PdfParser\Document\Document;
+use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamContent\ObjectStreamContentParser;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class ObjectStreamParser
 {
     /**
+     * @return array<ObjectStream>
      * @throws ParseFailureException
      */
-    public static function parse(string $content, Dictionary $dictionary): ?string
+    public static function parse(Document $document): array
     {
-        $startStream = strpos($content, Marker::START_STREAM->value);
-        $endStream = strpos($content, Marker::END_STREAM->value);
-        if ($startStream === false || $endStream === false) {
-            return null;
+        $byteOffsets = [$document->contentLength];
+        foreach ($document->crossReferenceSource->data as $crossReferenceData) {
+            if ($crossReferenceData->type === CrossReferenceStreamType::TYPE_UNCOMPRESSED_OBJECT) {
+                $byteOffsets[] = hexdec($crossReferenceData->objNumberOrByteOffset);
+            }
         }
 
-        $stream = substr($content, $startStream + strlen(Marker::START_STREAM->value), $endStream - $startStream - strlen(Marker::START_STREAM->value));
-
-        $streamFilter = $dictionary->getEntryWithKey(DictionaryKey::FILTER)?->value;
-        if ($streamFilter instanceof FilterNameValue) {
-            $stream = $streamFilter::decode($streamFilter, $stream);
+        $previousByteOffset = 0;
+        sort($byteOffsets);
+        $objectStreams = [];
+        foreach ($byteOffsets as $byteOffset) {
+            $objectStream = new ObjectStream();
+            $objectStream->setContent(substr($document->content, $previousByteOffset, $byteOffset - $previousByteOffset));
+            $objectStream->setDictionary(DictionaryParser::parse($objectStream->content));
+            $objectStream->setDecodedStream(ObjectStreamContentParser::parse($objectStream->content, $objectStream->dictionary));
+            $objectStreams[] = $objectStream;
+            $previousByteOffset = $byteOffset;
         }
 
-        return $stream;
+        return $objectStreams;
     }
 }
