@@ -6,6 +6,7 @@ namespace PrinsFrank\PdfParser\Document\Object\ObjectStream;
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\CrossReferenceStreamType;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Document;
+use PrinsFrank\PdfParser\Document\Object\ObjectParser;
 use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamContent\ObjectStreamContentParser;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
@@ -32,6 +33,7 @@ class ObjectStreamParser
             $objectStream->setContent(substr($document->content, $previousByteOffset, $byteOffset - $previousByteOffset));
             $objectStream->setDictionary(DictionaryParser::parse($objectStream->content));
             $objectStream->setDecodedStream(ObjectStreamContentParser::parse($objectStream->content, $objectStream->dictionary));
+            $objectStream->setObjects(...ObjectParser::parse($objectStream));
             $objectStreams[] = $objectStream;
             $previousByteOffset = $byteOffset;
         }

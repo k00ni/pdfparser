@@ -16,7 +16,7 @@ class ArrayValue implements DictionaryValueType
     public static function fromValue(string $valueString): DictionaryValueType
     {
         if (str_starts_with($valueString, '[') === false || str_ends_with($valueString, ']') === false) {
-            throw new ParseFailureException('Invalid value for array: "' . $valueString . '", should start with [ and end with ].');
+            throw new ParseFailureException('Invalid value for array: "' . $valueString . '", should start with "[" and end with "]".');
         }
 
         $array = [];

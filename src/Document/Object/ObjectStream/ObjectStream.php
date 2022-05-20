@@ -4,9 +4,12 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document\Object\ObjectStream;
 
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
+use PrinsFrank\PdfParser\Document\Object\ObjectItem;
 
 class ObjectStream
 {
+    /** @var ObjectItem[] */
+    public readonly array      $objectItems;
     public readonly string     $content;
     public readonly Dictionary $dictionary;
     public readonly ?string    $decodedStream;
@@ -28,6 +31,13 @@ class ObjectStream
     public function setDecodedStream(?string $decodedStream): self
     {
         $this->decodedStream = $decodedStream;
+
+        return $this;
+    }
+
+    public function setObjects(ObjectItem ...$objectItems): self
+    {
+        $this->objectItems = $objectItems;
 
         return $this;
     }

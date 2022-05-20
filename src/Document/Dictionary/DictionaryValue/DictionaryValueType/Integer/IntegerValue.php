@@ -8,7 +8,7 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class IntegerValue implements DictionaryValueType
 {
-    public function __construct(protected int $value) { }
+    public function __construct(public int $value) { }
 
     public static function fromValue(string $valueString): DictionaryValueType
     {

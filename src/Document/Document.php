@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document;
 
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceSource;
+use PrinsFrank\PdfParser\Document\Object\ObjectItem;
 use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStream;
-use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamContent\PDFObject;
 use PrinsFrank\PdfParser\Document\Trailer\Trailer;
 use PrinsFrank\PdfParser\Document\Version\Version;
 
@@ -14,9 +14,11 @@ final class Document
     public readonly string $content;
     public readonly int    $contentLength;
 
-    /** @var PDFObject[] */
-    public readonly array $objects;
-    public readonly Version              $version;
+    /** @var ObjectStream[] */
+    public readonly array   $objectStreams;
+    /** @var ObjectItem[] */
+    public readonly array   $objectItems;
+    public readonly Version $version;
     public readonly CrossReferenceSource $crossReferenceSource;
     public readonly Trailer              $trailer;
 
@@ -47,9 +49,9 @@ final class Document
         return $this;
     }
 
-    public function setObjectStreams(ObjectStream ...$objects): self
+    public function setObjectStreams(ObjectStream ...$objectStreams): self
     {
-        $this->objects = $objects;
+        $this->objectStreams = $objectStreams;
 
         return $this;
     }
