@@ -8,7 +8,7 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class ReferenceValue implements DictionaryValueType
 {
-    public function __construct(protected int $objectNumber, protected int $versionNumber) { }
+    public function __construct(public readonly int $objectNumber, public readonly int $versionNumber) { }
 
     /**
      * @throws ParseFailureException

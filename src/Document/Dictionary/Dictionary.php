@@ -3,10 +3,11 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Dictionary;
 
+use JsonSerializable;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 
-class Dictionary
+class Dictionary implements JsonSerializable
 {
     /** @var array<DictionaryEntry> */
     protected array $dictionaryEntries = [];
@@ -31,5 +32,15 @@ class Dictionary
         }
 
         return null;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return array_map(
+            static function (DictionaryEntry $dictionaryEntry) {
+                return (array) $dictionaryEntry;
+            },
+            $this->dictionaryEntries
+        );
     }
 }

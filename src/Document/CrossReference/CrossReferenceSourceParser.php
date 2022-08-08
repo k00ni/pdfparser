@@ -35,7 +35,7 @@ class CrossReferenceSourceParser
 
         $dictionaryType = $dictionary->getEntryWithKey(DictionaryKey::TYPE)?->value;
         if ($dictionaryType !== TypeNameValue::X_REF) {
-            throw new ParseFailureException('Expected stream of type xref, got "' . ($dictionaryType?->name ?? 'Null') . '"');
+            throw new ParseFailureException('Expected stream of type xref, got "' . ($dictionaryType?->name ?? 'null') . '" Dictionary: ' . json_encode($dictionary));
         }
 
         $wValue = $dictionary->getEntryWithKey(DictionaryKey::W)?->value?->value;
