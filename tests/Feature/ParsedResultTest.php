@@ -29,6 +29,7 @@ class ParsedResultTest extends TestCase
         $parser = new PdfParser();
 
         $parser->parse(file_get_contents($pdfPath));
+        $this->addToAssertionCount(1);
     }
 
     public function pdfs(): iterable
