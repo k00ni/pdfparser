@@ -7,7 +7,9 @@ enum SubtypeNameValue: string implements NameValue
 {
     case TYPE_1 = 'Type1';
     case IMAGE = 'Image';
-    case XML   = 'XML';
+    case XML = 'XML';
+    case TRUE_TYPE = 'TrueType';
+    case FORM = 'Form';
 
     public static function fromValue(string $valueString): self
     {

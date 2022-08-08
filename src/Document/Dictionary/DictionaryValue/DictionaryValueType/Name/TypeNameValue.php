@@ -13,6 +13,8 @@ enum TypeNameValue: string implements NameValue
     case PAGES           = 'Pages';
     case X_OBJECT        = 'XObject';
     case X_REF           = 'XRef';
+    case METADATA        = 'Metadata';
+    case CATALOG         = 'Catalog';
 
     public static function fromValue(string $valueString): self
     {

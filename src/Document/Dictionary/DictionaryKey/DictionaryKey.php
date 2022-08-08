@@ -5,14 +5,19 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey;
 
 enum DictionaryKey: string
 {
+    case A                  = 'A';
     case AA                 = 'AA';
     case ACRO_FORM          = 'AcroForm';
     case ANNOTS             = 'Annots';
     case ASCENT             = 'Ascent';
     case AUTH_EVENT         = 'AuthEvent';
+    case AUTHOR             = 'Author';
+    case AVG_WIDTH          = 'AvgWidth';
+    case BASE_ENCODING      = 'BaseEncoding';
     case BASE_FONT          = 'BaseFont';
     case B_BOX              = 'BBox';
     case BITS_PER_COMPONENT = 'BitsPerComponent';
+    case BORDER             = 'Border';
     case CAP_HEIGHT         = 'CapHeight';
     case C                  = 'C';
     case CF                 = 'CF';
@@ -31,8 +36,11 @@ enum DictionaryKey: string
     case DECODE_PARAMS      = 'DecodeParms';
     case DESCENT            = 'Descent';
     case DESTS              = 'Dests';
+    case DIFFERENCES        = 'Differences';
     case DOC_CHECKSUM       = 'DocChecksum';
+    case E                  = 'E';
     case EFF                = 'EFF';
+    case ENCODING           = 'Encoding';
     case ENCRYPT_METADATA   = 'EncryptMetadata';
     case ENCRYPTION         = 'Encrypt';
     case EXTENDS            = 'Extends';
@@ -51,26 +59,38 @@ enum DictionaryKey: string
     case FORM_TYPE          = 'FormType';
     case GS                 = 'GS';
     case GROUP              = 'Group';
+    case H                  = 'H';
     case HEIGHT             = 'Height';
     case HELV               = 'Helv';
     case I                  = 'I';
     case ID                 = 'ID';
+    case IM                 = 'Im';
+    case IMAGE_B            = 'ImageB';
     case IMAGE_C            = 'ImageC';
+    case IMAGE_I            = 'ImageI';
     case INDEX              = 'Index';
     case INFO               = 'Info';
     case ITALIC_ANGLE       = 'ItalicAngle';
+    case K                  = 'K';
+    case KEYWORDS           = 'Keywords';
     case KIDS               = 'Kids';
+    case L                  = 'L';
     case LANG               = 'Lang';
     case LAST_CHAR          = 'LastChar';
     case LEGAL              = 'Legal';
+    case LEADING            = 'Leading';
     case LENGTH             = 'Length';
+    case LINEARIZED         = 'Linearized';
     case MATRIX             = 'Matrix';
     case MEDIABOX           = 'MediaBox';
     case MARKED             = 'Marked';
     case MARK_INFO          = 'MarkInfo';
+    case MAX_WIDTH          = 'MaxWidth';
     case METADATA           = 'Metadata';
     case MOD_DATE           = 'ModDate';
+    case MISSING_WIDTH      = 'MissingWidth';
     case N                  = 'N';
+    case NAME               = 'Name';
     case NAMES              = 'Names';
     case NEEDS_RENDERING    = 'NeedsRendering';
     case O                  = 'O';
@@ -94,6 +114,7 @@ enum DictionaryKey: string
     case PTEX_FULL_BANNER   = 'PTEX.Fullbanner';
     case R                  = 'R';
     case RECIPIENTS         = 'Recipients';
+    case RECT               = 'Rect';
     case REQUIREMENTS       = 'Requirements';
     case RESOURCES          = 'Resources';
     case ROOT               = 'Root';
@@ -102,16 +123,21 @@ enum DictionaryKey: string
     case SIZE               = 'Size';
     case S_MASK             = 'SMask';
     case SPIDER_INFO        = 'SpiderInfo';
+    case STEM_H             = 'StemH';
     case STEM_V             = 'StemV';
     case STMF               = 'StmF';
     case STRF               = 'StrF';
     case STRUCT_PARENTS     = 'StructParents';
     case STRUCT_TREE_ROOT   = 'StructTreeRoot';
     case SUB_FILTER         = 'SubFilter';
+    case SUBJECT            = 'Subject';
     case SUBTYPE            = 'Subtype';
+    case T                  = 'T';
     case TABS               = 'Tabs';
     case TEXT               = 'Text';
     case THREADS            = 'Threads';
+    case TITLE              = 'Title';
+    case TO_UNICODE         = 'ToUnicode';
     case TRAPPED            = 'Trapped';
     case TYPE               = 'Type';
     case U                  = 'U';
@@ -123,7 +149,8 @@ enum DictionaryKey: string
     case WIDTH              = 'Width';
     case WIDTHS             = 'Widths';
     case X_HEIGHT           = 'XHeight';
-    case XREFSTM            = 'XRefStm';
+    case X_OBJECT           = 'XObject';
+    case X_REF_STM          = 'XRefStm';
 
     public static function fromKeyString(string $keyString): self
     {
