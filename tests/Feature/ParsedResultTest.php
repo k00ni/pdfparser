@@ -20,4 +20,22 @@ class ParsedResultTest extends TestCase
         $parsedDocument = $parser->parse(file_get_contents(dirname(__DIR__, 2) . '/_samples/pdf/simple_document.pdf'));
         static::assertEquals(Version::V1_5, $parsedDocument->version);
     }
+
+    /**
+     * @dataProvider pdfs
+     */
+    public function testExternalSourcePDFs(string $pdfPath): void
+    {
+        $parser = new PdfParser();
+
+        $parser->parse(file_get_contents($pdfPath));
+    }
+
+    public function pdfs(): iterable
+    {
+        $basePath = dirname(__DIR__, 2) . '/_samples/pdf/samples/';
+        foreach (array_diff(scandir($basePath), ['.', '..']) as $file) {
+            yield $file => [$basePath . $file];
+        }
+    }
 }
