@@ -6,6 +6,7 @@ namespace PrinsFrank\PdfParser\Document\CrossReference;
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceData\CrossReferenceData;
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\CrossReferenceStream;
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\CrossReferenceTable;
+use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TypeNameValue;
@@ -15,24 +16,32 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class CrossReferenceSourceParser
 {
+    /**
+     * @throws ParseFailureException
+     */
     public static function parse(Document $document): CrossReferenceSource
     {
-        return static::parseStream($document);
+        $content = substr($document->content, $document->trailer->byteOffsetLastCrossReferenceSection, $document->trailer->startXrefMarkerPos - $document->trailer->byteOffsetLastCrossReferenceSection);
+        $dictionary = DictionaryParser::parse($content);
+        if ($dictionary->getEntryWithKey(DictionaryKey::TYPE)?->value === TypeNameValue::X_REF) {
+            return self::parseStream($document, $dictionary, $content);
+        }
+
+        return static::parseTable($document, $dictionary, $content);
     }
 
-    public static function parseTable(Document $document): CrossReferenceTable
+    public static function parseTable(Document $document, Dictionary $dictionary, string $content): CrossReferenceTable
     {
+        $crossReferenceTable = new CrossReferenceTable();
 
+        return $crossReferenceTable;
     }
 
     /**
      * @throws ParseFailureException
      */
-    public static function parseStream(Document $document): CrossReferenceStream
+    public static function parseStream(Document $document, Dictionary $dictionary, string $content): CrossReferenceStream
     {
-        $content = substr($document->content, $document->trailer->byteOffsetLastCrossReferenceSection, $document->trailer->startXrefMarkerPos - $document->trailer->byteOffsetLastCrossReferenceSection);
-        $dictionary = DictionaryParser::parse($content);
-
         $dictionaryType = $dictionary->getEntryWithKey(DictionaryKey::TYPE)?->value;
         if ($dictionaryType !== TypeNameValue::X_REF) {
             throw new ParseFailureException('Expected stream of type xref, got "' . ($dictionaryType?->name ?? 'null') . '" Dictionary: ' . json_encode($dictionary));

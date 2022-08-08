@@ -5,7 +5,7 @@ namespace PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable;
 
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceSource;
 
-class CrossReferenceTable implements CrossReferenceSource
+class CrossReferenceTable extends CrossReferenceSource
 {
 
 }
