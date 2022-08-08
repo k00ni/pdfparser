@@ -5,12 +5,14 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryVal
 
 enum TypeNameValue: string implements NameValue
 {
-    case OBJ_STM         = 'ObjStm';
-    case X_REF           = 'XRef';
-    case PAGE            = 'Page';
-    case FONT_DESCRIPTOR = 'FontDescriptor';
     case FONT            = 'Font';
+    case FONT_DESCRIPTOR = 'FontDescriptor';
+    case GROUP           = 'Group';
+    case OBJ_STM         = 'ObjStm';
+    case PAGE            = 'Page';
     case PAGES           = 'Pages';
+    case X_OBJECT        = 'XObject';
+    case X_REF           = 'XRef';
 
     public static function fromValue(string $valueString): self
     {

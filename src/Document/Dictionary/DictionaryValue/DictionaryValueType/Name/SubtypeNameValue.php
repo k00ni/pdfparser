@@ -6,6 +6,8 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryVal
 enum SubtypeNameValue: string implements NameValue
 {
     case TYPE_1 = 'Type1';
+    case IMAGE = 'Image';
+    case XML   = 'XML';
 
     public static function fromValue(string $valueString): self
     {
