@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Array;
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\DictionaryValueType;
+use PrinsFrank\PdfParser\Exception\InvalidDictionaryValueTypeFormatException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class ArrayValue implements DictionaryValueType
@@ -16,7 +17,7 @@ class ArrayValue implements DictionaryValueType
     public static function fromValue(string $valueString): DictionaryValueType
     {
         if (str_starts_with($valueString, '[') === false || str_ends_with($valueString, ']') === false) {
-            throw new ParseFailureException('Invalid value for array: "' . $valueString . '", should start with "[" and end with "]".');
+            throw new InvalidDictionaryValueTypeFormatException('Invalid value for array: "' . $valueString . '", should start with "[" and end with "]".');
         }
 
         $array = [];
