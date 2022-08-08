@@ -20,15 +20,4 @@ class ParsedResultTest extends TestCase
         $parsedDocument = $parser->parse(file_get_contents(dirname(__DIR__, 2) . '/_samples/pdf/simple_document.pdf'));
         static::assertEquals(Version::V1_5, $parsedDocument->version);
     }
-
-    /**
-     * @throws PdfParserException
-     */
-    public function testVeryBigDocument(): void
-    {
-        $parser = new PdfParser();
-
-        $parsedDocument = $parser->parse(file_get_contents(dirname(__DIR__, 2) . '/_samples/pdf/very_big_document.pdf'));
-        static::assertEquals(Version::V1_6, $parsedDocument->version);
-    }
 }

@@ -24,7 +24,6 @@ class DictionaryParser
         $context = [$depth =>self::CONTEXT_ROOT];
         $previousChar = null;
         foreach (str_split($content) as $char) {
-            $previousContext = $context[$depth];
             if ($depth > 0) {
                 $codePointChar = ord($char);
                 if ($char === '/') {

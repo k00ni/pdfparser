@@ -64,6 +64,7 @@ class DictionaryValue
             DictionaryKey::BASE_FONT,
             DictionaryKey::FONT_DESCRIPTOR,
             DictionaryKey::FONT_FILE,
+            DictionaryKey::ENCRYPTION,
             DictionaryKey::PRODUCER => TextStringValue::fromValue($valueString),
             DictionaryKey::MOD_DATE,
             DictionaryKey::CREATION_DATE => DateValue::fromValue($valueString),
@@ -72,7 +73,7 @@ class DictionaryValue
             DictionaryKey::FONT_B_BOX,
             DictionaryKey::MEDIABOX => Rectangle::fromValue($valueString),
             DictionaryKey::SUBTYPE => SubtypeNameValue::fromValue($valueString),
-            default => throw new ParseFailureException('Dictionary key "' . $dictionaryKey->name . '" is not supported'),
+            default => throw new ParseFailureException('Dictionary key "' . $dictionaryKey->name . '" is not supported (' . $valueString . ')'),
         };
     }
 }
