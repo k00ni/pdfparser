@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Trailer;
 
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Exception\MarkerNotFoundException;
@@ -39,11 +40,18 @@ class TrailerSectionParser
         }
         $trailer->setStartXrefMarkerPos($startXrefMarkerPos);
 
+        $trailerMarkerPos = strrpos($document->content, Marker::TRAILER->value, -($document->contentLength - $startXrefMarkerPos));
+        if ($trailerMarkerPos === false) {
+            throw new MarkerNotFoundException(Marker::TRAILER->value);
+        }
+        $trailer->setStartTrailerMarkerPos($trailerMarkerPos);
+
         $byteOffsetLastCrossReferenceSection = substr($document->content, $startXrefMarkerPos + strlen(Marker::START_XREF->value),  -($document->contentLength - $eofMarkerPos));
         if ($byteOffsetLastCrossReferenceSection === false) {
             throw new ParseFailureException('Failed to retrieve the byte offset for the last cross reference section. Document length: "' . $document->contentLength . '", eof marker pos: "' . $eofMarkerPos . '"');
         }
         $trailer->setByteOffsetLastCrossReferenceSection((int) $byteOffsetLastCrossReferenceSection);
+        $trailer->setDictionary(DictionaryParser::parse(substr($document->content, $trailer->startTrailerMarkerPos, $trailer->startXrefMarkerPos - $trailer->startTrailerMarkerPos)));
 
         return $trailer;
     }
