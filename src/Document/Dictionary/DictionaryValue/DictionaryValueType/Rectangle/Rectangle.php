@@ -11,6 +11,6 @@ class Rectangle implements DictionaryValueType
 
     public static function fromValue(string $valueString): DictionaryValueType
     {
-        return new self(... array_map('floatval', explode(' ', $valueString)));
+        return new self(... array_map('floatval', explode(' ', trim($valueString, '[]'))));
     }
 }

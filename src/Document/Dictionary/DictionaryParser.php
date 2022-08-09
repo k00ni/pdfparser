@@ -21,7 +21,7 @@ class DictionaryParser
         $dictionaryArray = [];
         $depth = 0;
         $valueBuffer = $keyBuffer = [$depth => ''];
-        $context = [$depth =>self::CONTEXT_ROOT];
+        $context = [$depth => self::CONTEXT_ROOT];
         $previousChar = null;
         foreach (str_split($content) as $char) {
             if ($depth > 0) {
@@ -62,6 +62,10 @@ class DictionaryParser
                 $depth--;
             }
 
+            if ($depth < 0) {
+                throw new ParseFailureException('Traversed out of bounds in content "' . substr($content, $index - 10, 20) . '" at position "' . $index . '" with current char "' . $char . '" and previous char "' . $previousChar . '"');
+            }
+
             switch ($context[$depth]) {
                 case self::CONTEXT_KEY:
                     $keyBuffer[$depth] .= $char;
@@ -83,17 +87,11 @@ class DictionaryParser
         return DictionaryFactory::fromArray($dictionaryArray);
     }
 
-    private static function assignNested(mixed $dictionaryArray, int $depth, array $keyBuffer, array $valueBuffer): array
+    private static function assignNested(array $dictionaryArray, int $depth, array $keyBuffer, array $valueBuffer): array
     {
         $currentKey = trim($keyBuffer[$depth]);
         $value = trim($valueBuffer[$depth], " \t\n\r\0\x0B<>");
         if ($value === '' || $currentKey === '') {
-            return $dictionaryArray;
-        }
-
-        if ($depth === 1) {
-            $dictionaryArray[$currentKey] = $value;
-
             return $dictionaryArray;
         }
 

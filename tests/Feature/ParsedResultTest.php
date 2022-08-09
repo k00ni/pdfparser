@@ -23,6 +23,7 @@ class ParsedResultTest extends TestCase
 
     /**
      * @dataProvider pdfs
+     * @throws PdfParserException
      */
     public function testExternalSourcePDFs(string $pdfPath): void
     {

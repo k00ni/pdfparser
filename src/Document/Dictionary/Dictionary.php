@@ -12,9 +12,11 @@ class Dictionary implements JsonSerializable
     /** @var array<DictionaryEntry> */
     protected array $dictionaryEntries = [];
 
-    public function addEntry(DictionaryEntry $dictionaryEntry): void
+    public function addEntry(DictionaryEntry $dictionaryEntry): self
     {
         $this->dictionaryEntries[] = $dictionaryEntry;
+
+        return $this;
     }
 
     /** @return array<DictionaryEntry> */
