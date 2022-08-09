@@ -21,6 +21,7 @@ class ArrayValue implements DictionaryValueType
         }
 
         $array = [];
+        $valueString = preg_replace('/(<[^>]*>)(?=<[^>]*>)/', '$1 $2', $valueString);
         $values = explode(' ', rtrim(ltrim($valueString, '['), ']'));
         foreach ($values as $value) {
             if (str_starts_with($value, '[') && str_ends_with($value, ']')) {
