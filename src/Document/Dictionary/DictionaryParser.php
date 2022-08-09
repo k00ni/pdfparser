@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Dictionary;
 
+use Exception;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class DictionaryParser
@@ -23,7 +24,7 @@ class DictionaryParser
         $valueBuffer = $keyBuffer = [$depth => ''];
         $context = [$depth => self::CONTEXT_ROOT];
         $previousChar = null;
-        foreach (str_split($content) as $char) {
+        foreach (str_split($content) as $index => $char) {
             if ($depth > 0) {
                 $codePointChar = ord($char);
                 if ($char === '/') {
@@ -84,7 +85,13 @@ class DictionaryParser
             $dictionaryArray = static::assignNested($dictionaryArray, $depth, $keyBuffer, $valueBuffer);
         }
 
-        return DictionaryFactory::fromArray($dictionaryArray);
+        try {
+            $dictionary = DictionaryFactory::fromArray($dictionaryArray);
+        } catch (Exception $e) {
+            throw new Exception('Unable to create dictionary for string "' . $content . '": ' . $e->getMessage());
+        }
+
+        return $dictionary;
     }
 
     private static function assignNested(array $dictionaryArray, int $depth, array $keyBuffer, array $valueBuffer): array

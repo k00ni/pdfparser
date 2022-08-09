@@ -17,6 +17,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\TextString\TextStringValue;
 use PrinsFrank\PdfParser\Exception\InvalidDictionaryValueTypeFormatException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use Throwable;
 
 class DictionaryValue
 {
@@ -81,7 +82,6 @@ class DictionaryValue
                 DictionaryKey::OUTLINES,
                 DictionaryKey::TO_UNICODE,
                 DictionaryKey::OPEN_ACTION,
-                DictionaryKey::FONT_FILE,
                 DictionaryKey::ROOT          => ReferenceValue::fromValue($valueString),
                 DictionaryKey::CREATOR,
                 DictionaryKey::GS,
@@ -129,6 +129,7 @@ class DictionaryValue
                 DictionaryKey::URI,
                 DictionaryKey::K,
                 DictionaryKey::X_OBJECT,
+                DictionaryKey::FONT_FILE,
                 DictionaryKey::PRODUCER      => TextStringValue::fromValue($valueString),
                 DictionaryKey::MOD_DATE,
                 DictionaryKey::CREATION_DATE => DateValue::fromValue($valueString),
@@ -139,7 +140,7 @@ class DictionaryValue
                 DictionaryKey::SUBTYPE       => SubtypeNameValue::fromValue($valueString),
                 default                      => throw new ParseFailureException('Dictionary key "' . $dictionaryKey->name . '" is not supported (' . $valueString . ')'),
             };
-        } catch (InvalidDictionaryValueTypeFormatException $e) {
+        } catch (Throwable $e) {
             throw new ParseFailureException($e->getMessage() . ' for dictionary key of type "' . $dictionaryKey->value . '"');
         }
     }
