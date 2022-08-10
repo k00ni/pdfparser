@@ -65,7 +65,7 @@ class DictionaryParser
             }
 
             if ($depth < 0) {
-                throw new ParseFailureException('Traversed out of bounds in content "' . substr($content, $index - 10, 20) . '" at position "' . $index . '" with current char "' . $char . '" and previous char "' . $previousChar . '"');
+                throw new ParseFailureException('Traversed out of bounds in content "' . str_replace(["\r", "\n"], '', substr($content, $index - 10, 20)) . '" at position "' . $index . '" with current char "' . $char . '" and previous char "' . $previousChar . '"');
             }
 
             switch ($context[$depth]) {
