@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+namespace PrinsFrank\PdfParser\Document\Character;
+
 /**
  * @see PDF 32000-1:2008 7.2.2 Table 2
  */

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document\Dictionary;
 
 use Exception;
+use PrinsFrank\PdfParser\Document\Character\DelimiterCharacter;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class DictionaryParser
@@ -27,7 +28,7 @@ class DictionaryParser
         foreach (str_split($content) as $index => $char) {
             if ($depth > 0) {
                 $codePointChar = ord($char);
-                if ($char === '/') {
+                if ($char === DelimiterCharacter::SOLIDUS->value) {
                     if ($context[$depth] === self::CONTEXT_ROOT) {
                         $context[$depth] = self::CONTEXT_KEY;
                     } elseif ($context[$depth] === self::CONTEXT_KEY) {
@@ -41,23 +42,23 @@ class DictionaryParser
                     }
                 } else if ($context[$depth] === self::CONTEXT_KEY && (($codePointChar >= 65 && $codePointChar <= 90) || ($codePointChar >= 97 && $codePointChar <= 122) || $codePointChar === 46) === false) {
                     $context[$depth] = self::CONTEXT_KEY_VALUE_SEPARATOR;
-                } else if (in_array($context[$depth], [self::CONTEXT_VALUE, self::CONTEXT_KEY_VALUE_SEPARATOR]) && $char === '(') {
+                } else if (in_array($context[$depth], [self::CONTEXT_VALUE, self::CONTEXT_KEY_VALUE_SEPARATOR]) && $char === DelimiterCharacter::RIGHT_PARENTHESIS->value) {
                     $context[$depth] = self::CONTEXT_VALUE_EXPLICIT;
                 } else if ($context[$depth] === self::CONTEXT_KEY_VALUE_SEPARATOR) {
                     $context[$depth] = self::CONTEXT_VALUE;
-                } else if ($context[$depth] === self::CONTEXT_VALUE_EXPLICIT && $char === ')') {
+                } else if ($context[$depth] === self::CONTEXT_VALUE_EXPLICIT && $char === DelimiterCharacter::LEFT_PARENTHESIS->value) {
                     $context[$depth] = self::CONTEXT_VALUE;
                 }
             }
 
-            if ($char === '<' && $previousChar === '<') {
+            if ($char === DelimiterCharacter::LESS_THAN_SIGN->value && $previousChar === DelimiterCharacter::LESS_THAN_SIGN->value) {
                 $depth++;
                 $valueBuffer[$depth] = '';
                 $keyBuffer[$depth] = '';
                 $context[$depth] = self::CONTEXT_ROOT;
             }
 
-            if ($char === '>' && $previousChar === '>') {
+            if ($char === DelimiterCharacter::GREATER_THAN_SIGN->value && $previousChar === DelimiterCharacter::GREATER_THAN_SIGN->value) {
                 $dictionaryArray = static::assignNested($dictionaryArray, $depth, $keyBuffer, $valueBuffer);
                 unset($valueBuffer[$depth], $keyBuffer[$depth], $context[$depth]);
                 $depth--;
