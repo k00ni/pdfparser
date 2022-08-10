@@ -1,6 +1,9 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * @see PDF 32000-1:2008 7.2.2 Table 1
+ */
 enum WhitespaceCharacter: string
 {
     case NULL            = "\000";

@@ -1,6 +1,9 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * @see PDF 32000-1:2008 7.3.4.2 Table 3
+ */
 enum LiteralStringEscapeCharacter: string
 {
     case LINE_FEED         = '\n';
