@@ -5,7 +5,12 @@ namespace PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable;
 
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceSource;
 
-class CrossReferenceTable extends CrossReferenceSource
+class CrossReferenceTable implements CrossReferenceSource
 {
+    public readonly array $crossReferenceSubSections;
 
+    public function __construct(array $crossReferenceSubSections)
+    {
+        $this->crossReferenceSubSections = $crossReferenceSubSections;
+    }
 }

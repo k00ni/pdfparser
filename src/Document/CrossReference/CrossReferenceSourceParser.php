@@ -3,15 +3,21 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\CrossReference;
 
+use PrinsFrank\PdfParser\Document\Character\ObjectInUseOrFreeCharacter;
+use PrinsFrank\PdfParser\Document\Character\WhitespaceCharacter;
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceData\CrossReferenceData;
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\CrossReferenceStream;
+use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\CrossReferenceEntry;
+use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\CrossReferenceSubSection;
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\CrossReferenceTable;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Document;
+use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamContent\ObjectStreamContentParser;
+use PrinsFrank\PdfParser\Exception\InvalidCrossReferenceLineException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class CrossReferenceSourceParser
@@ -21,26 +27,50 @@ class CrossReferenceSourceParser
      */
     public static function parse(Document $document): CrossReferenceSource
     {
-        $content = substr($document->content, $document->trailer->byteOffsetLastCrossReferenceSection, $document->trailer->startXrefMarkerPos - $document->trailer->byteOffsetLastCrossReferenceSection);
+        $content = substr($document->content, $document->trailer->byteOffsetLastCrossReferenceSection, $document->trailer->startTrailerMarkerPos - $document->trailer->byteOffsetLastCrossReferenceSection);
         $dictionary = DictionaryParser::parse($content);
         if ($dictionary->getEntryWithKey(DictionaryKey::TYPE)?->value === TypeNameValue::X_REF) {
-            return self::parseStream($document, $dictionary, $content);
+            return self::parseStream($dictionary, $content);
         }
 
-        return static::parseTable($document, $dictionary, $content);
+        return static::parseTable($content);
     }
 
-    public static function parseTable(Document $document, Dictionary $dictionary, string $content): CrossReferenceTable
+    /**
+     * @throws InvalidCrossReferenceLineException
+     */
+    public static function parseTable(string $content): CrossReferenceTable
     {
-        $crossReferenceTable = new CrossReferenceTable();
+        $crossReferenceSubSection = null;
+        $crossReferenceSubSections = [];
+        $content = str_replace([WhitespaceCharacter::CARRIAGE_RETURN->value], WhitespaceCharacter::LINE_FEED->value, $content);
+        foreach (explode(WhitespaceCharacter::LINE_FEED->value, $content) as $index => $line) {
+            if (($index === 0 && $line === Marker::XREF->value)
+                || trim($line) === '') {
+                continue;
+            }
 
-        return $crossReferenceTable;
+            $sections = explode(WhitespaceCharacter::SPACE->value, trim($line));
+            switch (count($sections)) {
+                case 2:
+                    $crossReferenceSubSection = new CrossReferenceSubSection((int) $sections[0], (int) $sections[1]);
+                    $crossReferenceSubSections[] = $crossReferenceSubSection;
+                    break;
+                case 3:
+                    $crossReferenceSubSection->addCrossReferenceEntry(new CrossReferenceEntry((int) $sections[0], (int) $sections[1], ObjectInUseOrFreeCharacter::from(trim($sections[2]))));
+                    break;
+                default:
+                    throw new InvalidCrossReferenceLineException('Invalid line "' . trim($line) . '", 2 or 3 sections expected, "' . count($sections) . '" found: ' . json_encode($sections, JSON_THROW_ON_ERROR));
+            }
+        }
+
+        return new CrossReferenceTable($crossReferenceSubSections);
     }
 
     /**
      * @throws ParseFailureException
      */
-    public static function parseStream(Document $document, Dictionary $dictionary, string $content): CrossReferenceStream
+    public static function parseStream(Dictionary $dictionary, string $content): CrossReferenceStream
     {
         $dictionaryType = $dictionary->getEntryWithKey(DictionaryKey::TYPE)?->value;
         if ($dictionaryType !== TypeNameValue::X_REF) {
