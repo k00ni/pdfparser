@@ -5,7 +5,7 @@ namespace PrinsFrank\PdfParser\Document\CrossReference;
 
 use PrinsFrank\PdfParser\Document\Character\ObjectInUseOrFreeCharacter;
 use PrinsFrank\PdfParser\Document\Character\WhitespaceCharacter;
-use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceData\CrossReferenceData;
+use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\CrossReferenceData;
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\CrossReferenceStream;
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\CrossReferenceEntry;
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\CrossReferenceSubSection;

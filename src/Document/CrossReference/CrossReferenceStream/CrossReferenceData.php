@@ -1,9 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceData;
-
-use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\CrossReferenceStreamType;
+namespace PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream;
 
 class CrossReferenceData
 {
