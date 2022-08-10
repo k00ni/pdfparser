@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\CrossReference;
 
-use PrinsFrank\PdfParser\Document\Character\ObjectInUseOrFreeCharacter;
-use PrinsFrank\PdfParser\Document\Character\WhitespaceCharacter;
+use PrinsFrank\PdfParser\Document\Generic\Character\ObjectInUseOrFreeCharacter;
+use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\CrossReferenceData;
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\CrossReferenceStream;
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\CrossReferenceEntry;

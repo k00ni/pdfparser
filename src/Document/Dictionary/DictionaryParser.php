@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document\Dictionary;
 
 use Exception;
-use PrinsFrank\PdfParser\Document\Character\DelimiterCharacter;
+use PrinsFrank\PdfParser\Document\Generic\Character\DelimiterCharacter;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class DictionaryParser
