@@ -12,12 +12,12 @@ use PrinsFrank\PdfParser\Document\Document;
  */
 final class Trailer
 {
-    public readonly Document   $document;
-    public readonly int        $eofMarkerPos;
-    public readonly int        $startXrefMarkerPos;
-    public readonly int        $byteOffsetLastCrossReferenceSection;
-    public readonly int        $startTrailerMarkerPos;
-    public readonly Dictionary $dictionary;
+    public readonly Document    $document;
+    public readonly int         $eofMarkerPos;
+    public readonly int         $startXrefMarkerPos;
+    public readonly int         $byteOffsetLastCrossReferenceSection;
+    public readonly ?int        $startTrailerMarkerPos;
+    public readonly ?Dictionary $dictionary;
 
     public function __construct(Document $document)
     {
@@ -45,14 +45,14 @@ final class Trailer
         return $this;
     }
 
-    public function setStartTrailerMarkerPos(int $startTrailerMarkerPos): self
+    public function setStartTrailerMarkerPos(?int $startTrailerMarkerPos): self
     {
         $this->startTrailerMarkerPos = $startTrailerMarkerPos;
 
         return $this;
     }
 
-    public function setDictionary(Dictionary $dictionary): self
+    public function setDictionary(?Dictionary $dictionary): self
     {
         $this->dictionary = $dictionary;
 

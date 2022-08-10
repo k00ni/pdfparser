@@ -21,8 +21,8 @@ final class PdfParser
 
         return $document->setVersion(VersionParser::parse($document))
             ->setTrailer(TrailerSectionParser::parse($document))
-            ->setCrossReferenceSource(CrossReferenceSourceParser::parse($document))
-            ->setObjectStreams(...ObjectStreamParser::parse($document))
+//            ->setCrossReferenceSource(CrossReferenceSourceParser::parse($document))
+//            ->setObjectStreams(...ObjectStreamParser::parse($document))
         ;
     }
 }
