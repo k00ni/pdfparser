@@ -67,6 +67,7 @@ enum DictionaryKey: string
     case HELV               = 'Helv';
     case I                  = 'I';
     case ID                 = 'ID';
+    case INTENT             = 'Intent';
     case IM                 = 'Im';
     case IMAGE_B            = 'ImageB';
     case IMAGE_C            = 'ImageC';
@@ -99,6 +100,7 @@ enum DictionaryKey: string
     case O                  = 'O';
     case OC_PROPERTIES      = 'OCProperties';
     case OPEN_ACTION        = 'OpenAction';
+    case O_P_M              = 'OPM';
     case OUTLINES           = 'Outlines';
     case OUTPUT_INTENTS     = 'OutputIntents';
     case P                  = 'P';
@@ -137,6 +139,7 @@ enum DictionaryKey: string
     case SUBTYPE            = 'Subtype';
     case T                  = 'T';
     case TABS               = 'Tabs';
+    case TC                 = 'Tc';
     case TEXT               = 'Text';
     case THREADS            = 'Threads';
     case TITLE              = 'Title';
