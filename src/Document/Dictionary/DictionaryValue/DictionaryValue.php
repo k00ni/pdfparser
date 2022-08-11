@@ -15,7 +15,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\FilterNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\TextString\TextStringValue;
-use PrinsFrank\PdfParser\Exception\InvalidDictionaryValueTypeFormatException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use Throwable;
 
@@ -81,6 +80,7 @@ class DictionaryValue
                 DictionaryKey::HELV,
                 DictionaryKey::OUTLINES,
                 DictionaryKey::TO_UNICODE,
+                DictionaryKey::PAGE_LABELS,
                 DictionaryKey::ROOT          => ReferenceValue::fromValue($valueString),
                 DictionaryKey::CREATOR,
                 DictionaryKey::OPEN_ACTION,
@@ -130,6 +130,9 @@ class DictionaryValue
                 DictionaryKey::K,
                 DictionaryKey::X_OBJECT,
                 DictionaryKey::FONT_FILE,
+                DictionaryKey::CA,
+                DictionaryKey::C_S,
+                DictionaryKey::W_M,
                 DictionaryKey::PRODUCER      => TextStringValue::fromValue($valueString),
                 DictionaryKey::MOD_DATE,
                 DictionaryKey::CREATION_DATE => DateValue::fromValue($valueString),

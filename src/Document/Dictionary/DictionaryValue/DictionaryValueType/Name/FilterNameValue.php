@@ -15,7 +15,7 @@ enum FilterNameValue: string implements NameValue
     case RUN_LENGTH_DECODE = 'RunLengthDecode';
     case CCITT_FAX_DECODE = 'CCITTFaxDecode';
     case JBIG2_DECODE = 'JBIG2Decode';
-    case DCT_DECODE = 'DCTDecode';
+    case DCT_DECODE = 'DCTDecode'; // Grayscale or color image data encoded in JPEG baseline format
     case JBX_DECODE = 'JPXDecode';
     case CRYPT = 'Crypt';
 
@@ -30,6 +30,7 @@ enum FilterNameValue: string implements NameValue
     public static function decode(self $filter, string $content): ?string
     {
         return match($filter) {
+            self::DCT_DECODE => $content, // Dont decode JPEG content
             self::FLATE_DECODE => FlateDecode::decode($content),
             default => throw new ParseFailureException('Content "' . $content . '" cannot be decoded for filter "' . $filter->name . '"')
         };

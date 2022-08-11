@@ -10,6 +10,7 @@ enum SubtypeNameValue: string implements NameValue
     case XML = 'XML';
     case TRUE_TYPE = 'TrueType';
     case FORM = 'Form';
+    case LINK = 'Link';
 
     public static function fromValue(string $valueString): self
     {

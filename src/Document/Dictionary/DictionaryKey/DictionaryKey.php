@@ -20,6 +20,7 @@ enum DictionaryKey: string
     case BORDER             = 'Border';
     case CAP_HEIGHT         = 'CapHeight';
     case C                  = 'C';
+    case CA                 = 'CA';
     case CF                 = 'CF';
     case CFM                = 'CFM';
     case CHAR_SET           = 'CharSet';
@@ -32,7 +33,8 @@ enum DictionaryKey: string
     case CREATOR            = 'Creator';
     case CREATION_DATE      = 'CreationDate';
     case CROP_BOX           = 'CropBox';
-    case CS                 = 'CS';
+    case CS                 = 'Cs';
+    case C_S                = 'CS';
     case DECODE_PARAMS      = 'DecodeParms';
     case DESCENT            = 'Descent';
     case DESTS              = 'Dests';
@@ -57,7 +59,8 @@ enum DictionaryKey: string
     case FONT_FILE          = 'FontFile';
     case FONT_NAME          = 'FontName';
     case FORM_TYPE          = 'FormType';
-    case GS                 = 'GS';
+    case GS                 = 'Gs';
+    case G_S                = 'GS';
     case GROUP              = 'Group';
     case H                  = 'H';
     case HEIGHT             = 'Height';
@@ -99,7 +102,7 @@ enum DictionaryKey: string
     case OUTLINES           = 'Outlines';
     case OUTPUT_INTENTS     = 'OutputIntents';
     case P                  = 'P';
-    case PAGE_LABELS        = 'PagesLabels';
+    case PAGE_LABELS        = 'PageLabels';
     case PAGE_LAYOUT        = 'PageLayout';
     case PAGE_MODE          = 'PageMode';
     case PAGES              = 'Pages';
@@ -146,11 +149,13 @@ enum DictionaryKey: string
     case VERSION            = 'Version';
     case VIEWER_PREFERENCES = 'ViewerPreferences';
     case W                  = 'W';
+    case W_M                = 'WM';
     case WIDTH              = 'Width';
     case WIDTHS             = 'Widths';
     case X_HEIGHT           = 'XHeight';
     case X_OBJECT           = 'XObject';
     case X_REF_STM          = 'XRefStm';
+    case X_Y_Z              = 'XYZ';
 
     public static function fromKeyString(string $keyString): self
     {
