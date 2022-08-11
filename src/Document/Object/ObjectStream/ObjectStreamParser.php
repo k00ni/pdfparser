@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document\Object\ObjectStream;
 
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\CrossReferenceStreamType;
+use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\CrossReferenceTable;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\ObjectParser;
@@ -19,9 +20,17 @@ class ObjectStreamParser
     public static function parse(Document $document): array
     {
         $byteOffsets = [$document->contentLength];
-        foreach ($document->crossReferenceSource->data as $crossReferenceData) {
-            if ($crossReferenceData->type === CrossReferenceStreamType::TYPE_UNCOMPRESSED_OBJECT) {
-                $byteOffsets[] = hexdec($crossReferenceData->objNumberOrByteOffset);
+        if ($document->crossReferenceSource instanceof CrossReferenceTable) {
+            foreach ($document->crossReferenceSource->crossReferenceSubSections as $crossReferenceSubSection) {
+                foreach ($crossReferenceSubSection->crossReferenceEntries as $crossReferenceEntry) {
+                    $byteOffsets[] = $crossReferenceEntry->offset;
+                }
+            }
+        } else {
+            foreach ($document->crossReferenceSource->data as $crossReferenceData) {
+                if ($crossReferenceData->type === CrossReferenceStreamType::TYPE_UNCOMPRESSED_OBJECT) {
+                    $byteOffsets[] = hexdec($crossReferenceData->objNumberOrByteOffset);
+                }
             }
         }
 
