@@ -7,6 +7,7 @@ use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceSource;
 
 class CrossReferenceTable implements CrossReferenceSource
 {
+    /** @var array<CrossReferenceSubSection> */
     public readonly array $crossReferenceSubSections;
 
     public function __construct(array $crossReferenceSubSections)

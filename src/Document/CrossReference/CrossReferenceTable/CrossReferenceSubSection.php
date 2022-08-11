@@ -7,6 +7,8 @@ class CrossReferenceSubSection
 {
     public readonly int $firstObjectNumber;
     public readonly int $nrOfEntries;
+
+    /** @var array<CrossReferenceEntry> */
     public array $crossReferenceEntries = [];
 
     public function __construct(int $firstObjectNumber, int $nrOfEntries)
