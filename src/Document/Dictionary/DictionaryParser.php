@@ -6,6 +6,7 @@ namespace PrinsFrank\PdfParser\Document\Dictionary;
 use Exception;
 use PrinsFrank\PdfParser\Document\Generic\Character\DelimiterCharacter;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use Throwable;
 
 class DictionaryParser
 {
@@ -88,7 +89,7 @@ class DictionaryParser
 
         try {
             $dictionary = DictionaryFactory::fromArray($dictionaryArray);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             throw new Exception('Unable to create dictionary for string "' . $content . '": ' . $e->getMessage());
         }
 
