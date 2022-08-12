@@ -4,11 +4,11 @@ declare(strict_types=1);
 namespace Document\Generic\Parsing;
 
 use PHPUnit\Framework\TestCase;
-use PrinsFrank\PdfParser\Document\Generic\Parsing\CharBuffer;
+use PrinsFrank\PdfParser\Document\Generic\Parsing\RollingCharBuffer;
 use PrinsFrank\PdfParser\Exception\BufferTooSmallException;
 
 /**
- * @coversDefaultClass \PrinsFrank\PdfParser\Document\Generic\Parsing\CharBuffer
+ * @coversDefaultClass \PrinsFrank\PdfParser\Document\Generic\Parsing\RollingCharBuffer
  */
 class CharBufferTest extends TestCase
 {
@@ -19,7 +19,7 @@ class CharBufferTest extends TestCase
      */
     public function testGetPreviousCharacter(): void
     {
-        $charBuffer = new CharBuffer(3);
+        $charBuffer = new RollingCharBuffer(3);
         $charBuffer->setCharacter('a');
         static::assertNull($charBuffer->getPreviousCharacter());
         static::assertNull($charBuffer->getPreviousCharacter(1));

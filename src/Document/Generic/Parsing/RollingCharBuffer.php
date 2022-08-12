@@ -9,7 +9,7 @@ use PrinsFrank\PdfParser\Exception\BufferTooSmallException;
 /**
  * @template TLength of int<1, max>
  */
-class CharBuffer
+class RollingCharBuffer
 {
     /** @var TLength $length */
     private int $length;
