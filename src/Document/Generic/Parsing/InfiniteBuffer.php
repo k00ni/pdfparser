@@ -30,4 +30,11 @@ class InfiniteBuffer
 
         return $this;
     }
+
+    public function removeChar(int $nChars): self
+    {
+        $this->buffer = substr($this->buffer, 0, -$nChars);
+
+        return $this;
+    }
 }

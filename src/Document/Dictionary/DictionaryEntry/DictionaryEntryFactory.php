@@ -15,7 +15,7 @@ class DictionaryEntryFactory
      */
     public static function fromKeyValuePair(string $keyString, array|string $dictionaryValue): ?DictionaryEntry
     {
-        $dictionaryKey = DictionaryKey::fromKeyString($keyString);
+        $dictionaryKey = DictionaryKey::fromKeyString(trim($keyString));
         $dictionaryEntry = (new DictionaryEntry())->setKey($dictionaryKey);
         if (is_array($dictionaryValue)) {
             $arrayValues = [];
