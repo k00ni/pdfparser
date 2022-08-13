@@ -36,16 +36,18 @@ class DictionaryParser
             if ($char === DelimiterCharacter::LESS_THAN_SIGN->value
                 && $rollingCharBuffer->getPreviousCharacter() === DelimiterCharacter::LESS_THAN_SIGN->value
                 && $rollingCharBuffer->getPreviousCharacter(2) !== LiteralStringEscapeCharacter::REVERSE_SOLIDUS->value) {
-                $nestingContext->removeFromKeyBuffer();
-                $nestingContext->incrementNesting()->setContext(DictionaryParseContext::ROOT);
+                $nestingContext->removeFromKeyBuffer()
+                               ->setContext(DictionaryParseContext::DICTIONARY)
+                               ->incrementNesting()
+                               ->setContext(DictionaryParseContext::DICTIONARY);
             } else if ($char === DelimiterCharacter::GREATER_THAN_SIGN->value
                 && $rollingCharBuffer->getPreviousCharacter() === DelimiterCharacter::GREATER_THAN_SIGN->value
                 && $rollingCharBuffer->getPreviousCharacter(2) !== LiteralStringEscapeCharacter::REVERSE_SOLIDUS->value) {
                 $nestingContext->removeFromValueBuffer();
                 self::flush($dictionaryArray, $nestingContext);
-                $nestingContext->decrementNesting()->setContext(DictionaryParseContext::ROOT)->flush();
+                $nestingContext->decrementNesting()->flush();
             } else if ($char === DelimiterCharacter::SOLIDUS->value && $rollingCharBuffer->getPreviousCharacter() !== LiteralStringEscapeCharacter::REVERSE_SOLIDUS->value) {
-                if ($nestingContext->getContext() === DictionaryParseContext::ROOT) {
+                if ($nestingContext->getContext() === DictionaryParseContext::DICTIONARY) {
                     $nestingContext->setContext(DictionaryParseContext::KEY);
                 } else if ($nestingContext->getContext() === DictionaryParseContext::VALUE) {
                     self::flush($dictionaryArray, $nestingContext);
@@ -82,8 +84,11 @@ class DictionaryParser
                 DictionaryParseContext::VALUE => $nestingContext->addToValueBuffer($char),
                 default => null,
             };
+
+            echo 'Char "'. $char . '" resulted in new context "'. $nestingContext->getContext()->name . '"' . PHP_EOL;
         }
 
+        var_dump($dictionaryArray);
         try {
             $dictionary = DictionaryFactory::fromArray($dictionaryArray);
         } catch (Throwable $e) {

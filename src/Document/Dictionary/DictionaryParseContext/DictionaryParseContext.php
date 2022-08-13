@@ -6,6 +6,7 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryParseContext;
 enum DictionaryParseContext
 {
     case ROOT;
+    case DICTIONARY;
     case KEY;
     case KEY_VALUE_SEPARATOR;
     case VALUE;

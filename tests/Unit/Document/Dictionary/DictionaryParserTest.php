@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Tests\Unit\Parser;
+namespace PrinsFrank\PdfParser\Tests\Unit\Document\Dictionary;
 
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;

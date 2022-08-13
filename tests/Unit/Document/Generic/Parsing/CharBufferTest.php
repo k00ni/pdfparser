@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Document\Generic\Parsing;
+namespace PrinsFrank\PdfParser\Tests\Unit\Document\Generic\Parsing;
 
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\Generic\Parsing\RollingCharBuffer;
