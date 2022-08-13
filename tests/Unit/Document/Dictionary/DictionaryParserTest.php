@@ -9,8 +9,10 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Array\ArrayValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Date\DateValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Integer\IntegerValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\FilterNameValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TrappedNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Rectangle\Rectangle;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValue;
@@ -144,7 +146,7 @@ class DictionaryParserTest extends TestCase
                 ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::STEM_V)->setValue(new IntegerValue(69)))
                 ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::X_HEIGHT)->setValue(new IntegerValue(431)))
                 ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::CHAR_SET)->setValue(new TextStringValue('(/S/a/c/d/e/fi/g/l/n/o/one/p/r/s/t/two)')))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::FONT_FILE)->setValue(new ReferenceValue(11, 0)))
+                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::FONT_FILE)->setValue(new TextStringValue('11 0 R')))
             ,
             DictionaryParser::parse(
                 '<<' . PHP_EOL .
@@ -173,11 +175,11 @@ class DictionaryParserTest extends TestCase
         static::assertEquals(
 
             (new Dictionary())
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::PRODUCER)->setValue(new TextStringValue('(pdfTeX-1.40-18)')))
+                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::PRODUCER)->setValue(new TextStringValue('(pdfTeX-1.40.18)')))
                 ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::CREATOR)->setValue(new TextStringValue('(TeX)')))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::CREATION_DATE)->setValue(new TextStringValue('(D:20220506201153+02\'00\')')))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::MOD_DATE)->setValue(new TextStringValue('(D:20220506201153+02\'00\')')))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::TRAPPED)->setValue(new TextStringValue('/False')))
+                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::CREATION_DATE)->setValue(new DateValue('(D:20220506201153+02\'00\')')))
+                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::MOD_DATE)->setValue(new DateValue('(D:20220506201153+02\'00\')')))
+                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::TRAPPED)->setValue(TrappedNameValue::FALSE))
                 ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::PTEX_FULL_BANNER)->setValue(new TextStringValue('(This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) kpathsea version 6.2.3)')))
             ,
             DictionaryParser::parse(

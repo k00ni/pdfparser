@@ -9,4 +9,5 @@ enum DictionaryParseContext
     case KEY;
     case KEY_VALUE_SEPARATOR;
     case VALUE;
+    case EXPLICIT_VALUE;
 }
