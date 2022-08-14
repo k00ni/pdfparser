@@ -84,11 +84,8 @@ class DictionaryParser
                 DictionaryParseContext::VALUE => $nestingContext->addToValueBuffer($char),
                 default => null,
             };
-
-            echo 'Char "'. $char . '" resulted in new context "'. $nestingContext->getContext()->name . '"' . PHP_EOL;
         }
 
-        var_dump($dictionaryArray);
         try {
             $dictionary = DictionaryFactory::fromArray($dictionaryArray);
         } catch (Throwable $e) {

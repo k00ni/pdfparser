@@ -21,6 +21,7 @@ enum DictionaryKey: string
     case CAP_HEIGHT         = 'CapHeight';
     case C                  = 'C';
     case CA                 = 'CA';
+    case CA_L               = 'ca';
     case CF                 = 'CF';
     case CFM                = 'CFM';
     case CHAR_SET           = 'CharSet';
@@ -84,6 +85,7 @@ enum DictionaryKey: string
     case LEGAL              = 'Legal';
     case LEADING            = 'Leading';
     case LENGTH             = 'Length';
+    case LENGTH_1           = 'Length1';
     case LINEARIZED         = 'Linearized';
     case MATRIX             = 'Matrix';
     case MEDIABOX           = 'MediaBox';

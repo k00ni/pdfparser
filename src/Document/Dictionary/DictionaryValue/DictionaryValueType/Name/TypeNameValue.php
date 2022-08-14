@@ -18,6 +18,7 @@ enum TypeNameValue: string implements NameValue
     case ANNOT           = 'Annot';
     case OUTLINES        = 'Outlines';
     case EXT_G_STATE     = 'ExtGState';
+    case ENCODING        = 'Encoding';
 
     public static function fromValue(string $valueString): self
     {
