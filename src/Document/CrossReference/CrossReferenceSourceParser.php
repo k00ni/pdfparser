@@ -50,6 +50,10 @@ class CrossReferenceSourceParser
                 continue;
             }
 
+            if (trim($line) === Marker::TRAILER->value) {
+                break;
+            }
+
             $sections = explode(WhitespaceCharacter::SPACE->value, trim($line));
             switch (count($sections)) {
                 case 2:
@@ -60,7 +64,7 @@ class CrossReferenceSourceParser
                     $crossReferenceSubSection->addCrossReferenceEntry(new CrossReferenceEntry((int) $sections[0], (int) $sections[1], ObjectInUseOrFreeCharacter::from(trim($sections[2]))));
                     break;
                 default:
-                    throw new InvalidCrossReferenceLineException('Invalid line "' . trim($line) . '", 2 or 3 sections expected, "' . count($sections) . '" found: ' . json_encode($sections, JSON_THROW_ON_ERROR));
+                    throw new InvalidCrossReferenceLineException('Invalid line "' . trim($line) . '", 2 or 3 sections expected, "' . count($sections) . '" found: ' . json_encode($sections, JSON_THROW_ON_ERROR) . '" content: "' . $content . '"');
             }
         }
 
@@ -82,9 +86,9 @@ class CrossReferenceSourceParser
             throw new ParseFailureException('Missing W value, can\'t decode stream.');
         }
 
-        $byteLengthRecord1 = ($wValue[0] ?? 0) * 2;
-        $byteLengthRecord2 = ($wValue[1] ?? 0) * 2;
-        $byteLengthRecord3 = ($wValue[2] ?? 0) * 2;
+        $byteLengthRecord1 = ((int) ($wValue[0] ?? 0)) * 2;
+        $byteLengthRecord2 = ((int) ($wValue[1] ?? 0)) * 2;
+        $byteLengthRecord3 = ((int) ($wValue[2] ?? 0)) * 2;
         $crossReferenceStream = new CrossReferenceStream();
         foreach (str_split(bin2hex(ObjectStreamContentParser::parse($content, $dictionary)), $byteLengthRecord1 + $byteLengthRecord2 + $byteLengthRecord3) as $referenceRow) {
             $crossReferenceStream->addData(
