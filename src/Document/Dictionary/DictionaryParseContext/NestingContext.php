@@ -127,4 +127,9 @@ class NestingContext
 
         return $this;
     }
+
+    public function getCurrentLevel(): ?string
+    {
+        return $this->currentLevel;
+    }
 }
