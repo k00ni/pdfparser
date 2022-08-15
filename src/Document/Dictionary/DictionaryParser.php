@@ -60,6 +60,8 @@ class DictionaryParser
                     $nestingContext->setContext(DictionaryParseContext::VALUE);
                 } else if ($nestingContext->getContext() === DictionaryParseContext::VALUE) {
                     self::flush($dictionaryArray, $nestingContext);
+                } else if ($nestingContext->getContext() === DictionaryParseContext::COMMENT) {
+                    $nestingContext->setContext(DictionaryParseContext::DICTIONARY);
                 }
             } else if ($char === WhitespaceCharacter::SPACE->value && $nestingContext->getContext() === DictionaryParseContext::KEY) {
                 $nestingContext->setContext(DictionaryParseContext::KEY_VALUE_SEPARATOR);
@@ -75,6 +77,8 @@ class DictionaryParser
                 $nestingContext->setContext(DictionaryParseContext::VALUE);
             } else if (trim($char) !== '' && $nestingContext->getContext() === DictionaryParseContext::KEY_VALUE_SEPARATOR) {
                 $nestingContext->setContext(DictionaryParseContext::VALUE);
+            } else if ($char === DelimiterCharacter::PERCENT_SIGN->value && $rollingCharBuffer->getPreviousCharacter() !== LiteralStringEscapeCharacter::REVERSE_SOLIDUS->value) {
+                $nestingContext->setContext(DictionaryParseContext::COMMENT);
             }
 
             match ($nestingContext->getContext()) {

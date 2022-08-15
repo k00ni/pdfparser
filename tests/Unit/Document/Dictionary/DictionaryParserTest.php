@@ -173,7 +173,6 @@ class DictionaryParserTest extends TestCase
     public function testParseValuesEncapsulatedInParentheses(): void
     {
         static::assertEquals(
-
             (new Dictionary())
                 ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::PRODUCER)->setValue(new TextStringValue('(pdfTeX-1.40.18)')))
                 ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::CREATOR)->setValue(new TextStringValue('(TeX)')))
@@ -190,6 +189,22 @@ class DictionaryParserTest extends TestCase
                 '/ModDate (D:20220506201153+02\'00\')' . PHP_EOL .
                 '/Trapped /False' . PHP_EOL .
                 '/PTEX.Fullbanner (This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) kpathsea version 6.2.3)' . PHP_EOL .
+                '>>'
+            )
+        );
+    }
+
+    public function testIgnoreCommentedLines(): void
+    {
+        static::assertEquals(
+            (new Dictionary())
+                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::PRODUCER)->setValue(new TextStringValue('(pdfTeX-1.40.18)')))
+            ,
+            DictionaryParser::parse(
+                '<<' . PHP_EOL .
+                '/Producer (pdfTeX-1.40.18)' . PHP_EOL .
+                '%/Creator (TeX)' . PHP_EOL .
+                '%  /Creator (TeX)' . PHP_EOL .
                 '>>'
             )
         );
