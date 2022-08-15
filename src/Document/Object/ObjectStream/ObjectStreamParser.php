@@ -40,14 +40,10 @@ class ObjectStreamParser
         $objectStreams = [];
         foreach ($byteOffsets as $byteOffset) {
             $objectStream = new ObjectStream();
-            try {
-                $objectStream->setContent(substr($document->content, $previousByteOffset, $byteOffset - $previousByteOffset));
-                $objectStream->setDictionary(DictionaryParser::parse($objectStream->content));
-                $objectStream->setDecodedStream(ObjectStreamContentParser::parse($objectStream->content, $objectStream->dictionary));
-                $objectStream->setObjects(...ObjectParser::parse($objectStream));
-            } catch (Throwable $e) {
-                $document->addError($e->getMessage());
-            }
+            $objectStream->setContent(substr($document->content, $previousByteOffset, $byteOffset - $previousByteOffset));
+            $objectStream->setDictionary(DictionaryParser::parse($document, $objectStream->content));
+            $objectStream->setDecodedStream(ObjectStreamContentParser::parse($objectStream->content, $objectStream->dictionary));
+            $objectStream->setObjects(...ObjectParser::parse($document, $objectStream));
             $objectStreams[] = $objectStream;
             $previousByteOffset = $byteOffset;
         }

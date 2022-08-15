@@ -28,7 +28,7 @@ class CrossReferenceSourceParser
     public static function parse(Document $document): CrossReferenceSource
     {
         $content = substr($document->content, $document->trailer->byteOffsetLastCrossReferenceSection, $document->trailer->startTrailerMarkerPos - $document->trailer->byteOffsetLastCrossReferenceSection);
-        $dictionary = DictionaryParser::parse($content);
+        $dictionary = DictionaryParser::parse($document, $content);
         if ($dictionary->getEntryWithKey(DictionaryKey::TYPE)?->value === TypeNameValue::X_REF) {
             return self::parseStream($dictionary, $content);
         }

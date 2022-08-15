@@ -186,8 +186,8 @@ enum DictionaryKey: string
     case X_REF_STM          = 'XRefStm';
     case X_Y_Z              = 'XYZ';
 
-    public static function fromKeyString(string $keyString): self
+    public static function tryFromKeyString(string $keyString): ?self
     {
-        return self::from(rtrim(ltrim($keyString, '/'), "1234567890\n\t "));
+        return self::tryFrom(rtrim(ltrim($keyString, '/'), "1234567890\n\t "));
     }
 }

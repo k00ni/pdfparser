@@ -5,12 +5,13 @@ namespace PrinsFrank\PdfParser\Document\Object;
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
+use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStream;
 
 class ObjectParser
 {
     /** @return ObjectItem[] */
-    public static function parse(ObjectStream $objectStream): array
+    public static function parse(Document $document, ObjectStream $objectStream): array
     {
         $numberOfItemsEntry = $objectStream->dictionary->getEntryWithKey(DictionaryKey::N);
         if ($numberOfItemsEntry === null || $objectStream->decodedStream === null) {
@@ -36,7 +37,7 @@ class ObjectParser
             $objectItems[] = new ObjectItem(
                 (int) $objectId,
                 $objectContent,
-                DictionaryParser::parse($objectContent)
+                DictionaryParser::parse($document, $objectContent)
             );
         }
 
