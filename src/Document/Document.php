@@ -22,6 +22,9 @@ final class Document
     public readonly CrossReferenceSource $crossReferenceSource;
     public readonly Trailer              $trailer;
 
+    /** @var array<string> */
+    public array $errors = [];
+
     public function __construct(string $content)
     {
         $this->content       = $content;
@@ -54,5 +57,18 @@ final class Document
         $this->objectStreams = $objectStreams;
 
         return $this;
+    }
+
+    public function addError(string $error): self
+    {
+        $this->errors[] = $error;
+
+        return $this;
+    }
+
+    /** @return array<string> */
+    public function getErrors(): array
+    {
+        return $this->errors;
     }
 }

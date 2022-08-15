@@ -96,13 +96,7 @@ class DictionaryParser
             };
         }
 
-        try {
-            $dictionary = DictionaryFactory::fromArray($dictionaryArray);
-        } catch (Throwable $e) {
-            throw new Exception('Unable to create dictionary for string "' . $content . '": ' . $e->getMessage());
-        }
-
-        return $dictionary;
+        return DictionaryFactory::fromArray($dictionaryArray);
     }
 
     private static function flush(array &$dictionaryArray, NestingContext $nestingContext) : void

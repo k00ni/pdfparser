@@ -10,6 +10,7 @@ use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\ObjectParser;
 use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamContent\ObjectStreamContentParser;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use Throwable;
 
 class ObjectStreamParser
 {
@@ -39,10 +40,14 @@ class ObjectStreamParser
         $objectStreams = [];
         foreach ($byteOffsets as $byteOffset) {
             $objectStream = new ObjectStream();
-            $objectStream->setContent(substr($document->content, $previousByteOffset, $byteOffset - $previousByteOffset));
-            $objectStream->setDictionary(DictionaryParser::parse($objectStream->content));
-            $objectStream->setDecodedStream(ObjectStreamContentParser::parse($objectStream->content, $objectStream->dictionary));
-            $objectStream->setObjects(...ObjectParser::parse($objectStream));
+            try {
+                $objectStream->setContent(substr($document->content, $previousByteOffset, $byteOffset - $previousByteOffset));
+                $objectStream->setDictionary(DictionaryParser::parse($objectStream->content));
+                $objectStream->setDecodedStream(ObjectStreamContentParser::parse($objectStream->content, $objectStream->dictionary));
+                $objectStream->setObjects(...ObjectParser::parse($objectStream));
+            } catch (Throwable $e) {
+                $document->addError($e->getMessage());
+            }
             $objectStreams[] = $objectStream;
             $previousByteOffset = $byteOffset;
         }
