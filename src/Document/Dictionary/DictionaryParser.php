@@ -9,6 +9,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParseContext\NestingConte
 use PrinsFrank\PdfParser\Document\Generic\Character\DelimiterCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Character\LiteralStringEscapeCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
+use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Document\Generic\Parsing\RollingCharBuffer;
 use PrinsFrank\PdfParser\Exception\BufferTooSmallException;
 use Throwable;
@@ -29,10 +30,14 @@ class DictionaryParser
     public static function parse(string $content): Dictionary
     {
         $dictionaryArray = [];
-        $rollingCharBuffer = new RollingCharBuffer(3);
+        $rollingCharBuffer = new RollingCharBuffer(6);
         $nestingContext = (new NestingContext())->setContext(DictionaryParseContext::ROOT);
         foreach (str_split($content) as $char) {
             $rollingCharBuffer->next()->setCharacter($char);
+            if ($rollingCharBuffer->seenMarker(Marker::STREAM)) {
+                break;
+            }
+
             if ($char === DelimiterCharacter::LESS_THAN_SIGN->value
                 && $rollingCharBuffer->getPreviousCharacter() === DelimiterCharacter::LESS_THAN_SIGN->value
                 && $rollingCharBuffer->getPreviousCharacter(2) !== LiteralStringEscapeCharacter::REVERSE_SOLIDUS->value) {

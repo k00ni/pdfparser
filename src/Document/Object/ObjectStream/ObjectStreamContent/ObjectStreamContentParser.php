@@ -16,13 +16,13 @@ class ObjectStreamContentParser
      */
     public static function parse(string $content, Dictionary $dictionary): ?string
     {
-        $startStream = strpos($content, Marker::START_STREAM->value);
+        $startStream = strpos($content, Marker::STREAM->value);
         $endStream = strpos($content, Marker::END_STREAM->value);
         if ($startStream === false || $endStream === false) {
             return null;
         }
 
-        $stream = substr($content, $startStream + strlen(Marker::START_STREAM->value), $endStream - $startStream - strlen(Marker::START_STREAM->value));
+        $stream = substr($content, $startStream + strlen(Marker::STREAM->value), $endStream - $startStream - strlen(Marker::STREAM->value));
 
         $streamFilter = $dictionary->getEntryWithKey(DictionaryKey::FILTER)?->value;
         if ($streamFilter instanceof FilterNameValue) {

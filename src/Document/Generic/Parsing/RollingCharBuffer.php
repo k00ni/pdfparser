@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document\Generic\Parsing;
 
 use InvalidArgumentException;
+use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Exception\BufferTooSmallException;
 
 /**
@@ -64,5 +65,17 @@ class RollingCharBuffer
         }
 
         return $this->buffer[($this->currentIndex - $nAgo) % $this->length] ?? null;
+    }
+
+    public function seenMarker(Marker $marker): bool
+    {
+        foreach (array_reverse(str_split($marker->value)) as $index => $char) {
+            $previousChar = $this->getPreviousCharacter($index);
+            if ($previousChar !== $char) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

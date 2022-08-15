@@ -10,6 +10,6 @@ enum Marker: string
     case TRAILER      = 'trailer';
     case XREF         = 'xref';
     case START_XREF   = 'startxref';
-    case START_STREAM = 'stream';
+    case STREAM       = 'stream';
     case END_STREAM   = 'endstream';
 }
