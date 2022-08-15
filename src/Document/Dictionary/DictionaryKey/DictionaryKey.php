@@ -58,6 +58,7 @@ enum DictionaryKey: string
     case FONT_B_BOX         = 'FontBBox';
     case FONT_DESCRIPTOR    = 'FontDescriptor';
     case FONT_FILE          = 'FontFile';
+    case FONT_FILE_3        = 'FontFile3';
     case FONT_NAME          = 'FontName';
     case FORM_TYPE          = 'FormType';
     case GS                 = 'Gs';
