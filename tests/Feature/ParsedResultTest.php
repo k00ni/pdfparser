@@ -31,7 +31,6 @@ class ParsedResultTest extends TestCase
 
         $document = $parser->parse(file_get_contents($pdfPath));
         static::assertSame([], $document->getErrors());
-        $this->addToAssertionCount(1);
     }
 
     public function pdfs(): iterable
