@@ -102,6 +102,10 @@ class DictionaryParser
 
     private static function flush(array &$dictionaryArray, NestingContext $nestingContext) : void
     {
+        if ($nestingContext->getValueBuffer()->isEmpty() || $nestingContext->getKeyBuffer()->isEmpty()) {
+            return;
+        }
+
         $dictionaryArrayPointer = &$dictionaryArray;
         foreach ($nestingContext->getKeysFromRoot() as $key) {
             if ($key === (string) $nestingContext->getKeyBuffer()) {
