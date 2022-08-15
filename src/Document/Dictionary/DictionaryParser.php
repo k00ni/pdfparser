@@ -36,10 +36,11 @@ class DictionaryParser
             if ($char === DelimiterCharacter::LESS_THAN_SIGN->value
                 && $rollingCharBuffer->getPreviousCharacter() === DelimiterCharacter::LESS_THAN_SIGN->value
                 && $rollingCharBuffer->getPreviousCharacter(2) !== LiteralStringEscapeCharacter::REVERSE_SOLIDUS->value) {
-                $nestingContext->removeFromKeyBuffer()
-                               ->setContext(DictionaryParseContext::DICTIONARY)
-                               ->incrementNesting()
-                               ->setContext(DictionaryParseContext::DICTIONARY);
+                if ($nestingContext->getContext() === DictionaryParseContext::KEY) {
+                    $nestingContext->removeFromKeyBuffer();
+                }
+
+                $nestingContext->setContext(DictionaryParseContext::DICTIONARY)->incrementNesting()->setContext(DictionaryParseContext::DICTIONARY);
             } else if ($char === DelimiterCharacter::GREATER_THAN_SIGN->value
                 && $rollingCharBuffer->getPreviousCharacter() === DelimiterCharacter::GREATER_THAN_SIGN->value
                 && $rollingCharBuffer->getPreviousCharacter(2) !== LiteralStringEscapeCharacter::REVERSE_SOLIDUS->value) {
