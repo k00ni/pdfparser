@@ -15,7 +15,7 @@ class ReferenceValue implements DictionaryValueType
      */
     public static function fromValue(string $valueString): DictionaryValueType
     {
-        $referenceParts = explode(' ', $valueString);
+        $referenceParts = explode(' ', rtrim(ltrim($valueString, '['), ']'));
         if (count($referenceParts) !== 3) {
             throw new InvalidDictionaryValueTypeFormatException('Invalid valueString, expected 3 parts: "' . $valueString . '"');
         }

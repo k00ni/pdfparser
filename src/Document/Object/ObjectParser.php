@@ -13,7 +13,7 @@ class ObjectParser
     public static function parse(ObjectStream $objectStream): array
     {
         $numberOfItemsEntry = $objectStream->dictionary->getEntryWithKey(DictionaryKey::N);
-        if ($numberOfItemsEntry === null) {
+        if ($numberOfItemsEntry === null || $objectStream->decodedStream === null) {
             return []; // No objects in this object stream
         }
         $firstEOL = strcspn($objectStream->decodedStream, "\r\n");

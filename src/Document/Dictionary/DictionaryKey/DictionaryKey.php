@@ -9,6 +9,8 @@ enum DictionaryKey: string
     case AA                 = 'AA';
     case ACRO_FORM          = 'AcroForm';
     case ANNOTS             = 'Annots';
+    case A_I_S              = 'AIS';
+    case ARTBOX             = 'ArtBox';
     case ASCENT             = 'Ascent';
     case AUTH_EVENT         = 'AuthEvent';
     case AUTHOR             = 'Author';
@@ -17,14 +19,20 @@ enum DictionaryKey: string
     case BASE_FONT          = 'BaseFont';
     case B_BOX              = 'BBox';
     case BITS_PER_COMPONENT = 'BitsPerComponent';
+    case BLEED_BOX          = 'BleedBox';
+    case B_M                = 'BM';
     case BORDER             = 'Border';
     case CAP_HEIGHT         = 'CapHeight';
     case C                  = 'C';
+    case C_O_               = 'CO_';
     case CA                 = 'CA';
     case CA_L               = 'ca';
     case CF                 = 'CF';
     case CFM                = 'CFM';
     case CHAR_SET           = 'CharSet';
+    case C_I_D_SET          = 'CIDSet';
+    case C_I_D_SYSTEM_INFO  = 'CIDSystemInfo';
+    case C_I_D_TO_G_I_D_MAP = 'CIDToGIDMap';
     case COLORS             = 'Colors';
     case COLOR_SPACE        = 'ColorSpace';
     case COLUMNS            = 'Columns';
@@ -38,9 +46,12 @@ enum DictionaryKey: string
     case C_S                = 'CS';
     case DECODE_PARAMS      = 'DecodeParms';
     case DESCENT            = 'Descent';
+    case DESCENDANT_FONTS   = 'DescendantFonts';
     case DESTS              = 'Dests';
     case DIFFERENCES        = 'Differences';
+    case DIRECTION          = 'Direction';
     case DOC_CHECKSUM       = 'DocChecksum';
+    case D_W                = 'DW';
     case E                  = 'E';
     case EFF                = 'EFF';
     case ENCODING           = 'Encoding';
@@ -57,8 +68,11 @@ enum DictionaryKey: string
     case FONT               = 'Font';
     case FONT_B_BOX         = 'FontBBox';
     case FONT_DESCRIPTOR    = 'FontDescriptor';
+    case FONT_FAMILY        = 'FontFamily';
     case FONT_FILE          = 'FontFile';
     case FONT_NAME          = 'FontName';
+    case FONT_STRETCH       = 'FontStretch';
+    case FONT_WEIGHT        = 'FontWeight';
     case FORM_TYPE          = 'FormType';
     case GS                 = 'Gs';
     case G_S                = 'GS';
@@ -68,8 +82,10 @@ enum DictionaryKey: string
     case HELV               = 'Helv';
     case I                  = 'I';
     case ID                 = 'ID';
+    case IN_DESIGN          = 'InDesign';
     case INTENT             = 'Intent';
     case IM                 = 'Im';
+    case IMAGE              = 'Image';
     case IMAGE_B            = 'ImageB';
     case IMAGE_C            = 'ImageC';
     case IMAGE_I            = 'ImageI';
@@ -101,10 +117,13 @@ enum DictionaryKey: string
     case O                  = 'O';
     case OC_PROPERTIES      = 'OCProperties';
     case OPEN_ACTION        = 'OpenAction';
+    case ORDERING           = 'Ordering';
+    case O_P                = 'OP';
     case O_P_M              = 'OPM';
     case OUTLINES           = 'Outlines';
     case OUTPUT_INTENTS     = 'OutputIntents';
     case P                  = 'P';
+    case PAGE               = 'Page';
     case PAGE_LABELS        = 'PageLabels';
     case PAGE_LAYOUT        = 'PageLayout';
     case PAGE_MODE          = 'PageMode';
@@ -121,12 +140,16 @@ enum DictionaryKey: string
     case R                  = 'R';
     case RECIPIENTS         = 'Recipients';
     case RECT               = 'Rect';
+    case REGISTRY           = 'Registry';
     case REQUIREMENTS       = 'Requirements';
     case RESOURCES          = 'Resources';
     case ROOT               = 'Root';
     case ROTATE             = 'Rotate';
     case S                  = 'S';
+    case S_A                = 'SA';
+    case SHADING            = 'Shading';
     case SIZE               = 'Size';
+    case S_M                = 'SM';
     case S_MASK             = 'SMask';
     case SPIDER_INFO        = 'SpiderInfo';
     case STEM_H             = 'StemH';
@@ -138,12 +161,14 @@ enum DictionaryKey: string
     case SUB_FILTER         = 'SubFilter';
     case SUBJECT            = 'Subject';
     case SUBTYPE            = 'Subtype';
+    case SUPPLEMENT         = 'Supplement';
     case T                  = 'T';
     case TABS               = 'Tabs';
     case TC                 = 'Tc';
     case TEXT               = 'Text';
     case THREADS            = 'Threads';
     case TITLE              = 'Title';
+    case T_P_L              = 'TPL';
     case TO_UNICODE         = 'ToUnicode';
     case TRAPPED            = 'Trapped';
     case TYPE               = 'Type';
@@ -163,6 +188,6 @@ enum DictionaryKey: string
 
     public static function fromKeyString(string $keyString): self
     {
-        return self::from(ltrim($keyString, '/123456789'));
+        return self::from(rtrim(ltrim($keyString, '/'), "1234567890\n\t "));
     }
 }

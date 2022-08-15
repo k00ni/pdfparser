@@ -21,7 +21,7 @@ enum FilterNameValue: string implements NameValue
 
     public static function fromValue(string $valueString): self
     {
-        return self::from(trim(ltrim($valueString, '/')));
+        return self::from(trim(rtrim(ltrim($valueString, '/[')), ']'));
     }
 
     /**
