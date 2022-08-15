@@ -58,7 +58,6 @@ enum DictionaryKey: string
     case FONT_B_BOX         = 'FontBBox';
     case FONT_DESCRIPTOR    = 'FontDescriptor';
     case FONT_FILE          = 'FontFile';
-    case FONT_FILE_3        = 'FontFile3';
     case FONT_NAME          = 'FontName';
     case FORM_TYPE          = 'FormType';
     case GS                 = 'Gs';
@@ -86,7 +85,6 @@ enum DictionaryKey: string
     case LEGAL              = 'Legal';
     case LEADING            = 'Leading';
     case LENGTH             = 'Length';
-    case LENGTH_1           = 'Length1';
     case LINEARIZED         = 'Linearized';
     case MATRIX             = 'Matrix';
     case MEDIABOX           = 'MediaBox';
@@ -165,6 +163,6 @@ enum DictionaryKey: string
 
     public static function fromKeyString(string $keyString): self
     {
-        return self::from(ltrim($keyString, '/'));
+        return self::from(ltrim($keyString, '/123456789'));
     }
 }
