@@ -13,7 +13,7 @@ use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Document\Generic\Parsing\RollingCharBuffer;
 use PrinsFrank\PdfParser\Exception\BufferTooSmallException;
-use Throwable;
+use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 /**
  * << start object
@@ -27,6 +27,7 @@ class DictionaryParser
 {
     /**
      * @throws BufferTooSmallException
+     * @throws ParseFailureException
      */
     public static function parse(Document $document, string $content): Dictionary
     {

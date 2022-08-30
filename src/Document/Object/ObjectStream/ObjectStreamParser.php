@@ -35,6 +35,10 @@ class ObjectStreamParser
             }
         }
 
+        if (count($byteOffsets) === 1) {
+            $document->addError('Only 1 byte offset was retrieved.');
+        }
+
         $previousByteOffset = 0;
         sort($byteOffsets);
         $objectStreams = [];
