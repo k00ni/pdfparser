@@ -32,8 +32,12 @@ class ObjectParser
         sort($objectLocationIndices);
         $objectItems = [];
         foreach ($objectLocationIndices as $index => $objectOffset) {
-            $objectContent = substr($objectStreamContent, $objectOffset, ($objectLocationIndices[$index + 1] ?? 0) - $objectOffset);
-            $objectId = array_search($objectOffset, $objectLocations);
+            if (array_key_exists($index + 1, $objectLocationIndices)) {
+                $objectContent = substr($objectStreamContent, $objectOffset, ($objectLocationIndices[$index + 1] ?? 0) - $objectOffset);
+            } else {
+                $objectContent = substr($objectStreamContent, $objectOffset);
+            }
+            $objectId = array_search($objectOffset, $objectLocations, true);
             $objectItems[] = new ObjectItem(
                 (int) $objectId,
                 $objectContent,
