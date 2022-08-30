@@ -71,4 +71,9 @@ final class Document
     {
         return $this->errors;
     }
+
+    public function hasErrors(): bool
+    {
+        return $this->errors !== [];
+    }
 }
