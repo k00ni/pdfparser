@@ -9,16 +9,13 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\ObjectParser;
 use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamContent\ObjectStreamContentParser;
+use PrinsFrank\PdfParser\Exception\BufferTooSmallException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
-use Throwable;
 
 class ObjectStreamParser
 {
-    /**
-     * @return array<ObjectStream>
-     * @throws ParseFailureException
-     */
-    public static function parse(Document $document): array
+    /** @throws ParseFailureException|BufferTooSmallException */
+    public static function parse(Document $document): ObjectStreamCollection
     {
         $byteOffsets = [$document->contentLength];
         if ($document->crossReferenceSource instanceof CrossReferenceTable) {
@@ -52,6 +49,6 @@ class ObjectStreamParser
             $previousByteOffset = $byteOffset;
         }
 
-        return $objectStreams;
+        return new ObjectStreamCollection(...$objectStreams);
     }
 }

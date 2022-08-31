@@ -14,13 +14,12 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 class PageParser
 {
     /**
-     * @return array<Page>
      * @throws ParseFailureException
      * @throws InvalidArgumentException
      */
-    public static function parse(Document $document): array
+    public static function parse(Document $document): PageCollection
     {
-        $xRefStreams = $document->objectStreamsByType(TypeNameValue::X_REF);
+        $xRefStreams = $document->objectStreamCollection->getObjectStreamsByType(TypeNameValue::X_REF);
         if (count($xRefStreams) !== 1) {
             throw new ParseFailureException('Expected 1 xrefStream, "' . count($xRefStreams) . '" retrieved');
         }
@@ -30,7 +29,7 @@ class PageParser
             throw new ParseFailureException('Unable to retrieve ROOT crossReference');
         }
 
-        $rootObject = $document->objectByReference($rootObjectReference);
+        $rootObject = $document->objectStreamCollection->getObjectByReference($rootObjectReference);
         if ($rootObject === null) {
             throw new ParseFailureException('Root object was not found');
         }
@@ -40,7 +39,7 @@ class PageParser
             throw new ParseFailureException('Pages object reference was not found');
         }
 
-        $pagesObject = $document->objectByReference($pagesObjectReference);
+        $pagesObject = $document->objectStreamCollection->getObjectByReference($pagesObjectReference);
         if ($pagesObject === null) {
             throw new ParseFailureException('Pages object was not found');
         }
@@ -52,7 +51,7 @@ class PageParser
 
         $pages = [];
         foreach ($pagesKids->referenceValues as $referenceValue) {
-            $pageObject = $document->objectByReference($referenceValue);
+            $pageObject = $document->objectStreamCollection->getObjectByReference($referenceValue);
             if ($pageObject === null) {
                 throw new ParseFailureException('Object with reference "' . $referenceValue . '" not found');
             }
@@ -62,7 +61,7 @@ class PageParser
                 throw new ParseFailureException('Expected a reference to the contents of a page, none found');
             }
 
-            $contentObject = $document->objectByReference($contentReference);
+            $contentObject = $document->objectStreamCollection->getObjectByReference($contentReference);
             if ($contentObject === null) {
                 throw new ParseFailureException('Object for content with reference "' . $contentReference->objectNumber . ':' . $contentReference->versionNumber . '" not found');
             }
@@ -70,6 +69,6 @@ class PageParser
             $pages[] = new Page($pageObject, $contentObject);
         }
 
-        return $pages;
+        return new PageCollection(...$pages);
     }
 }
