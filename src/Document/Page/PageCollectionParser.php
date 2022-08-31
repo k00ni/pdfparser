@@ -11,7 +11,7 @@ use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
-class PageParser
+class PageCollectionParser
 {
     /**
      * @throws ParseFailureException
