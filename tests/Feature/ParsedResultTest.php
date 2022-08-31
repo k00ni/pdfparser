@@ -21,7 +21,6 @@ class ParsedResultTest extends TestCase
         static::assertEquals(Version::V1_5, $parsedDocument->version);
         static::assertFalse($parsedDocument->hasErrors());
         static::assertCount(2, $parsedDocument->pages());
-        var_dump($parsedDocument->objectStreams);
     }
 
     /**

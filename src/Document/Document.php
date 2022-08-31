@@ -8,6 +8,7 @@ use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceSource;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Object\ObjectItem;
 use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStream;
 use PrinsFrank\PdfParser\Document\Trailer\Trailer;
@@ -112,12 +113,17 @@ final class Document
             throw new ParseFailureException('Pages object was not found');
         }
 
-        $pagesKids = $pagesObject->dictionary->getEntryWithKey(DictionaryKey::KIDS);
-        // todo parse kids object as array of crossreferences
+        $pagesKids = $pagesObject->dictionary->getEntryWithKey(DictionaryKey::KIDS)?->value;
+        if ($pagesKids instanceof ReferenceValueArray === false) {
+            throw new ParseFailureException('Expected array of reference values for kids, none returned.');
+        }
 
-        var_dump($pagesKids);
+        $pages = [];
+        foreach ($pagesKids->referenceValues as $referenceValue) {
+            $pages[] = $this->objectByReference($referenceValue);
+        }
 
-        return [];
+        return $pages;
     }
 
     public function objectByReference(ReferenceValue $referenceValue): ?ObjectItem

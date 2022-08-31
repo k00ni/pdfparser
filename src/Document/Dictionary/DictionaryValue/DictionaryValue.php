@@ -15,6 +15,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\FilterNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TypeNameValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\TextString\TextStringValue;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use Throwable;
@@ -33,7 +34,6 @@ class DictionaryValue
                 DictionaryKey::TRAPPED       => TrappedNameValue::fromValue($valueString),
                 DictionaryKey::INDEX,
                 DictionaryKey::ID,
-                DictionaryKey::KIDS,
                 DictionaryKey::CROP_BOX,
                 DictionaryKey::B_BOX,
                 DictionaryKey::MATRIX,
@@ -86,6 +86,7 @@ class DictionaryValue
                 DictionaryKey::C_I_D_SET,
                 DictionaryKey::DESCENDANT_FONTS,
                 DictionaryKey::ROOT          => ReferenceValue::fromValue($valueString),
+                DictionaryKey::KIDS          => ReferenceValueArray::fromValue($valueString),
                 DictionaryKey::CREATOR,
                 DictionaryKey::OPEN_ACTION,
                 DictionaryKey::GS,
