@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Errors;
 
-class ErrorCollection
+use Countable;
+
+class ErrorCollection implements Countable
 {
     /** @var array<Error> */
     private array $errors;
@@ -19,5 +21,10 @@ class ErrorCollection
     public function getErrors(): array
     {
         return $this->errors;
+    }
+
+    public function count(): int
+    {
+        return count($this->errors);
     }
 }
