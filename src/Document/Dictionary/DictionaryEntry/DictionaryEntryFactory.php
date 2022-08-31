@@ -18,7 +18,7 @@ class DictionaryEntryFactory
     {
         $dictionaryKey = DictionaryKey::tryFromKeyString(trim($keyString));
         if ($dictionaryKey === null) {
-            $document->addError('DictionaryKey "' . $keyString . '" not supported');
+            $document->errorCollection->addError('DictionaryKey "' . $keyString . '" not supported');
 
             return null;
         }
