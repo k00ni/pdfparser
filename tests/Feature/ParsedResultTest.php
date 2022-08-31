@@ -20,7 +20,8 @@ class ParsedResultTest extends TestCase
         $parsedDocument = $parser->parse(file_get_contents(dirname(__DIR__, 2) . '/_samples/pdf/simple_document.pdf'));
         static::assertEquals(Version::V1_5, $parsedDocument->version);
         static::assertFalse($parsedDocument->hasErrors());
-        static::assertCount(2, $parsedDocument->pages());
+        static::assertCount(2, $parsedDocument->getPages());
+        var_dump($parsedDocument->getPages());
     }
 
     /**

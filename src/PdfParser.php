@@ -6,6 +6,7 @@ namespace PrinsFrank\PdfParser;
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceSourceParser;
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamParser;
+use PrinsFrank\PdfParser\Document\Page\PageParser;
 use PrinsFrank\PdfParser\Document\Trailer\TrailerSectionParser;
 use PrinsFrank\PdfParser\Document\Version\VersionParser;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
@@ -23,6 +24,7 @@ final class PdfParser
             ->setTrailer(TrailerSectionParser::parse($document))
             ->setCrossReferenceSource(CrossReferenceSourceParser::parse($document))
             ->setObjectStreams(...ObjectStreamParser::parse($document))
+            ->setPages(...PageParser::parse($document))
         ;
     }
 }
