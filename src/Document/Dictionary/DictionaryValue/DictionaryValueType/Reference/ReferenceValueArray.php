@@ -21,7 +21,7 @@ class ReferenceValueArray implements DictionaryValueType
      */
     public static function fromValue(string $valueString): DictionaryValueType
     {
-        $referenceParts = explode(' ', rtrim(ltrim($valueString, '['), ']'));
+        $referenceParts = explode(' ', rtrim(ltrim($valueString, ' ['), ' ]'));
         $nrOfReferenceParts = count($referenceParts);
         if ($nrOfReferenceParts % 3 !== 0) {
             throw new InvalidDictionaryValueTypeFormatException('Invalid valueString, expected a multiple of 3 parts: "' . $valueString . '"');
