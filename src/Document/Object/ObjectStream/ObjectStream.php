@@ -4,15 +4,16 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document\Object\ObjectStream;
 
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
-use PrinsFrank\PdfParser\Document\Object\ObjectItem;
+use PrinsFrank\PdfParser\Document\Object\ObjectItemCollection;
 
 class ObjectStream
 {
-    /** @var ObjectItem[] */
-    public readonly array      $objectItems;
-    public readonly string     $content;
-    public readonly Dictionary $dictionary;
-    public readonly ?string    $decodedStream;
+    public readonly string               $content;
+    public readonly ?string              $decodedStream;
+    public readonly ObjectItemCollection $objectItemCollection;
+    public readonly Dictionary           $dictionary;
+    public ?int                          $objectId         = null;
+    public ?int                          $generationNumber = null;
 
     public function setContent(string $content): self
     {
@@ -35,9 +36,23 @@ class ObjectStream
         return $this;
     }
 
-    public function setObjects(ObjectItem ...$objectItems): self
+    public function setObjectItemCollection(ObjectItemCollection $objectItemCollection): self
     {
-        $this->objectItems = $objectItems;
+        $this->objectItemCollection = $objectItemCollection;
+
+        return $this;
+    }
+
+    public function setObjectId(int $objectId): self
+    {
+        $this->objectId = $objectId;
+
+        return $this;
+    }
+
+    public function setGenerationNumber(int $generationNumber): self
+    {
+        $this->generationNumber = $generationNumber;
 
         return $this;
     }

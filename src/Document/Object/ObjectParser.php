@@ -3,20 +3,19 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Object;
 
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStream;
 
 class ObjectParser
 {
-    /** @return ObjectItem[] */
-    public static function parse(Document $document, ObjectStream $objectStream): array
+    public static function parse(Document $document, ObjectStream $objectStream): ObjectItemCollection
     {
-        $numberOfItemsEntry = $objectStream->dictionary->getEntryWithKey(DictionaryKey::N);
-        if ($numberOfItemsEntry === null || $objectStream->decodedStream === null) {
-            return []; // No objects in this object stream
+        $objectItemCollection = new ObjectItemCollection();
+        if ($objectStream->decodedStream === null) {
+            return $objectItemCollection;
         }
+
         $firstEOL = strcspn($objectStream->decodedStream, "\r\n");
         $objectIndicesLine = substr($objectStream->decodedStream, 0, $firstEOL);
         $items = explode(' ', $objectIndicesLine);
@@ -30,7 +29,6 @@ class ObjectParser
         $objectStreamContent = substr($objectStream->decodedStream, $firstEOL);
         $objectLocationIndices = array_values($objectLocations);
         sort($objectLocationIndices);
-        $objectItems = [];
         foreach ($objectLocationIndices as $index => $objectOffset) {
             if (array_key_exists($index + 1, $objectLocationIndices)) {
                 $objectContent = substr($objectStreamContent, $objectOffset, ($objectLocationIndices[$index + 1] ?? 0) - $objectOffset);
@@ -38,13 +36,15 @@ class ObjectParser
                 $objectContent = substr($objectStreamContent, $objectOffset);
             }
             $objectId = array_search($objectOffset, $objectLocations, true);
-            $objectItems[] = new ObjectItem(
-                (int) $objectId,
-                $objectContent,
-                DictionaryParser::parse($document, $objectContent)
+            $objectItemCollection->addObjectItem(
+                    new ObjectItem(
+                    (int) $objectId,
+                    $objectContent,
+                    DictionaryParser::parse($document, $objectContent)
+                )
             );
         }
 
-        return $objectItems;
+        return $objectItemCollection;
     }
 }

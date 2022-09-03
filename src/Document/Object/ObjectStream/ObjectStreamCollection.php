@@ -31,10 +31,14 @@ class ObjectStreamCollection
         return $objectStreams;
     }
 
-    public function getObjectByReference(ReferenceValue $referenceValue): ?ObjectItem
+    public function getObjectByReference(ReferenceValue $referenceValue): ObjectItem|ObjectStream|null
     {
         foreach ($this->objectStreams as $objectStream) {
-            foreach ($objectStream->objectItems as $objectItem) {
+            if ($objectStream->objectId === $referenceValue->objectNumber) {
+                return $objectStream;
+            }
+
+            foreach ($objectStream->objectItemCollection->getObjectItems() as $objectItem) {
                 if ($objectItem->objectId !== $referenceValue->objectNumber) {
                     continue;
                 }

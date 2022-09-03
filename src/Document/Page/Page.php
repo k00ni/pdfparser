@@ -6,21 +6,22 @@ namespace PrinsFrank\PdfParser\Document\Page;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Object\ObjectItem;
+use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStream;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 
 class Page
 {
-    private readonly ObjectItem $pageObjectItem;
-    private readonly ObjectItem $contentObjectItem;
+    private readonly ObjectItem|ObjectStream      $pageObject;
+    private readonly ObjectItem|ObjectStream|null $contentObject;
 
     /** @throws InvalidArgumentException */
-    public function __construct(ObjectItem $pageObjectItem, ObjectItem $contentObjectItem)
+    public function __construct(ObjectItem|ObjectStream $pageObject, ObjectItem|ObjectStream|null $contentObject)
     {
-        if ($pageObjectItem->dictionary->getEntryWithKey(DictionaryKey::TYPE)?->value !== TypeNameValue::PAGE) {
+        if ($pageObject->dictionary->getEntryWithKey(DictionaryKey::TYPE)?->value !== TypeNameValue::PAGE) {
             throw new InvalidArgumentException();
         }
 
-        $this->pageObjectItem    = $pageObjectItem;
-        $this->contentObjectItem = $contentObjectItem;
+        $this->pageObject    = $pageObject;
+        $this->contentObject = $contentObject;
     }
 }

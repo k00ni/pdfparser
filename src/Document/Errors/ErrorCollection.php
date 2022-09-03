@@ -8,7 +8,7 @@ use Countable;
 class ErrorCollection implements Countable
 {
     /** @var array<Error> */
-    private array $errors;
+    private array $errors = [];
 
     public function addError(Error|string $error): self
     {

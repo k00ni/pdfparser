@@ -32,19 +32,25 @@ class ObjectStreamParser
             }
         }
 
+        sort($byteOffsets);
         if (count($byteOffsets) === 1) {
             $document->errorCollection->addError('Only 1 byte offset was retrieved.');
         }
 
         $previousByteOffset = 0;
-        sort($byteOffsets);
         $objectStreams = [];
         foreach ($byteOffsets as $byteOffset) {
             $objectStream = new ObjectStream();
+            $firstLine = substr($document->content, $previousByteOffset, strpos($document->content, "\n", $previousByteOffset) - $previousByteOffset);
+            $objectIndicators = explode(' ', $firstLine);
+            if (count($objectIndicators) === 3 && $objectIndicators[2] === 'obj') {
+                $objectStream->setObjectId((int)$objectIndicators[0]);
+                $objectStream->setGenerationNumber((int) $objectIndicators[1]);
+            }
             $objectStream->setContent(substr($document->content, $previousByteOffset, $byteOffset - $previousByteOffset));
             $objectStream->setDictionary(DictionaryParser::parse($document, $objectStream->content));
             $objectStream->setDecodedStream(ObjectStreamContentParser::parse($objectStream->content, $objectStream->dictionary));
-            $objectStream->setObjects(...ObjectParser::parse($document, $objectStream));
+            $objectStream->setObjectItemCollection(ObjectParser::parse($document, $objectStream));
             $objectStreams[] = $objectStream;
             $previousByteOffset = $byteOffset;
         }
