@@ -17,5 +17,8 @@
     },
     "require": {
         "ext-zlib": "*"
+    },
+    "scripts": {
+        "samples": "cd _samples/pdf &&  latex ../tex/*.tex"
     }
 }
