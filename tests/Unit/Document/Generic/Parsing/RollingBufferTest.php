@@ -43,23 +43,23 @@ class RollingBufferTest extends TestCase
     }
 
     /**
-     * @covers ::seenMarker
+     * @covers ::seenBackedEnumValue
      */
     public function testSeenMarker(): void
     {
         $charBuffer = new RollingCharBuffer(6);
-        static::assertFalse($charBuffer->seenMarker(Marker::STREAM));
+        static::assertFalse($charBuffer->seenBackedEnumValue(Marker::STREAM));
         $charBuffer->next()->setCharacter('s');
-        static::assertFalse($charBuffer->seenMarker(Marker::STREAM));
+        static::assertFalse($charBuffer->seenBackedEnumValue(Marker::STREAM));
         $charBuffer->next()->setCharacter('t');
-        static::assertFalse($charBuffer->seenMarker(Marker::STREAM));
+        static::assertFalse($charBuffer->seenBackedEnumValue(Marker::STREAM));
         $charBuffer->next()->setCharacter('r');
-        static::assertFalse($charBuffer->seenMarker(Marker::STREAM));
+        static::assertFalse($charBuffer->seenBackedEnumValue(Marker::STREAM));
         $charBuffer->next()->setCharacter('e');
-        static::assertFalse($charBuffer->seenMarker(Marker::STREAM));
+        static::assertFalse($charBuffer->seenBackedEnumValue(Marker::STREAM));
         $charBuffer->next()->setCharacter('a');
-        static::assertFalse($charBuffer->seenMarker(Marker::STREAM));
+        static::assertFalse($charBuffer->seenBackedEnumValue(Marker::STREAM));
         $charBuffer->next()->setCharacter('m');
-        static::assertTrue($charBuffer->seenMarker(Marker::STREAM));
+        static::assertTrue($charBuffer->seenBackedEnumValue(Marker::STREAM));
     }
 }

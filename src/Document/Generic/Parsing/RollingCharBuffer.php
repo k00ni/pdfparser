@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Generic\Parsing;
 
+use BackedEnum;
 use InvalidArgumentException;
-use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Exception\BufferTooSmallException;
 
 /**
@@ -67,9 +67,16 @@ class RollingCharBuffer
         return $this->buffer[($this->currentIndex - $nAgo) % $this->length] ?? null;
     }
 
-    public function seenMarker(Marker $marker): bool
+    /**
+     * @throws BufferTooSmallException
+     */
+    public function seenBackedEnumValue(BackedEnum $backedEnum): bool
     {
-        foreach (array_reverse(str_split($marker->value)) as $index => $char) {
+        if (strlen($backedEnum->value) > $this->length) {
+            throw new BufferTooSmallException('Buffer length of "' . $this->length . '" configured, but enum with length "' . strlen($backedEnum->value) . '" requested');
+        }
+
+        foreach (array_reverse(str_split($backedEnum->value)) as $index => $char) {
             $previousChar = $this->getPreviousCharacter($index);
             if ($previousChar !== $char) {
                 return false;
@@ -77,5 +84,24 @@ class RollingCharBuffer
         }
 
         return true;
+    }
+
+    /**
+     * @template T of \BackedEnum
+     * @param array<class-string<T>> $enumClasses
+     * @return T|null
+     */
+    public function getBackedEnumValue(string... $enumClasses): ?BackedEnum
+    {
+        foreach ($enumClasses as $enumClass) {
+            /** @var class-string<BackedEnum> */
+            foreach ($enumClass::cases() as $case) {
+                if ($this->seenBackedEnumValue($case)) {
+                    return $case;
+                }
+            }
+        }
+
+        return null;
     }
 }

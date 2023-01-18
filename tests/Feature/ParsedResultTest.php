@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Tests\Feature;
 
 use PHPUnit\Framework\TestCase;
+use PrinsFrank\PdfParser\Document\Text\TextParser;
 use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\PdfParser;
@@ -45,5 +46,13 @@ class ParsedResultTest extends TestCase
         foreach (array_diff(scandir($basePath), ['.', '..']) as $file) {
             yield $file => [$basePath . $file];
         }
+    }
+
+    public function testParseText(): void
+    {
+        $parsedResult = TextParser::parse('BT
+/F20 9.9626 Tf 148.712 707.125 Td [(Sen)28(tence)-334(on)-333(\014rst)-333(page)]TJ 154.421 -567.87 Td [(1)]TJ
+ET');
+        var_dump($parsedResult);
     }
 }

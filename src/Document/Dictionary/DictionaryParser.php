@@ -36,7 +36,7 @@ class DictionaryParser
         $nestingContext = (new NestingContext())->setContext(DictionaryParseContext::ROOT);
         foreach (str_split($content) as $char) {
             $rollingCharBuffer->next()->setCharacter($char);
-            if ($rollingCharBuffer->seenMarker(Marker::STREAM)) {
+            if ($rollingCharBuffer->seenBackedEnumValue(Marker::STREAM)) {
                 break;
             }
 
