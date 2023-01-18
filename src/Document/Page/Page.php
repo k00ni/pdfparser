@@ -12,16 +12,18 @@ use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 class Page
 {
     private readonly ObjectItem|ObjectStream      $pageObject;
-    private readonly ObjectItem|ObjectStream|null $contentObject;
+
+    /** @var list<ObjectItem|ObjectStream> */
+    private readonly array  $contentObjects;
 
     /** @throws InvalidArgumentException */
-    public function __construct(ObjectItem|ObjectStream $pageObject, ObjectItem|ObjectStream|null $contentObject)
+    public function __construct(ObjectItem|ObjectStream $pageObject, ObjectItem|ObjectStream... $contentObjects)
     {
         if ($pageObject->dictionary->getEntryWithKey(DictionaryKey::TYPE)?->value !== TypeNameValue::PAGE) {
             throw new InvalidArgumentException();
         }
 
         $this->pageObject    = $pageObject;
-        $this->contentObject = $contentObject;
+        $this->contentObjects = $contentObjects;
     }
 }

@@ -34,4 +34,19 @@ class ReferenceValueArray implements DictionaryValueType
 
         return new self(... $referenceValues);
     }
+
+    public function count(): int
+    {
+        return count($this->referenceValues);
+    }
+
+    public function objectNumbers(): array
+    {
+        $objectNumbers = [];
+        foreach ($this->referenceValues as $referenceValue) {
+            $objectNumbers[] = $referenceValue->objectNumber;
+        }
+
+        return $objectNumbers;
+    }
 }

@@ -57,16 +57,16 @@ class PageCollectionParser
             }
 
             $contentReference = $pageObject->dictionary->getEntryWithKey(DictionaryKey::CONTENTS)?->value;
-            if ($contentReference instanceof ReferenceValue === false) {
+            if ($contentReference instanceof ReferenceValue === false && $contentReference instanceof ReferenceValueArray === false) {
                 throw new ParseFailureException('Expected a reference to the contents of a page, none found');
             }
 
-            $contentObject = $document->objectStreamCollection->getObjectByReference($contentReference);
-            if ($contentObject === null) {
+            $contentObjects = $document->objectStreamCollection->getObjectsByReference($contentReference);
+            if ($contentObjects === []) {
                 throw new ParseFailureException('Object for content with reference "' . $contentReference->objectNumber . ':' . $contentReference->versionNumber . '" not found');
             }
 
-            $pages[] = new Page($pageObject, $contentObject);
+            $pages[] = new Page($pageObject, ...$contentObjects);
         }
 
         return new PageCollection(...$pages);
