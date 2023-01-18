@@ -8,6 +8,9 @@ use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\PdfParser;
 
+/**
+ * @coversNothing
+ */
 class ParsedResultTest extends TestCase
 {
     /**
