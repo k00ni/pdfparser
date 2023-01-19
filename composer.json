@@ -19,6 +19,6 @@
         "ext-zlib": "*"
     },
     "scripts": {
-        "samples": "cd _samples/pdf &&  latex ../tex/*.tex"
+        "samples": "cd _samples/pdf &&  for i in ../tex/*.tex; do pdflatex $i;done"
     }
 }
