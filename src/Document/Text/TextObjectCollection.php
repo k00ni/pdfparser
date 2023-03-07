@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Text;
 
-class TextObjectCollection
+use Stringable;
+
+class TextObjectCollection implements Stringable
 {
     /** @var array<TextObject> */
     public array $textObjects;
@@ -18,5 +20,10 @@ class TextObjectCollection
         $this->textObjects[] = $textObject;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return implode('', $this->textObjects);
     }
 }

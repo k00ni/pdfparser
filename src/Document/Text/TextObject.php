@@ -3,7 +3,10 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Text;
 
-class TextObject
+use PrinsFrank\PdfParser\Document\Text\OperatorString\TextShowingOperator;
+use Stringable;
+
+class TextObject implements Stringable
 {
     /** @var array<TextOperator> */
     public array $textOperators;
@@ -18,5 +21,10 @@ class TextObject
         $this->textOperators[] = $textOperator;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return implode('', $this->textOperators);
     }
 }
