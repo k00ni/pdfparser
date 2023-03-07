@@ -13,8 +13,10 @@ class TextObjectCollection
         $this->textObjects = $textObjects;
     }
 
-    public function addTextObject(TextObject $textObject): void
+    public function addTextObject(TextObject $textObject): self
     {
         $this->textObjects[] = $textObject;
+
+        return $this;
     }
 }

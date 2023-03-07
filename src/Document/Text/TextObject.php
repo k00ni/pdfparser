@@ -13,8 +13,10 @@ class TextObject
         $this->textOperators = $textOperators;
     }
 
-    public function addTextOperator(TextOperator $textOperator): void
+    public function addTextOperator(TextOperator $textOperator): self
     {
         $this->textOperators[] = $textOperator;
+
+        return $this;
     }
 }
