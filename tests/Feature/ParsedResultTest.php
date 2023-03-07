@@ -25,7 +25,19 @@ class ParsedResultTest extends TestCase
         static::assertEquals(Version::V1_5, $parsedDocument->version);
         static::assertCount(0, $parsedDocument->errorCollection);
         static::assertCount(2, $parsedDocument->pageCollection);
-        var_dump($parsedDocument->pageCollection);
+    }
+
+    /**
+     * @throws PdfParserException
+     */
+    public function testSimpleDocumentWithTitles(): void
+    {
+        $parser = new PdfParser();
+
+        $parsedDocument = $parser->parse(file_get_contents(dirname(__DIR__, 2) . '/_samples/pdf/simple_document_with_titles.pdf'));
+        static::assertEquals(Version::V1_5, $parsedDocument->version);
+        static::assertCount(0, $parsedDocument->errorCollection);
+        static::assertCount(2, $parsedDocument->pageCollection);
     }
 
     /**
