@@ -40,11 +40,9 @@ class ObjectStreamCollection
             }
 
             foreach ($objectStream->objectItemCollection->getObjectItems() as $objectItem) {
-                if ($objectItem->objectId !== $referenceValue->objectNumber) {
-                    continue;
+                if ($objectItem->objectId === $referenceValue->objectNumber) {
+                    return $objectItem;
                 }
-
-                return $objectItem;
             }
         }
 
