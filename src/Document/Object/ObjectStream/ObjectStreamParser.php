@@ -48,9 +48,9 @@ class ObjectStreamParser
                 $objectStream->setGenerationNumber((int) $objectIndicators[1]);
             }
             $objectStream->setContent(substr($document->content, $previousByteOffset, $byteOffset - $previousByteOffset));
-            $objectStream->setDictionary(DictionaryParser::parse($document, $objectStream->content));
+            $objectStream->setDictionary(DictionaryParser::parse($objectStream->content, $document->errorCollection));
             $objectStream->setDecodedStream(ObjectStreamContentParser::parse($objectStream->content, $objectStream->dictionary));
-            $objectStream->setObjectItemCollection(ObjectParser::parse($document, $objectStream));
+            $objectStream->setObjectItemCollection(ObjectParser::parse($objectStream, $document->errorCollection));
             $objectStreams[] = $objectStream;
             $previousByteOffset = $byteOffset;
         }

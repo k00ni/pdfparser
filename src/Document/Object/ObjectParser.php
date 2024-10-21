@@ -4,12 +4,12 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document\Object;
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
-use PrinsFrank\PdfParser\Document\Document;
+use PrinsFrank\PdfParser\Document\Errors\ErrorCollection;
 use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStream;
 
 class ObjectParser
 {
-    public static function parse(Document $document, ObjectStream $objectStream): ObjectItemCollection
+    public static function parse(ObjectStream $objectStream, ErrorCollection $errorCollection): ObjectItemCollection
     {
         $objectItemCollection = new ObjectItemCollection();
         if ($objectStream->decodedStream === null) {
@@ -40,7 +40,7 @@ class ObjectParser
                     new ObjectItem(
                     (int) $objectId,
                     $objectContent,
-                    DictionaryParser::parse($document, $objectContent)
+                    DictionaryParser::parse($objectContent, $errorCollection)
                 )
             );
         }

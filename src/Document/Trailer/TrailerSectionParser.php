@@ -52,7 +52,7 @@ class TrailerSectionParser
             $trailer->setDictionary(null);
         } else {
             $trailer->setStartTrailerMarkerPos($trailerMarkerPos);
-            $trailer->setDictionary(DictionaryParser::parse($document, substr($document->content, $trailer->startTrailerMarkerPos, $trailer->startXrefMarkerPos - $trailer->startTrailerMarkerPos)));
+            $trailer->setDictionary(DictionaryParser::parse(substr($document->content, $trailer->startTrailerMarkerPos, $trailer->startXrefMarkerPos - $trailer->startTrailerMarkerPos), $document->errorCollection));
         }
 
         return $trailer;

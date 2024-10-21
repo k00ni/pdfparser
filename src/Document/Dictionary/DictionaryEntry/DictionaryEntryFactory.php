@@ -6,7 +6,7 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Array\ArrayValue;
-use PrinsFrank\PdfParser\Document\Document;
+use PrinsFrank\PdfParser\Document\Errors\ErrorCollection;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class DictionaryEntryFactory
@@ -14,11 +14,11 @@ class DictionaryEntryFactory
     /**
      * @throws ParseFailureException
      */
-    public static function fromKeyValuePair(Document $document, string $keyString, array|string $dictionaryValue): ?DictionaryEntry
+    public static function fromKeyValuePair(string $keyString, array|string $dictionaryValue, ErrorCollection $errorCollection): ?DictionaryEntry
     {
         $dictionaryKey = DictionaryKey::tryFromKeyString(trim($keyString));
         if ($dictionaryKey === null) {
-            $document->errorCollection->addError('DictionaryKey "' . $keyString . '" not supported');
+            $errorCollection->addError('DictionaryKey "' . $keyString . '" not supported');
 
             return null;
         }
@@ -27,7 +27,7 @@ class DictionaryEntryFactory
         if (is_array($dictionaryValue)) {
             $arrayValues = [];
             foreach ($dictionaryValue as $dictionaryItemKey => $dictionaryItemValue) {
-                $arrayValues[] = self::fromKeyValuePair($document, $dictionaryItemKey, $dictionaryItemValue);
+                $arrayValues[] = self::fromKeyValuePair($dictionaryItemKey, $dictionaryItemValue, $errorCollection);
             }
             $value = new ArrayValue($arrayValues);
         } else {

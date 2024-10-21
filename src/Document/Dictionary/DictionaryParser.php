@@ -3,10 +3,9 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Dictionary;
 
-use Exception;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParseContext\DictionaryParseContext;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParseContext\NestingContext;
-use PrinsFrank\PdfParser\Document\Document;
+use PrinsFrank\PdfParser\Document\Errors\ErrorCollection;
 use PrinsFrank\PdfParser\Document\Generic\Character\DelimiterCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Character\LiteralStringEscapeCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
@@ -29,7 +28,7 @@ class DictionaryParser
      * @throws BufferTooSmallException
      * @throws ParseFailureException
      */
-    public static function parse(Document $document, string $content): Dictionary
+    public static function parse(string $content, ErrorCollection $errorCollection): Dictionary
     {
         $dictionaryArray = [];
         $rollingCharBuffer = new RollingCharBuffer(6);
@@ -98,7 +97,7 @@ class DictionaryParser
             };
         }
 
-        return DictionaryFactory::fromArray($document, $dictionaryArray);
+        return DictionaryFactory::fromArray($dictionaryArray, $errorCollection);
     }
 
     private static function flush(array &$dictionaryArray, NestingContext $nestingContext) : void
