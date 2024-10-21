@@ -54,7 +54,13 @@ class ParsedResultTest extends TestCase
     public function pdfs(): iterable
     {
         $basePath = dirname(__DIR__, 2) . '/_samples/pdf/samples/';
-        foreach (array_diff(scandir($basePath), ['.', '..']) as $file) {
+
+        $files = scandir($basePath);
+        if ($files === false) {
+            return;
+        }
+
+        foreach (array_diff($files, ['.', '..']) as $file) {
             yield $file => [$basePath . $file];
         }
     }
