@@ -19,7 +19,7 @@ class PageCollectionParser {
     public static function parse(Document $document): PageCollection {
         $xRefStreams = $document->objectStreamCollection->getObjectStreamsByType(TypeNameValue::X_REF);
         if (count($xRefStreams) !== 1) {
-            throw new ParseFailureException('Expected 1 xrefStream, "' . count($xRefStreams) . '" retrieved');
+            throw new ParseFailureException(sprintf('Expected 1 xrefStream, %d retrieved', count($xRefStreams)));
         }
 
         $rootObjectReference = $xRefStreams[0]->dictionary->getEntryWithKey(DictionaryKey::ROOT)?->value;

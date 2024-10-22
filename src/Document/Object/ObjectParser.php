@@ -8,14 +8,14 @@ use PrinsFrank\PdfParser\Document\Errors\ErrorCollection;
 use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStream;
 
 class ObjectParser {
-    public static function parse(ObjectStream $objectStream, ErrorCollection $errorCollection): ObjectItemCollection {
+    public static function parse(?string $decodedStream, ErrorCollection $errorCollection): ObjectItemCollection {
         $objectItemCollection = new ObjectItemCollection();
-        if ($objectStream->decodedStream === null) {
+        if ($decodedStream === null) {
             return $objectItemCollection;
         }
 
-        $firstEOL = strcspn($objectStream->decodedStream, "\r\n");
-        $objectIndicesLine = substr($objectStream->decodedStream, 0, $firstEOL);
+        $firstEOL = strcspn($decodedStream, "\r\n");
+        $objectIndicesLine = substr($decodedStream, 0, $firstEOL);
         $items = explode(' ', $objectIndicesLine);
         $objectLocations = [];
         foreach ($items as $key => $value) {
@@ -24,7 +24,7 @@ class ObjectParser {
             }
         }
 
-        $objectStreamContent = substr($objectStream->decodedStream, $firstEOL);
+        $objectStreamContent = substr($decodedStream, $firstEOL);
         $objectLocationIndices = array_values($objectLocations);
         sort($objectLocationIndices);
         foreach ($objectLocationIndices as $index => $objectOffset) {

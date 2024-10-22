@@ -10,9 +10,10 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType
 use PrinsFrank\PdfParser\Document\Object\ObjectItem;
 
 class ObjectStreamCollection {
+    /** @var list<ObjectStream> */
     private readonly array $objectStreams;
 
-    /** @param array<ObjectStream> */
+    /** @param list<ObjectStream> */
     public function __construct(ObjectStream ...$objectStreams) {
         $this->objectStreams = $objectStreams;
     }
