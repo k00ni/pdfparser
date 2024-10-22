@@ -8,8 +8,7 @@ use PrinsFrank\PdfParser\Document\Generic\Parsing\InfiniteBuffer;
 /**
  * @template TLevel of int<0, max>
  */
-class NestingContext
-{
+class NestingContext {
     private ?string $currentLevel;
 
     /** @var array<string, DictionaryParseContext> */
@@ -21,20 +20,17 @@ class NestingContext
     /** @var array<string, InfiniteBuffer> */
     private array $valueBuffer = [];
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->currentLevel = null;
     }
 
-    public function incrementNesting(): self
-    {
+    public function incrementNesting(): self {
         $this->currentLevel = (string) ($this->keyBuffer[$this->currentLevel] ?? (int) $this->currentLevel + 1);
 
         return $this;
     }
 
-    public function decrementNesting(): self
-    {
+    public function decrementNesting(): self {
         foreach (array_reverse(array_keys($this->nestingContext)) as $previousLevel) {
             if ($previousLevel !== $this->currentLevel) {
                 $this->currentLevel = (string) $previousLevel;
@@ -46,20 +42,17 @@ class NestingContext
         return $this;
     }
 
-    public function setContext(DictionaryParseContext $dictionaryParseContext): self
-    {
+    public function setContext(DictionaryParseContext $dictionaryParseContext): self {
         $this->nestingContext[$this->currentLevel] = $dictionaryParseContext;
 
         return $this;
     }
 
-    public function getContext(): DictionaryParseContext
-    {
+    public function getContext(): DictionaryParseContext {
         return $this->nestingContext[$this->currentLevel] ?? DictionaryParseContext::ROOT;
     }
 
-    public function getKeyBuffer(): InfiniteBuffer
-    {
+    public function getKeyBuffer(): InfiniteBuffer {
         if (array_key_exists($this->currentLevel, $this->keyBuffer) === false) {
             $this->keyBuffer[$this->currentLevel] = new InfiniteBuffer();
         }
@@ -67,22 +60,19 @@ class NestingContext
         return $this->keyBuffer[$this->currentLevel];
     }
 
-    public function addToKeyBuffer(string $char): self
-    {
+    public function addToKeyBuffer(string $char): self {
         $this->getKeyBuffer()->addChar($char);
 
         return $this;
     }
 
-    public function removeFromKeyBuffer(int $nChars = 1): self
-    {
+    public function removeFromKeyBuffer(int $nChars = 1): self {
         $this->getKeyBuffer()->removeChar($nChars);
 
         return $this;
     }
 
-    public function getValueBuffer(): InfiniteBuffer
-    {
+    public function getValueBuffer(): InfiniteBuffer {
         if (array_key_exists($this->currentLevel, $this->valueBuffer) === false) {
             $this->valueBuffer[$this->currentLevel] = new InfiniteBuffer();
         }
@@ -90,23 +80,20 @@ class NestingContext
         return $this->valueBuffer[$this->currentLevel];
     }
 
-    public function addToValueBuffer(string $char): self
-    {
+    public function addToValueBuffer(string $char): self {
         $this->getValueBuffer()->addChar($char);
 
         return $this;
     }
 
-    public function removeFromValueBuffer(int $nChars = 1): self
-    {
+    public function removeFromValueBuffer(int $nChars = 1): self {
         $this->getValueBuffer()->removeChar($nChars);
 
         return $this;
     }
 
     /** @return array<positive-int, string> */
-    public function getKeysFromRoot(): array
-    {
+    public function getKeysFromRoot(): array {
         $keysFromRoot = [];
         foreach ($this->keyBuffer as $keyBuffer) {
             $keyBufferString = (string) $keyBuffer;
@@ -120,16 +107,14 @@ class NestingContext
         return $keysFromRoot;
     }
 
-    public function flush(): self
-    {
+    public function flush(): self {
         ($this->valueBuffer[$this->currentLevel] ?? null)?->flush();
         ($this->keyBuffer[$this->currentLevel] ?? null)?->flush();
 
         return $this;
     }
 
-    public function getCurrentLevel(): ?string
-    {
+    public function getCurrentLevel(): ?string {
         return $this->currentLevel;
     }
 }

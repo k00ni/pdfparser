@@ -6,8 +6,7 @@ namespace PrinsFrank\PdfParser\Document\Object\ObjectStream;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Object\ObjectItemCollection;
 
-class ObjectStream
-{
+class ObjectStream {
     public readonly string               $content;
     public readonly ?string              $decodedStream;
     public readonly ObjectItemCollection $objectItemCollection;
@@ -15,43 +14,37 @@ class ObjectStream
     public ?int                          $objectId = null;
     public ?int                          $generationNumber = null;
 
-    public function setContent(string $content): self
-    {
+    public function setContent(string $content): self {
         $this->content = $content;
 
         return $this;
     }
 
-    public function setDictionary(Dictionary $dictionary): self
-    {
+    public function setDictionary(Dictionary $dictionary): self {
         $this->dictionary = $dictionary;
 
         return $this;
     }
 
-    public function setDecodedStream(?string $decodedStream): self
-    {
+    public function setDecodedStream(?string $decodedStream): self {
         $this->decodedStream = $decodedStream;
 
         return $this;
     }
 
-    public function setObjectItemCollection(ObjectItemCollection $objectItemCollection): self
-    {
+    public function setObjectItemCollection(ObjectItemCollection $objectItemCollection): self {
         $this->objectItemCollection = $objectItemCollection;
 
         return $this;
     }
 
-    public function setObjectId(int $objectId): self
-    {
+    public function setObjectId(int $objectId): self {
         $this->objectId = $objectId;
 
         return $this;
     }
 
-    public function setGenerationNumber(int $generationNumber): self
-    {
+    public function setGenerationNumber(int $generationNumber): self {
         $this->generationNumber = $generationNumber;
 
         return $this;

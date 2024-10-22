@@ -6,14 +6,11 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryVal
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\DictionaryValueType;
 use PrinsFrank\PdfParser\Exception\InvalidDictionaryValueTypeFormatException;
 
-class FloatValue implements DictionaryValueType
-{
-    public function __construct(public float $value)
-    {
+class FloatValue implements DictionaryValueType {
+    public function __construct(public float $value) {
     }
 
-    public static function fromValue(string $valueString): DictionaryValueType
-    {
+    public static function fromValue(string $valueString): DictionaryValueType {
         $valueAsInt = (float) $valueString;
         if ((string) $valueAsInt !== $valueString) {
             throw new InvalidDictionaryValueTypeFormatException('Non numerical value encountered for floatValue: "' . $valueString . '"');

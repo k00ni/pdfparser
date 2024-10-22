@@ -9,11 +9,9 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType
 use PrinsFrank\PdfParser\Document\Errors\ErrorCollection;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
-class DictionaryEntryFactory
-{
+class DictionaryEntryFactory {
     /** @throws ParseFailureException */
-    public static function fromKeyValuePair(string $keyString, array|string $dictionaryValue, ErrorCollection $errorCollection): ?DictionaryEntry
-    {
+    public static function fromKeyValuePair(string $keyString, array|string $dictionaryValue, ErrorCollection $errorCollection): ?DictionaryEntry {
         $dictionaryKey = DictionaryKey::tryFromKeyString(trim($keyString));
         if ($dictionaryKey === null) {
             $errorCollection->addError('DictionaryKey "' . $keyString . '" not supported');

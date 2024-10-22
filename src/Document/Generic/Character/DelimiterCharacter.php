@@ -12,8 +12,7 @@ namespace PrinsFrank\PdfParser\Document\Generic\Character;
  * strings; see 7.3.4.2, “Literal Strings”. The leading ( of a string does delimit a preceding entity and the closing ) of
  * a string delimits the string’s end.
  */
-enum DelimiterCharacter: string
-{
+enum DelimiterCharacter: string {
     case LEFT_PARENTHESIS = '(';
     case RIGHT_PARENTHESIS = ')';
     case LESS_THAN_SIGN = '<';

@@ -11,16 +11,14 @@ use PrinsFrank\PdfParser\Exception\BufferTooSmallException;
 /**
  * @coversDefaultClass \PrinsFrank\PdfParser\Document\Generic\Parsing\RollingCharBuffer
  */
-class RollingBufferTest extends TestCase
-{
+class RollingBufferTest extends TestCase {
     /**
      * @covers ::setCharacter
      * @covers ::getPreviousCharacter
      *
      * @throws BufferTooSmallException
      */
-    public function testGetPreviousCharacter(): void
-    {
+    public function testGetPreviousCharacter(): void {
         $charBuffer = new RollingCharBuffer(3);
         $charBuffer->setCharacter('a');
         static::assertNull($charBuffer->getPreviousCharacter());
@@ -44,8 +42,7 @@ class RollingBufferTest extends TestCase
     }
 
     /** @covers ::seenBackedEnumValue */
-    public function testSeenMarker(): void
-    {
+    public function testSeenMarker(): void {
         $charBuffer = new RollingCharBuffer(6);
         static::assertFalse($charBuffer->seenBackedEnumValue(Marker::STREAM));
         $charBuffer->next()->setCharacter('s');

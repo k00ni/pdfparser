@@ -3,8 +3,7 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Generic;
 
-enum Marker: string
-{
+enum Marker: string {
     case VERSION = '%PDF-';
     case EOF = '%%EOF';
     case TRAILER = 'trailer';

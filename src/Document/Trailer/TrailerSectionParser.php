@@ -18,14 +18,12 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
  * trailer followed by a series of key-value pairs enclosed in double angle brackets (<<...>>) (using LESS-THAN SIGNs
  * (3ch) and GREATER-THAN SIGNs (3Eh)).
  */
-class TrailerSectionParser
-{
+class TrailerSectionParser {
     /**
      * @throws MarkerNotFoundException
      * @throws ParseFailureException
      */
-    public static function parse(Document $document): Trailer
-    {
+    public static function parse(Document $document): Trailer {
         $trailer = new Trailer($document);
 
         $eofMarkerPos = strrpos($document->content, Marker::EOF->value);

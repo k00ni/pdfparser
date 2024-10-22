@@ -11,11 +11,9 @@ use PrinsFrank\PdfParser\PdfParser;
 /**
  * @coversNothing
  */
-class ParsedResultTest extends TestCase
-{
+class ParsedResultTest extends TestCase {
     /** @throws PdfParserException */
-    public function testSimpleDocument(): void
-    {
+    public function testSimpleDocument(): void {
         $parser = new PdfParser();
 
         $parsedDocument = $parser->parse(file_get_contents(dirname(__DIR__, 2) . '/_samples/pdf/simple_document.pdf'));
@@ -25,8 +23,7 @@ class ParsedResultTest extends TestCase
     }
 
     /** @throws PdfParserException */
-    public function testSimpleDocumentWithTitles(): void
-    {
+    public function testSimpleDocumentWithTitles(): void {
         $parser = new PdfParser();
 
         $parsedDocument = $parser->parse(file_get_contents(dirname(__DIR__, 2) . '/_samples/pdf/simple_document_with_titles.pdf'));
@@ -40,16 +37,14 @@ class ParsedResultTest extends TestCase
      *
      * @throws PdfParserException
      */
-    public function testExternalSourcePDFs(string $pdfPath): void
-    {
+    public function testExternalSourcePDFs(string $pdfPath): void {
         $parser = new PdfParser();
 
         $document = $parser->parse(file_get_contents($pdfPath));
         static::assertCount(0, $document->errorCollection);
     }
 
-    public function pdfs(): iterable
-    {
+    public function pdfs(): iterable {
         $basePath = dirname(__DIR__, 2) . '/_samples/pdf/samples/';
 
         $files = scandir($basePath);

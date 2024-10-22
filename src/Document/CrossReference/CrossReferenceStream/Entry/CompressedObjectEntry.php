@@ -2,8 +2,7 @@
 
 namespace PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\Entry;
 
-class CompressedObjectEntry
-{
+class CompressedObjectEntry {
     /**
      * @see Table 18
      *
@@ -11,7 +10,7 @@ class CompressedObjectEntry
      * stored. (The generation number of the object stream shall be
      * implicitly 0.)
      */
-    public final const GENERATION_NUMBER = 0;
+    final public const GENERATION_NUMBER = 0;
 
     public function __construct(
         public readonly int $storedInObjectNumber,

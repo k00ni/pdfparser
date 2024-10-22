@@ -10,8 +10,7 @@ use PrinsFrank\PdfParser\Exception\BufferTooSmallException;
 /**
  * @template TLength of int<1, max>
  */
-class RollingCharBuffer
-{
+class RollingCharBuffer {
     /** @var TLength $length */
     private int $length;
 
@@ -32,8 +31,7 @@ class RollingCharBuffer
     private array $buffer = [];
 
     /** @param TLength $length */
-    public function __construct(int $length)
-    {
+    public function __construct(int $length) {
         if ($length < 1) {
             throw new InvalidArgumentException('A negative or zero buffer length doesn\'t make sense, "' . $length . '" provided');
         }
@@ -41,24 +39,21 @@ class RollingCharBuffer
         $this->length = $length;
     }
 
-    public function next(): self
-    {
+    public function next(): self {
         $this->currentIndex++;
         $this->setCharacter(null);
 
         return $this;
     }
 
-    public function setCharacter(?string $char): self
-    {
+    public function setCharacter(?string $char): self {
         $this->buffer[$this->currentIndex % $this->length] = $char;
 
         return $this;
     }
 
     /** @throws BufferTooSmallException */
-    public function getPreviousCharacter(int $nAgo = 1): ?string
-    {
+    public function getPreviousCharacter(int $nAgo = 1): ?string {
         if ($nAgo >= $this->length) {
             throw new BufferTooSmallException('Buffer length of "' . $this->length . '" configured, but character "-' . $nAgo . '" requested');
         }
@@ -67,8 +62,7 @@ class RollingCharBuffer
     }
 
     /** @throws BufferTooSmallException */
-    public function seenBackedEnumValue(BackedEnum $backedEnum): bool
-    {
+    public function seenBackedEnumValue(BackedEnum $backedEnum): bool {
         if (strlen($backedEnum->value) > $this->length) {
             throw new BufferTooSmallException('Buffer length of "' . $this->length . '" configured, but enum with length "' . strlen($backedEnum->value) . '" requested');
         }
@@ -88,8 +82,7 @@ class RollingCharBuffer
      * @param array<class-string<T>> $enumClasses
      * @return T|null
      */
-    public function getBackedEnumValue(string... $enumClasses): ?BackedEnum
-    {
+    public function getBackedEnumValue(string... $enumClasses): ?BackedEnum {
         foreach ($enumClasses as $enumClass) {
             /** @var class-string<BackedEnum> */
             foreach ($enumClass::cases() as $case) {

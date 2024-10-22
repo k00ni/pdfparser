@@ -7,11 +7,9 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntryFact
 use PrinsFrank\PdfParser\Document\Errors\ErrorCollection;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
-class DictionaryFactory
-{
+class DictionaryFactory {
     /** @throws ParseFailureException */
-    public static function fromArray(array $dictionaryArray, ErrorCollection $errorCollection): Dictionary
-    {
+    public static function fromArray(array $dictionaryArray, ErrorCollection $errorCollection): Dictionary {
         $dictionary = new Dictionary();
         foreach ($dictionaryArray as $keyString => $value) {
             $dictionaryEntry = DictionaryEntryFactory::fromKeyValuePair($keyString, $value, $errorCollection);

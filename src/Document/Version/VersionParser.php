@@ -8,14 +8,12 @@ use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Exception\UnsupportedFileFormatException;
 use PrinsFrank\PdfParser\Exception\UnsupportedPdfVersionException;
 
-class VersionParser
-{
+class VersionParser {
     /**
      * @throws UnsupportedFileFormatException
      * @throws UnsupportedPdfVersionException
      */
-    public static function parse(Document $document): Version
-    {
+    public static function parse(Document $document): Version {
         if (str_starts_with($document->content, Marker::VERSION->value) === false) {
             throw new UnsupportedFileFormatException();
         }

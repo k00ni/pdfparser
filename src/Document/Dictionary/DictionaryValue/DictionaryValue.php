@@ -19,11 +19,9 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use Throwable;
 
-class DictionaryValue
-{
+class DictionaryValue {
     /** @throws ParseFailureException */
-    public static function fromValueString(DictionaryKey $dictionaryKey, string $valueString)
-    {
+    public static function fromValueString(DictionaryKey $dictionaryKey, string $valueString) {
         try {
             return match ($dictionaryKey) {
                 DictionaryKey::FILTER => FilterNameValue::fromValue($valueString),

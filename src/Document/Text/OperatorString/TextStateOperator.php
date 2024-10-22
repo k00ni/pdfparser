@@ -3,8 +3,7 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Text\OperatorString;
 
-enum TextStateOperator: string
-{
+enum TextStateOperator: string {
     case CHAR_SIZE = 'Tc';
     case WORD_SPACE = 'Tw';
     case SCALE = 'Tz';

@@ -6,8 +6,7 @@ namespace PrinsFrank\PdfParser\Document\Generic\Character;
 /**
  * @see PDF 32000-1:2008 7.3.4.2 Table 3
  */
-enum LiteralStringEscapeCharacter: string
-{
+enum LiteralStringEscapeCharacter: string {
     case LINE_FEED = '\n';
     case CARRIAGE_RETURN = '\r';
     case HORIZONTAL_TAB = '\t';

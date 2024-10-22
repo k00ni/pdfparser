@@ -8,13 +8,11 @@ use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\Entry\Comp
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\Entry\LinkedListFreeObjectEntry;
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\Entry\UncompressedDataEntry;
 
-class CrossReferenceStream implements CrossReferenceSource
-{
+class CrossReferenceStream implements CrossReferenceSource {
     /** @var array<CompressedObjectEntry|LinkedListFreeObjectEntry|UncompressedDataEntry> */
     public array $entries = [];
 
-    public function addEntry(CompressedObjectEntry|LinkedListFreeObjectEntry|UncompressedDataEntry $data): self
-    {
+    public function addEntry(CompressedObjectEntry|LinkedListFreeObjectEntry|UncompressedDataEntry $data): self {
         $this->entries[] = $data;
 
         return $this;

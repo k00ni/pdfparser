@@ -11,11 +11,9 @@ use PrinsFrank\PdfParser\Document\Trailer\TrailerSectionParser;
 use PrinsFrank\PdfParser\Document\Version\VersionParser;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 
-final class PdfParser
-{
+final class PdfParser {
     /** @throws PdfParserException */
-    public function parse(string $fileContent): Document
-    {
+    public function parse(string $fileContent): Document {
         $document = new Document($fileContent);
 
         return $document->setVersion(VersionParser::parse($document))

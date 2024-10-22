@@ -3,6 +3,5 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Exception;
 
-class GzUncompressException extends PdfParserException
-{
+class GzUncompressException extends PdfParserException {
 }

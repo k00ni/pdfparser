@@ -11,14 +11,12 @@ use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
-class PageCollectionParser
-{
+class PageCollectionParser {
     /**
      * @throws ParseFailureException
      * @throws InvalidArgumentException
      */
-    public static function parse(Document $document): PageCollection
-    {
+    public static function parse(Document $document): PageCollection {
         $xRefStreams = $document->objectStreamCollection->getObjectStreamsByType(TypeNameValue::X_REF);
         if (count($xRefStreams) !== 1) {
             throw new ParseFailureException('Expected 1 xrefStream, "' . count($xRefStreams) . '" retrieved');

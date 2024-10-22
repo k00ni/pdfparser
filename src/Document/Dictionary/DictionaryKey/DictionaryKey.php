@@ -3,8 +3,7 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey;
 
-enum DictionaryKey: string
-{
+enum DictionaryKey: string {
     case A = 'A';
     case AA = 'AA';
     case ACRO_FORM = 'AcroForm';
@@ -186,8 +185,7 @@ enum DictionaryKey: string
     case X_REF_STM = 'XRefStm';
     case X_Y_Z = 'XYZ';
 
-    public static function tryFromKeyString(string $keyString): ?self
-    {
+    public static function tryFromKeyString(string $keyString): ?self {
         return self::tryFrom(rtrim(ltrim($keyString, '/'), "1234567890\n\t "));
     }
 }

@@ -12,11 +12,9 @@ use PrinsFrank\PdfParser\Document\Text\TextObjectCollection;
 use PrinsFrank\PdfParser\Document\Text\TextOperator;
 
 /** @coversDefaultClass \PrinsFrank\PdfParser\Document\Text\TextObjectCollection */
-class TextObjectCollectionTest extends TestCase
-{
+class TextObjectCollectionTest extends TestCase {
     /** @covers ::__toString */
-    public function testParseText(): void
-    {
+    public function testParseText(): void {
         static::assertEquals(
             '[(Sen)28(tence)-334(on)-333(rst)-333(page)][(1)]',
             (string) (new TextObjectCollection())

@@ -16,8 +16,7 @@ namespace PrinsFrank\PdfParser\Document\Generic\Character;
  * space characters. However, sometimes an EOL marker is required or recommended—that is, preceding a
  * token that must appear at the beginning of a line.
  */
-enum WhitespaceCharacter: string
-{
+enum WhitespaceCharacter: string {
     case NULL = "\000";
     case HORIZONTAL_TAB = "\t";
     case LINE_FEED = "\n";

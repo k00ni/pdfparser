@@ -3,8 +3,7 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryParseContext;
 
-enum DictionaryParseContext
-{
+enum DictionaryParseContext {
     case ROOT;
     case DICTIONARY;
     case KEY;

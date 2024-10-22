@@ -23,11 +23,9 @@ use PrinsFrank\PdfParser\Document\Errors\ErrorCollection;
 /**
  * @coversDefaultClass \PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser
  */
-class DictionaryParserTest extends TestCase
-{
+class DictionaryParserTest extends TestCase {
     /** @covers ::parse */
-    public function testParseCrossReference(): void
-    {
+    public function testParseCrossReference(): void {
         static::assertEquals(
             (new Dictionary())
                 ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::TYPE)->setValue(TypeNameValue::X_REF))
@@ -59,8 +57,7 @@ class DictionaryParserTest extends TestCase
     }
 
     /** @covers ::parse */
-    public function testObjectStream(): void
-    {
+    public function testObjectStream(): void {
         static::assertEquals(
             (new Dictionary())
                 ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::DECODE_PARAMS)->setValue(new ArrayValue(
@@ -103,8 +100,7 @@ class DictionaryParserTest extends TestCase
     }
 
     /** @covers ::parse */
-    public function testParseSingleLine(): void
-    {
+    public function testParseSingleLine(): void {
         static::assertEquals(
             (new Dictionary())
                 ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::DECODE_PARAMS)->setValue(new ArrayValue(
@@ -128,8 +124,7 @@ class DictionaryParserTest extends TestCase
     }
 
     /** @covers ::parse */
-    public function testParseFontInfo(): void
-    {
+    public function testParseFontInfo(): void {
         static::assertEquals(
             (new Dictionary())
                 ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::TYPE)->setValue(TypeNameValue::FONT_DESCRIPTOR))
@@ -165,8 +160,7 @@ class DictionaryParserTest extends TestCase
     }
 
     /** @covers ::parse */
-    public function testParseValuesEncapsulatedInParentheses(): void
-    {
+    public function testParseValuesEncapsulatedInParentheses(): void {
         static::assertEquals(
             (new Dictionary())
                 ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::PRODUCER)->setValue(new TextStringValue('(pdfTeX-1.40.18)')))
@@ -190,8 +184,7 @@ class DictionaryParserTest extends TestCase
     }
 
     /** @covers ::parse */
-    public function testIgnoreCommentedLines(): void
-    {
+    public function testIgnoreCommentedLines(): void {
         static::assertEquals(
             (new Dictionary())
                 ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::PRODUCER)->setValue(new TextStringValue('(pdfTeX-1.40.18)'))),

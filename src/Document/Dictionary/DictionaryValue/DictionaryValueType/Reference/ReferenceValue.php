@@ -6,16 +6,15 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryVal
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\DictionaryValueType;
 use PrinsFrank\PdfParser\Exception\InvalidDictionaryValueTypeFormatException;
 
-class ReferenceValue implements DictionaryValueType
-{
+class ReferenceValue implements DictionaryValueType {
     public function __construct(
         public readonly int $objectNumber,
         public readonly int $versionNumber
-    ) { }
+    ) {
+    }
 
     /** @throws InvalidDictionaryValueTypeFormatException */
-    public static function fromValue(string $valueString): DictionaryValueType
-    {
+    public static function fromValue(string $valueString): DictionaryValueType {
         $referenceParts = explode(' ', trim(rtrim(ltrim($valueString, '['), ']')));
         if (count($referenceParts) !== 3) {
             throw new InvalidDictionaryValueTypeFormatException('Invalid valueString, expected 3 parts: "' . $valueString . '"');

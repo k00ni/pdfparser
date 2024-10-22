@@ -21,14 +21,12 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
  * ] end array
  * / start key
  */
-class DictionaryParser
-{
+class DictionaryParser {
     /**
      * @throws BufferTooSmallException
      * @throws ParseFailureException
      */
-    public static function parse(string $content, ErrorCollection $errorCollection): Dictionary
-    {
+    public static function parse(string $content, ErrorCollection $errorCollection): Dictionary {
         $dictionaryArray = [];
         $rollingCharBuffer = new RollingCharBuffer(6);
         $nestingContext = (new NestingContext())->setContext(DictionaryParseContext::ROOT);
@@ -99,8 +97,7 @@ class DictionaryParser
         return DictionaryFactory::fromArray($dictionaryArray, $errorCollection);
     }
 
-    private static function flush(array &$dictionaryArray, NestingContext $nestingContext): void
-    {
+    private static function flush(array &$dictionaryArray, NestingContext $nestingContext): void {
         if ($nestingContext->getValueBuffer()->isEmpty() || $nestingContext->getKeyBuffer()->isEmpty()) {
             return;
         }

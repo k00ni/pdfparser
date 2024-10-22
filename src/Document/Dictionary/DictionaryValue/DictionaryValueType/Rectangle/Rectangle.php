@@ -5,14 +5,11 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryVal
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\DictionaryValueType;
 
-class Rectangle implements DictionaryValueType
-{
-    public function __construct(public float $xTopLeft, public float $yTopLeft, public float $xBottomRight, public float $yBottomRight)
-    {
+class Rectangle implements DictionaryValueType {
+    public function __construct(public float $xTopLeft, public float $yTopLeft, public float $xBottomRight, public float $yBottomRight) {
     }
 
-    public static function fromValue(string $valueString): DictionaryValueType
-    {
+    public static function fromValue(string $valueString): DictionaryValueType {
         return new self(... array_map('floatval', explode(' ', trim($valueString, '[]'))));
     }
 }

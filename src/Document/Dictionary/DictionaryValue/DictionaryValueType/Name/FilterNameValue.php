@@ -6,8 +6,7 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryVal
 use PrinsFrank\PdfParser\Document\Filter\Decode\FlateDecode;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
-enum FilterNameValue: string implements NameValue
-{
+enum FilterNameValue: string implements NameValue {
     case ASCII_HEX_DECODE = 'ASCIIHexDecode';
     case ASCII_85_DECODE = 'ASCII85Decode';
     case LZW_DECODE = 'LZWDecode';
@@ -19,14 +18,12 @@ enum FilterNameValue: string implements NameValue
     case JBX_DECODE = 'JPXDecode';
     case CRYPT = 'Crypt';
 
-    public static function fromValue(string $valueString): self
-    {
+    public static function fromValue(string $valueString): self {
         return self::from(trim(rtrim(ltrim($valueString, '/[')), ']'));
     }
 
     /** @throws ParseFailureException */
-    public static function decode(self $filter, string $content): ?string
-    {
+    public static function decode(self $filter, string $content): ?string {
         return match($filter) {
             self::DCT_DECODE => $content, // Dont decode JPEG content
             self::FLATE_DECODE => FlateDecode::decode($content),

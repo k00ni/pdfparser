@@ -3,46 +3,38 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Generic\Parsing;
 
-class InfiniteBuffer
-{
+class InfiniteBuffer {
     private string $buffer = '';
 
-    public function addChar(string $char): self
-    {
+    public function addChar(string $char): self {
         $this->buffer .= $char;
 
         return $this;
     }
 
-    public function flush(): self
-    {
+    public function flush(): self {
         return $this->setValue('');
     }
 
-    public function __toString(): string
-    {
+    public function __toString(): string {
         return $this->buffer;
     }
 
-    public function getLength(): int
-    {
+    public function getLength(): int {
         return strlen($this->buffer);
     }
 
-    public function isEmpty(): bool
-    {
+    public function isEmpty(): bool {
         return $this->getLength() === 0;
     }
 
-    public function setValue(string $buffer): self
-    {
+    public function setValue(string $buffer): self {
         $this->buffer = $buffer;
 
         return $this;
     }
 
-    public function removeChar(int $nChars): self
-    {
+    public function removeChar(int $nChars): self {
         if ($this->buffer !== '') {
             $this->buffer = substr($this->buffer, 0, -$nChars);
         }

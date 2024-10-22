@@ -9,11 +9,9 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
-class ObjectStreamContentParser
-{
+class ObjectStreamContentParser {
     /** @throws ParseFailureException */
-    public static function parse(string $content, Dictionary $dictionary): ?string
-    {
+    public static function parse(string $content, Dictionary $dictionary): ?string {
         $startStream = strpos($content, Marker::STREAM->value);
         $endStream = strpos($content, Marker::END_STREAM->value);
         if ($startStream === false || $endStream === false) {

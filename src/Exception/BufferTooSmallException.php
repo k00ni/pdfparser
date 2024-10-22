@@ -3,6 +3,5 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Exception;
 
-class BufferTooSmallException extends PdfParserException
-{
+class BufferTooSmallException extends PdfParserException {
 }

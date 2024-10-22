@@ -5,6 +5,5 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryVal
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\DictionaryValueType;
 
-interface NameValue extends DictionaryValueType
-{
+interface NameValue extends DictionaryValueType {
 }

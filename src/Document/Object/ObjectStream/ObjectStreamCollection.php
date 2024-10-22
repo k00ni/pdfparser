@@ -9,19 +9,16 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Object\ObjectItem;
 
-class ObjectStreamCollection
-{
+class ObjectStreamCollection {
     private readonly array $objectStreams;
 
     /** @param array<ObjectStream> */
-    public function __construct(ObjectStream ...$objectStreams)
-    {
+    public function __construct(ObjectStream ...$objectStreams) {
         $this->objectStreams = $objectStreams;
     }
 
     /** @return array<ObjectStream> */
-    public function getObjectStreamsByType(TypeNameValue $typeNameValue): array
-    {
+    public function getObjectStreamsByType(TypeNameValue $typeNameValue): array {
         $objectStreams = [];
         foreach ($this->objectStreams as $objectStream) {
             if ($objectStream->dictionary->getEntryWithKey(DictionaryKey::TYPE)?->value === $typeNameValue) {
@@ -32,8 +29,7 @@ class ObjectStreamCollection
         return $objectStreams;
     }
 
-    public function getObjectByReference(ReferenceValue $referenceValue): ObjectItem|ObjectStream|null
-    {
+    public function getObjectByReference(ReferenceValue $referenceValue): ObjectItem|ObjectStream|null {
         foreach ($this->objectStreams as $objectStream) {
             if ($objectStream->objectId === $referenceValue->objectNumber) {
                 return $objectStream;
@@ -50,8 +46,7 @@ class ObjectStreamCollection
     }
 
     /** @return list<ObjectItem|ObjectStream> */
-    public function getObjectsByReference(ReferenceValueArray $referenceValue): array
-    {
+    public function getObjectsByReference(ReferenceValueArray $referenceValue): array {
         $objects = [];
         foreach ($this->objectStreams as $objectStream) {
             if (in_array($objectStream->objectId, $referenceValue->objectNumbers(), true)) {

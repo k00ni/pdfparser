@@ -5,14 +5,11 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryVal
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\DictionaryValueType;
 
-class DateValue implements DictionaryValueType
-{
-    public function __construct(public readonly string $value)
-    {
+class DateValue implements DictionaryValueType {
+    public function __construct(public readonly string $value) {
     }
 
-    public static function fromValue(string $valueString): DictionaryValueType
-    {
+    public static function fromValue(string $valueString): DictionaryValueType {
         return new self($valueString);
     }
 }

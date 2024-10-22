@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document\CrossReference;
 
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\CrossReferenceStream;
-use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\CrossReferenceStreamEntryType;
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\CrossReferenceStreamType;
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\Entry\CompressedObjectEntry;
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\Entry\LinkedListFreeObjectEntry;
@@ -24,11 +23,9 @@ use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamContent\Object
 use PrinsFrank\PdfParser\Exception\InvalidCrossReferenceLineException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
-class CrossReferenceSourceParser
-{
+class CrossReferenceSourceParser {
     /** @throws ParseFailureException */
-    public static function parse(Document $document): CrossReferenceSource
-    {
+    public static function parse(Document $document): CrossReferenceSource {
         $content = substr($document->content, $document->trailer->byteOffsetLastCrossReferenceSection);
         $dictionary = DictionaryParser::parse($content, $document->errorCollection);
         if ($dictionary->getEntryWithKey(DictionaryKey::TYPE)?->value === TypeNameValue::X_REF) {
@@ -39,8 +36,7 @@ class CrossReferenceSourceParser
     }
 
     /** @throws InvalidCrossReferenceLineException */
-    public static function parseTable(string $content): CrossReferenceTable
-    {
+    public static function parseTable(string $content): CrossReferenceTable {
         $crossReferenceSubSection = null;
         $crossReferenceSubSections = [];
         $content = str_replace([WhitespaceCharacter::CARRIAGE_RETURN->value], WhitespaceCharacter::LINE_FEED->value, $content);
@@ -72,8 +68,7 @@ class CrossReferenceSourceParser
     }
 
     /** @throws ParseFailureException */
-    public static function parseStream(Dictionary $dictionary, string $content): CrossReferenceStream
-    {
+    public static function parseStream(Dictionary $dictionary, string $content): CrossReferenceStream {
         $dictionaryType = $dictionary->getEntryWithKey(DictionaryKey::TYPE)?->value;
         if ($dictionaryType !== TypeNameValue::X_REF) {
             throw new ParseFailureException('Expected stream of type xref, got "' . ($dictionaryType?->name ?? 'null') . '" Dictionary: ' . json_encode($dictionary));

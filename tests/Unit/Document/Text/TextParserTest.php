@@ -13,11 +13,9 @@ use PrinsFrank\PdfParser\Document\Text\TextOperator;
 use PrinsFrank\PdfParser\Document\Text\TextParser;
 
 /** @coversDefaultClass \PrinsFrank\PdfParser\Document\Text\TextParser */
-class TextParserTest extends TestCase
-{
+class TextParserTest extends TestCase {
     /** @covers ::parse */
-    public function testParseText(): void
-    {
+    public function testParseText(): void {
         static::assertEquals(
             (new TextObjectCollection())
                 ->addTextObject(

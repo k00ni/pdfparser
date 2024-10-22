@@ -7,10 +7,8 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Errors\ErrorCollection;
 use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStream;
 
-class ObjectParser
-{
-    public static function parse(ObjectStream $objectStream, ErrorCollection $errorCollection): ObjectItemCollection
-    {
+class ObjectParser {
+    public static function parse(ObjectStream $objectStream, ErrorCollection $errorCollection): ObjectItemCollection {
         $objectItemCollection = new ObjectItemCollection();
         if ($objectStream->decodedStream === null) {
             return $objectItemCollection;
