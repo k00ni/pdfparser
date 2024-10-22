@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream;
 
-enum CrossReferenceStreamType: string
+enum CrossReferenceStreamType: int
 {
-    case TYPE_LINKED_LIST_FREE_OBJECT = '00';
-    case TYPE_UNCOMPRESSED_OBJECT = '01';
-    case TYPE_COMPRESSED_OBJECT = '02';
+    case LINKED_LIST_FREE_OBJECT = 0;
+    case UNCOMPRESSED_OBJECT = 1;
+    case COMPRESSED_OBJECT = 2;
 }

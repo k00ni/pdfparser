@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\CrossReference;
 
-use PrinsFrank\PdfParser\Document\Generic\Character\ObjectInUseOrFreeCharacter;
-use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
-use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\CrossReferenceData;
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\CrossReferenceStream;
+use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\CrossReferenceStreamEntryType;
+use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\CrossReferenceStreamType;
+use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\Entry\CompressedObjectEntry;
+use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\Entry\LinkedListFreeObjectEntry;
+use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\Entry\UncompressedDataEntry;
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\CrossReferenceEntry;
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\CrossReferenceSubSection;
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\CrossReferenceTable;
@@ -15,6 +17,8 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Document;
+use PrinsFrank\PdfParser\Document\Generic\Character\ObjectInUseOrFreeCharacter;
+use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamContent\ObjectStreamContentParser;
 use PrinsFrank\PdfParser\Exception\InvalidCrossReferenceLineException;
@@ -85,12 +89,16 @@ class CrossReferenceSourceParser
         $byteLengthRecord3 = ((int) ($wValue[2] ?? 0)) * 2;
         $crossReferenceStream = new CrossReferenceStream();
         foreach (str_split(bin2hex(ObjectStreamContentParser::parse($content, $dictionary)), $byteLengthRecord1 + $byteLengthRecord2 + $byteLengthRecord3) as $referenceRow) {
-            $crossReferenceStream->addData(
-                new CrossReferenceData(
-                    substr($referenceRow, 0, $byteLengthRecord1),
-                    substr($referenceRow, $byteLengthRecord1, $byteLengthRecord2),
-                    substr($referenceRow, $byteLengthRecord2 + $byteLengthRecord1, $byteLengthRecord3),
-                )
+            $field1 = CrossReferenceStreamType::from(hexdec(substr($referenceRow, 0, $byteLengthRecord1)));
+            $field2 = hexdec(substr($referenceRow, $byteLengthRecord1, $byteLengthRecord2));
+            $field3 = hexdec(substr($referenceRow, $byteLengthRecord2 + $byteLengthRecord1, $byteLengthRecord3));
+
+            $crossReferenceStream->addEntry(
+                match ($field1) {
+                    CrossReferenceStreamType::LINKED_LIST_FREE_OBJECT => new LinkedListFreeObjectEntry($field2, $field3),
+                    CrossReferenceStreamType::UNCOMPRESSED_OBJECT => new UncompressedDataEntry($field2, $field3),
+                    CrossReferenceStreamType::COMPRESSED_OBJECT => new CompressedObjectEntry($field2, $field3),
+                }
             );
         }
 

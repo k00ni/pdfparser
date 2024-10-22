@@ -4,15 +4,18 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream;
 
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceSource;
+use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\Entry\CompressedObjectEntry;
+use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\Entry\LinkedListFreeObjectEntry;
+use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\Entry\UncompressedDataEntry;
 
 class CrossReferenceStream implements CrossReferenceSource
 {
-    /** @var array<CrossReferenceData> */
-    public array $data = [];
+    /** @var array<CompressedObjectEntry|LinkedListFreeObjectEntry|UncompressedDataEntry> */
+    public array $entries = [];
 
-    public function addData(CrossReferenceData $data): self
+    public function addEntry(CompressedObjectEntry|LinkedListFreeObjectEntry|UncompressedDataEntry $data): self
     {
-        $this->data[] = $data;
+        $this->entries[] = $data;
 
         return $this;
     }

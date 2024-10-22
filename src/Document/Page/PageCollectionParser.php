@@ -63,7 +63,7 @@ class PageCollectionParser
 
             $contentObjects = $document->objectStreamCollection->getObjectsByReference($contentReference);
             if ($contentObjects === []) {
-                throw new ParseFailureException('Object for content with reference "' . $contentReference->objectNumber . ':' . $contentReference->versionNumber . '" not found');
+                throw new ParseFailureException(sprintf('Object for content with reference "%d:%d" not found', $contentReference->objectNumber, $contentReference->versionNumber));
             }
 
             $pages[] = new Page($pageObject, ...$contentObjects);

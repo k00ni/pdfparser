@@ -5,6 +5,7 @@ namespace PrinsFrank\PdfParser\Document\Version;
 
 use RuntimeException;
 
+/** @source 6. Version Designations */
 enum Version: string
 {
     case V1_0 = '1.0';
