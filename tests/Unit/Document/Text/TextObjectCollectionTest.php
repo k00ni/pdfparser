@@ -14,7 +14,6 @@ use PrinsFrank\PdfParser\Document\Text\TextOperator;
 /** @coversDefaultClass \PrinsFrank\PdfParser\Document\Text\TextObjectCollection */
 class TextObjectCollectionTest extends TestCase
 {
-
     /** @covers ::__toString */
     public function testParseText(): void
     {

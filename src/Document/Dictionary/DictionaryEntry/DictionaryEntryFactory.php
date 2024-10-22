@@ -11,9 +11,7 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class DictionaryEntryFactory
 {
-    /**
-     * @throws ParseFailureException
-     */
+    /** @throws ParseFailureException */
     public static function fromKeyValuePair(string $keyString, array|string $dictionaryValue, ErrorCollection $errorCollection): ?DictionaryEntry
     {
         $dictionaryKey = DictionaryKey::tryFromKeyString(trim($keyString));

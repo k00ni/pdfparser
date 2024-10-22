@@ -5,5 +5,4 @@ namespace PrinsFrank\PdfParser\Exception;
 
 class UnsupportedFileFormatException extends PdfParserException
 {
-
 }

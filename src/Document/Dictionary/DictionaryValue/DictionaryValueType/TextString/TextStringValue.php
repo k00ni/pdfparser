@@ -7,7 +7,9 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType
 
 class TextStringValue implements DictionaryValueType
 {
-    public function __construct(public string $textStringValue) { }
+    public function __construct(public string $textStringValue)
+    {
+    }
 
     public static function fromValue(string $valueString): DictionaryValueType
     {

@@ -49,9 +49,7 @@ class ObjectStreamCollection
         return null;
     }
 
-    /**
-     * @return list<ObjectItem|ObjectStream>
-     */
+    /** @return list<ObjectItem|ObjectStream> */
     public function getObjectsByReference(ReferenceValueArray $referenceValue): array
     {
         $objects = [];

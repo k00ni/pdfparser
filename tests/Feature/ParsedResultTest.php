@@ -13,9 +13,7 @@ use PrinsFrank\PdfParser\PdfParser;
  */
 class ParsedResultTest extends TestCase
 {
-    /**
-     * @throws PdfParserException
-     */
+    /** @throws PdfParserException */
     public function testSimpleDocument(): void
     {
         $parser = new PdfParser();
@@ -26,9 +24,7 @@ class ParsedResultTest extends TestCase
         static::assertCount(2, $parsedDocument->pageCollection);
     }
 
-    /**
-     * @throws PdfParserException
-     */
+    /** @throws PdfParserException */
     public function testSimpleDocumentWithTitles(): void
     {
         $parser = new PdfParser();
@@ -41,6 +37,7 @@ class ParsedResultTest extends TestCase
 
     /**
      * @dataProvider pdfs
+     *
      * @throws PdfParserException
      */
     public function testExternalSourcePDFs(string $pdfPath): void

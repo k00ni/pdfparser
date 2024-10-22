@@ -40,7 +40,7 @@ class TrailerSectionParser
         }
         $trailer->setStartXrefMarkerPos($startXrefMarkerPos);
 
-        $byteOffsetLastCrossReferenceSection = substr($document->content, $startXrefMarkerPos + strlen(Marker::START_XREF->value),  -($document->contentLength - $eofMarkerPos));
+        $byteOffsetLastCrossReferenceSection = substr($document->content, $startXrefMarkerPos + strlen(Marker::START_XREF->value), -($document->contentLength - $eofMarkerPos));
         if ($byteOffsetLastCrossReferenceSection === false) {
             throw new ParseFailureException('Failed to retrieve the byte offset for the last cross reference section. Document length: "' . $document->contentLength . '", eof marker pos: "' . $eofMarkerPos . '"');
         }

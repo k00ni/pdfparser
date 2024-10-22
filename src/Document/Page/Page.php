@@ -23,7 +23,7 @@ class Page
             throw new InvalidArgumentException();
         }
 
-        $this->pageObject    = $pageObject;
+        $this->pageObject = $pageObject;
         $this->contentObjects = $contentObjects;
     }
 }

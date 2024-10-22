@@ -5,5 +5,7 @@ namespace PrinsFrank\PdfParser\Document\Errors;
 
 class Error
 {
-    public function __construct(public string $message) { }
+    public function __construct(public string $message)
+    {
+    }
 }

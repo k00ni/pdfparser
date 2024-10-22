@@ -9,11 +9,11 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class ArrayValue implements DictionaryValueType
 {
-    public function __construct(public array $value) { }
+    public function __construct(public array $value)
+    {
+    }
 
-    /**
-     * @throws ParseFailureException
-     */
+    /** @throws ParseFailureException */
     public static function fromValue(string $valueString): DictionaryValueType
     {
         if (str_starts_with($valueString, '[') === false || str_ends_with($valueString, ']') === false) {
@@ -26,7 +26,7 @@ class ArrayValue implements DictionaryValueType
         foreach ($values as $value) {
             if (str_starts_with($value, '[') && str_ends_with($value, ']')) {
                 $array[] = self::fromValue($value);
-            } else if ((string) (int) $value === $value) {
+            } elseif ((string) (int) $value === $value) {
                 $array[] = (int) $value;
             } else {
                 $array[] = $value;

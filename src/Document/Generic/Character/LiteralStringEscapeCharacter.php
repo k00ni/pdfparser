@@ -8,13 +8,13 @@ namespace PrinsFrank\PdfParser\Document\Generic\Character;
  */
 enum LiteralStringEscapeCharacter: string
 {
-    case LINE_FEED         = '\n';
-    case CARRIAGE_RETURN   = '\r';
-    case HORIZONTAL_TAB    = '\t';
-    case BACKSPACE         = '\b';
-    case FORM_FEED         = '\f';
-    case LEFT_PARENTHESIS  = '\(';
+    case LINE_FEED = '\n';
+    case CARRIAGE_RETURN = '\r';
+    case HORIZONTAL_TAB = '\t';
+    case BACKSPACE = '\b';
+    case FORM_FEED = '\f';
+    case LEFT_PARENTHESIS = '\(';
     case RIGHT_PARENTHESIS = '\)';
-    case REVERSE_SOLIDUS   = '\\';
-    case CHARACTER_CODE    = '\ddd';
+    case REVERSE_SOLIDUS = '\\';
+    case CHARACTER_CODE = '\ddd';
 }

@@ -11,9 +11,7 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class ObjectStreamContentParser
 {
-    /**
-     * @throws ParseFailureException
-     */
+    /** @throws ParseFailureException */
     public static function parse(string $content, Dictionary $dictionary): ?string
     {
         $startStream = strpos($content, Marker::STREAM->value);

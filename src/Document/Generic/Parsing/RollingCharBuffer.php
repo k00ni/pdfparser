@@ -26,6 +26,7 @@ class RollingCharBuffer
      * ['d', 'b', 'c']
      * ['d', 'e', 'c']
      * ['d', 'e', 'f']
+     *
      * @var array<int<0, TLength>, string>
      */
     private array $buffer = [];
@@ -55,9 +56,7 @@ class RollingCharBuffer
         return $this;
     }
 
-    /**
-     * @throws BufferTooSmallException
-     */
+    /** @throws BufferTooSmallException */
     public function getPreviousCharacter(int $nAgo = 1): ?string
     {
         if ($nAgo >= $this->length) {
@@ -67,9 +66,7 @@ class RollingCharBuffer
         return $this->buffer[($this->currentIndex - $nAgo) % $this->length] ?? null;
     }
 
-    /**
-     * @throws BufferTooSmallException
-     */
+    /** @throws BufferTooSmallException */
     public function seenBackedEnumValue(BackedEnum $backedEnum): bool
     {
         if (strlen($backedEnum->value) > $this->length) {

@@ -8,7 +8,9 @@ use PrinsFrank\PdfParser\Exception\InvalidDictionaryValueTypeFormatException;
 
 class FloatValue implements DictionaryValueType
 {
-    public function __construct(public float $value) { }
+    public function __construct(public float $value)
+    {
+    }
 
     public static function fromValue(string $valueString): DictionaryValueType
     {

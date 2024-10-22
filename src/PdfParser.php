@@ -13,9 +13,7 @@ use PrinsFrank\PdfParser\Exception\PdfParserException;
 
 final class PdfParser
 {
-    /**
-     * @throws PdfParserException
-     */
+    /** @throws PdfParserException */
     public function parse(string $fileContent): Document
     {
         $document = new Document($fileContent);

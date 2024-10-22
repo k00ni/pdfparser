@@ -6,5 +6,5 @@ namespace PrinsFrank\PdfParser\Document\Generic\Character;
 enum ObjectInUseOrFreeCharacter: string
 {
     case IN_USE = 'n';
-    case FREE   = 'f';
+    case FREE = 'f';
 }

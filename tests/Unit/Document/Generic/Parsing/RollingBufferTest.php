@@ -16,6 +16,7 @@ class RollingBufferTest extends TestCase
     /**
      * @covers ::setCharacter
      * @covers ::getPreviousCharacter
+     *
      * @throws BufferTooSmallException
      */
     public function testGetPreviousCharacter(): void
@@ -42,9 +43,7 @@ class RollingBufferTest extends TestCase
         static::assertSame('c', $charBuffer->getPreviousCharacter(2));
     }
 
-    /**
-     * @covers ::seenBackedEnumValue
-     */
+    /** @covers ::seenBackedEnumValue */
     public function testSeenMarker(): void
     {
         $charBuffer = new RollingCharBuffer(6);

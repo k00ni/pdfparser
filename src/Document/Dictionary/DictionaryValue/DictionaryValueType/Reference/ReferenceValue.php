@@ -8,11 +8,11 @@ use PrinsFrank\PdfParser\Exception\InvalidDictionaryValueTypeFormatException;
 
 class ReferenceValue implements DictionaryValueType
 {
-    public function __construct(public readonly int $objectNumber, public readonly int $versionNumber) { }
+    public function __construct(public readonly int $objectNumber, public readonly int $versionNumber)
+    {
+    }
 
-    /**
-     * @throws InvalidDictionaryValueTypeFormatException
-     */
+    /** @throws InvalidDictionaryValueTypeFormatException */
     public static function fromValue(string $valueString): DictionaryValueType
     {
         $referenceParts = explode(' ', trim(rtrim(ltrim($valueString, '['), ']')));

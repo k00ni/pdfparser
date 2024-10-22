@@ -24,8 +24,8 @@ final class Document
 
     public function __construct(string $content)
     {
-        $this->content         = $content;
-        $this->contentLength   = strlen($content);
+        $this->content = $content;
+        $this->contentLength = strlen($content);
         $this->errorCollection = new ErrorCollection();
     }
 

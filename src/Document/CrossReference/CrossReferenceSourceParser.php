@@ -22,9 +22,7 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class CrossReferenceSourceParser
 {
-    /**
-     * @throws ParseFailureException
-     */
+    /** @throws ParseFailureException */
     public static function parse(Document $document): CrossReferenceSource
     {
         $content = substr($document->content, $document->trailer->byteOffsetLastCrossReferenceSection);
@@ -36,9 +34,7 @@ class CrossReferenceSourceParser
         return static::parseTable($content);
     }
 
-    /**
-     * @throws InvalidCrossReferenceLineException
-     */
+    /** @throws InvalidCrossReferenceLineException */
     public static function parseTable(string $content): CrossReferenceTable
     {
         $crossReferenceSubSection = null;
@@ -71,9 +67,7 @@ class CrossReferenceSourceParser
         return new CrossReferenceTable($crossReferenceSubSections);
     }
 
-    /**
-     * @throws ParseFailureException
-     */
+    /** @throws ParseFailureException */
     public static function parseStream(Dictionary $dictionary, string $content): CrossReferenceStream
     {
         $dictionaryType = $dictionary->getEntryWithKey(DictionaryKey::TYPE)?->value;

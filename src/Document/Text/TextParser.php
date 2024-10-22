@@ -13,9 +13,7 @@ use PrinsFrank\PdfParser\Exception\BufferTooSmallException;
 
 class TextParser
 {
-    /**
-     * @throws BufferTooSmallException
-     */
+    /** @throws BufferTooSmallException */
     public static function parse(string $text): TextObjectCollection
     {
         $textObjectCollection = new TextObjectCollection();

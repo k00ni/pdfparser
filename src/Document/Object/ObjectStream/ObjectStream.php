@@ -12,7 +12,7 @@ class ObjectStream
     public readonly ?string              $decodedStream;
     public readonly ObjectItemCollection $objectItemCollection;
     public readonly Dictionary           $dictionary;
-    public ?int                          $objectId         = null;
+    public ?int                          $objectId = null;
     public ?int                          $generationNumber = null;
 
     public function setContent(string $content): self

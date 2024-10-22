@@ -6,7 +6,6 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Date\DateValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Dictionary\DictionaryValueValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Float\FloatValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Integer\IntegerValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\SubtypeNameValue;
@@ -22,16 +21,14 @@ use Throwable;
 
 class DictionaryValue
 {
-    /**
-     * @throws ParseFailureException
-     */
+    /** @throws ParseFailureException */
     public static function fromValueString(DictionaryKey $dictionaryKey, string $valueString)
     {
         try {
             return match ($dictionaryKey) {
-                DictionaryKey::FILTER        => FilterNameValue::fromValue($valueString),
-                DictionaryKey::TYPE          => TypeNameValue::fromValue($valueString),
-                DictionaryKey::TRAPPED       => TrappedNameValue::fromValue($valueString),
+                DictionaryKey::FILTER => FilterNameValue::fromValue($valueString),
+                DictionaryKey::TYPE => TypeNameValue::fromValue($valueString),
+                DictionaryKey::TRAPPED => TrappedNameValue::fromValue($valueString),
                 DictionaryKey::INDEX,
                 DictionaryKey::ID,
                 DictionaryKey::CROP_BOX,
@@ -40,7 +37,7 @@ class DictionaryValue
                 DictionaryKey::RECT,
                 DictionaryKey::BORDER,
                 DictionaryKey::ARTBOX,
-                DictionaryKey::W             => ArrayValue::fromValue($valueString),
+                DictionaryKey::W => ArrayValue::fromValue($valueString),
                 DictionaryKey::COLUMNS,
                 DictionaryKey::PREDICTOR,
                 DictionaryKey::PREVIOUS,
@@ -72,8 +69,8 @@ class DictionaryValue
                 DictionaryKey::MAX_WIDTH,
                 DictionaryKey::AVG_WIDTH,
                 DictionaryKey::LENGTH,
-                DictionaryKey::SIZE          => IntegerValue::fromValue($valueString),
-                DictionaryKey::ASCENT        => FloatValue::fromValue($valueString),
+                DictionaryKey::SIZE => IntegerValue::fromValue($valueString),
+                DictionaryKey::ASCENT => FloatValue::fromValue($valueString),
                 DictionaryKey::INFO,
                 DictionaryKey::METADATA,
                 DictionaryKey::PAGES,
@@ -87,10 +84,10 @@ class DictionaryValue
                 DictionaryKey::C_I_D_SET,
                 DictionaryKey::DESCENDANT_FONTS,
                 DictionaryKey::PARENT,
-                DictionaryKey::ROOT          => ReferenceValue::fromValue($valueString),
+                DictionaryKey::ROOT => ReferenceValue::fromValue($valueString),
                 DictionaryKey::CONTENTS,
                 DictionaryKey::RESOURCES,
-                DictionaryKey::KIDS          => ReferenceValueArray::fromValue($valueString),
+                DictionaryKey::KIDS => ReferenceValueArray::fromValue($valueString),
                 DictionaryKey::CREATOR,
                 DictionaryKey::OPEN_ACTION,
                 DictionaryKey::GS,
@@ -167,13 +164,13 @@ class DictionaryValue
                 DictionaryKey::S_M,
                 DictionaryKey::C_O_,
                 DictionaryKey::PAGE,
-                DictionaryKey::PRODUCER      => TextStringValue::fromValue($valueString),
+                DictionaryKey::PRODUCER => TextStringValue::fromValue($valueString),
                 DictionaryKey::MOD_DATE,
                 DictionaryKey::CREATION_DATE => DateValue::fromValue($valueString),
                 DictionaryKey::FONT_B_BOX,
-                DictionaryKey::MEDIABOX      => Rectangle::fromValue($valueString),
-                DictionaryKey::SUBTYPE       => SubtypeNameValue::fromValue($valueString),
-                default                      => throw new ParseFailureException('Dictionary key "' . $dictionaryKey->name . '" is not supported (' . $valueString . ')'),
+                DictionaryKey::MEDIABOX => Rectangle::fromValue($valueString),
+                DictionaryKey::SUBTYPE => SubtypeNameValue::fromValue($valueString),
+                default => throw new ParseFailureException('Dictionary key "' . $dictionaryKey->name . '" is not supported (' . $valueString . ')'),
             };
         } catch (Throwable $e) {
             throw new ParseFailureException($e->getMessage() . ' for dictionary key of type "' . $dictionaryKey->value . '"');

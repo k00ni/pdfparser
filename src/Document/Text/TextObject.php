@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Text;
 
-use PrinsFrank\PdfParser\Document\Text\OperatorString\TextShowingOperator;
 use Stringable;
 
 class TextObject implements Stringable
