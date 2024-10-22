@@ -8,12 +8,12 @@ use PrinsFrank\PdfParser\Document\Object\ObjectItemCollection;
 
 class ObjectStream {
     public function __construct(
-        public int $objectId,
-        public int $generationNumber,
-        public readonly string $content,
-        public readonly ?string $decodedStream,
+        public int                           $objectNumber,
+        public int                           $generationNumber,
+        public readonly string               $content,
+        public readonly ?string              $decodedStream,
         public readonly ObjectItemCollection $objectItemCollection,
-        public readonly Dictionary $dictionary,
+        public readonly Dictionary           $dictionary,
     ) {
     }
 }

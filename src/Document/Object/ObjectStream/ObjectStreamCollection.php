@@ -32,7 +32,7 @@ class ObjectStreamCollection {
 
     public function getObjectByReference(ReferenceValue $referenceValue): ObjectItem|ObjectStream|null {
         foreach ($this->objectStreams as $objectStream) {
-            if ($objectStream->objectId === $referenceValue->objectNumber) {
+            if ($objectStream->objectNumber === $referenceValue->objectNumber) {
                 return $objectStream;
             }
 
@@ -50,7 +50,7 @@ class ObjectStreamCollection {
     public function getObjectsByReference(ReferenceValueArray $referenceValue): array {
         $objects = [];
         foreach ($this->objectStreams as $objectStream) {
-            if (in_array($objectStream->objectId, $referenceValue->objectNumbers(), true)) {
+            if (in_array($objectStream->objectNumber, $referenceValue->objectNumbers(), true)) {
                 $objects[] = $objectStream;
 
                 continue;
