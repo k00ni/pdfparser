@@ -8,7 +8,9 @@ use PrinsFrank\PdfParser\Exception\InvalidDictionaryValueTypeFormatException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class ArrayValue implements DictionaryValueType {
-    public function __construct(public array $value) {
+    public function __construct(
+        public readonly array $value
+    ) {
     }
 
     /** @throws ParseFailureException */

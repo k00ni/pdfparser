@@ -19,10 +19,9 @@ class ObjectStreamContentParser {
         }
 
         $stream = substr($content, $startStream + strlen(Marker::STREAM->value), $endStream - $startStream - strlen(Marker::STREAM->value));
-
         $streamFilter = $dictionary->getEntryWithKey(DictionaryKey::FILTER)?->value;
         if ($streamFilter instanceof FilterNameValue) {
-            $stream = $streamFilter::decode($streamFilter, $stream);
+            $stream = $streamFilter->decode($stream);
         }
 
         return $stream;

@@ -6,6 +6,7 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Date\DateValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\DictionaryValueType;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Float\FloatValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Integer\IntegerValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\SubtypeNameValue;
@@ -21,7 +22,7 @@ use Throwable;
 
 class DictionaryValue {
     /** @throws ParseFailureException */
-    public static function fromValueString(DictionaryKey $dictionaryKey, string $valueString) {
+    public static function fromValueString(DictionaryKey $dictionaryKey, string $valueString): TrappedNameValue|DictionaryValueType|TypeNameValue|SubtypeNameValue|FilterNameValue {
         try {
             return match ($dictionaryKey) {
                 DictionaryKey::FILTER => FilterNameValue::fromValue($valueString),

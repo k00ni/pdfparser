@@ -6,7 +6,9 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryVal
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\DictionaryValueType;
 
 class TextStringValue implements DictionaryValueType {
-    public function __construct(public string $textStringValue) {
+    public function __construct(
+        public readonly string $textStringValue
+    ) {
     }
 
     public static function fromValue(string $valueString): DictionaryValueType {

@@ -6,7 +6,12 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryVal
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\DictionaryValueType;
 
 class Rectangle implements DictionaryValueType {
-    public function __construct(public float $xTopLeft, public float $yTopLeft, public float $xBottomRight, public float $yBottomRight) {
+    public function __construct(
+        public readonly float $xTopLeft,
+        public readonly float $yTopLeft,
+        public readonly float $xBottomRight,
+        public readonly float $yBottomRight
+    ) {
     }
 
     public static function fromValue(string $valueString): DictionaryValueType {

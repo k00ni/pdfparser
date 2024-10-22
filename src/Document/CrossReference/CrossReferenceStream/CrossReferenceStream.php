@@ -18,7 +18,6 @@ class CrossReferenceStream implements CrossReferenceSource {
         return $this;
     }
 
-    /** @return list<int> */
     public function getByteOffsets(): array {
         $byteOffsets = [];
         foreach ($this->entries as $crossReferenceData) {

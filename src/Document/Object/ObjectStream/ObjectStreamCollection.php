@@ -36,7 +36,7 @@ class ObjectStreamCollection {
                 return $objectStream;
             }
 
-            foreach ($objectStream->objectItemCollection->getObjectItems() as $objectItem) {
+            foreach ($objectStream->objectItemCollection->objectItems as $objectItem) {
                 if ($objectItem->objectNumber === $referenceValue->objectNumber) {
                     return $objectItem;
                 }
@@ -56,7 +56,7 @@ class ObjectStreamCollection {
                 continue;
             }
 
-            foreach ($objectStream->objectItemCollection->getObjectItems() as $objectItem) {
+            foreach ($objectStream->objectItemCollection->objectItems as $objectItem) {
                 if (in_array($objectItem->objectNumber, $referenceValue->objectNumbers(), true)) {
                     $objects[] = $objectItem;
                 }

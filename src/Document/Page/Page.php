@@ -10,18 +10,18 @@ use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStream;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 
 class Page {
-    private readonly ObjectItem|ObjectStream      $pageObject;
-
     /** @var list<ObjectItem|ObjectStream> */
-    private readonly array  $contentObjects;
+    private readonly array $contentObjects;
 
     /** @throws InvalidArgumentException */
-    public function __construct(ObjectItem|ObjectStream $pageObject, ObjectItem|ObjectStream... $contentObjects) {
+    public function __construct(
+        private readonly ObjectItem|ObjectStream $pageObject,
+        ObjectItem|ObjectStream... $contentObjects
+    ) {
         if ($pageObject->dictionary->getEntryWithKey(DictionaryKey::TYPE)?->value !== TypeNameValue::PAGE) {
             throw new InvalidArgumentException();
         }
 
-        $this->pageObject = $pageObject;
         $this->contentObjects = $contentObjects;
     }
 }

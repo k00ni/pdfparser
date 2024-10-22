@@ -6,14 +6,12 @@ namespace PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable;
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceSource;
 
 class CrossReferenceTable implements CrossReferenceSource {
-    /** @var array<CrossReferenceSubSection> */
-    public readonly array $crossReferenceSubSections;
-
-    public function __construct(array $crossReferenceSubSections) {
-        $this->crossReferenceSubSections = $crossReferenceSubSections;
+    /** @param array<CrossReferenceSubSection> $crossReferenceSubSections */
+    public function __construct(
+        public readonly array $crossReferenceSubSections
+    ) {
     }
 
-    /** @return list<int> */
     public function getByteOffsets(): array {
         $byteOffsets = [];
         foreach ($this->crossReferenceSubSections as $crossReferenceSubSection) {

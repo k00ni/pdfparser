@@ -14,12 +14,11 @@ class DictionaryEntryFactory {
     public static function fromKeyValuePair(string $keyString, array|string $dictionaryValue, ErrorCollection $errorCollection): ?DictionaryEntry {
         $dictionaryKey = DictionaryKey::tryFromKeyString(trim($keyString));
         if ($dictionaryKey === null) {
-            $errorCollection->addError('DictionaryKey "' . $keyString . '" not supported');
+            $errorCollection->addError(new Error('DictionaryKey "' . $keyString . '" not supported'));
 
             return null;
         }
 
-        $dictionaryEntry = (new DictionaryEntry())->setKey($dictionaryKey);
         if (is_array($dictionaryValue)) {
             $arrayValues = [];
             foreach ($dictionaryValue as $dictionaryItemKey => $dictionaryItemValue) {
@@ -30,6 +29,6 @@ class DictionaryEntryFactory {
             $value = DictionaryValue::fromValueString($dictionaryKey, $dictionaryValue);
         }
 
-        return $dictionaryEntry->setValue($value);
+        return new DictionaryEntry($dictionaryKey, $value);
     }
 }

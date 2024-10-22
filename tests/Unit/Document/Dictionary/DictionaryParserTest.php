@@ -27,16 +27,17 @@ class DictionaryParserTest extends TestCase {
     /** @covers ::parse */
     public function testParseCrossReference(): void {
         static::assertEquals(
-            (new Dictionary())
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::TYPE)->setValue(TypeNameValue::X_REF))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::INDEX)->setValue(new ArrayValue([0, 16])))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::SIZE)->setValue(new IntegerValue(16)))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::W)->setValue(new ArrayValue([1, 2, 1])))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::ROOT)->setValue(new ReferenceValue(13, 0)))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::INFO)->setValue(new ReferenceValue(14, 0)))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::ID)->setValue(new ArrayValue(['<F7F55EED423E47B1F3E311DE7CFCE2E5>', '<F7F55EED423E47B1F3E311DE7CFCE2E5>'])))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::LENGTH)->setValue(new IntegerValue(57)))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::FILTER)->setValue(FilterNameValue::FLATE_DECODE)),
+            new Dictionary(
+                new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::X_REF),
+                new DictionaryEntry(DictionaryKey::INDEX, new ArrayValue([0, 16])),
+                new DictionaryEntry(DictionaryKey::SIZE, new IntegerValue(16)),
+                new DictionaryEntry(DictionaryKey::W, new ArrayValue([1, 2, 1])),
+                new DictionaryEntry(DictionaryKey::ROOT, new ReferenceValue(13, 0)),
+                new DictionaryEntry(DictionaryKey::INFO, new ReferenceValue(14, 0)),
+                new DictionaryEntry(DictionaryKey::ID, new ArrayValue(['<F7F55EED423E47B1F3E311DE7CFCE2E5>', '<F7F55EED423E47B1F3E311DE7CFCE2E5>'])),
+                new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(57)),
+                new DictionaryEntry(DictionaryKey::FILTER, FilterNameValue::FLATE_DECODE),
+            ),
             DictionaryParser::parse(
                 '15 0 obj' . PHP_EOL .
                 '<<' . PHP_EOL .
@@ -59,23 +60,24 @@ class DictionaryParserTest extends TestCase {
     /** @covers ::parse */
     public function testObjectStream(): void {
         static::assertEquals(
-            (new Dictionary())
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::DECODE_PARAMS)->setValue(new ArrayValue(
+            new Dictionary(
+                new DictionaryEntry(DictionaryKey::DECODE_PARAMS, new ArrayValue(
                     [
-                        (new DictionaryEntry())->setKey(DictionaryKey::COLUMNS)->setValue(new IntegerValue(5)),
-                        (new DictionaryEntry())->setKey(DictionaryKey::PREDICTOR)->setValue(new IntegerValue(12))
+                        new DictionaryEntry(DictionaryKey::COLUMNS, new IntegerValue(5)),
+                        new DictionaryEntry(DictionaryKey::PREDICTOR, new IntegerValue(12))
                     ]
-                )))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::FILTER)->setValue(FilterNameValue::FLATE_DECODE))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::ID)->setValue(new ArrayValue(['<9A27A23F6A2546448EBB340FF38477BD>', '<C5C4714E306446ABAE40FE784477D322>'])))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::INDEX)->setValue(new ArrayValue([2460, 1, 4311, 1, 4317, 2, 4414, 1, 4717, 21])))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::INFO)->setValue(new ReferenceValue(4318, 0)))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::LENGTH)->setValue(new IntegerValue(106)))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::PREVIOUS)->setValue(new IntegerValue(46153797)))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::ROOT)->setValue(new ReferenceValue(4320, 0)))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::SIZE)->setValue(new IntegerValue(4738)))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::TYPE)->setValue(TypeNameValue::X_REF))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::W)->setValue(new ArrayValue([1, 4, 0]))),
+                )),
+                new DictionaryEntry(DictionaryKey::FILTER, FilterNameValue::FLATE_DECODE),
+                new DictionaryEntry(DictionaryKey::ID, new ArrayValue(['<9A27A23F6A2546448EBB340FF38477BD>', '<C5C4714E306446ABAE40FE784477D322>'])),
+                new DictionaryEntry(DictionaryKey::INDEX, new ArrayValue([2460, 1, 4311, 1, 4317, 2, 4414, 1, 4717, 21])),
+                new DictionaryEntry(DictionaryKey::INFO, new ReferenceValue(4318, 0)),
+                new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(106)),
+                new DictionaryEntry(DictionaryKey::PREVIOUS, new IntegerValue(46153797)),
+                new DictionaryEntry(DictionaryKey::ROOT, new ReferenceValue(4320, 0)),
+                new DictionaryEntry(DictionaryKey::SIZE, new IntegerValue(4738)),
+                new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::X_REF),
+                new DictionaryEntry(DictionaryKey::W, new ArrayValue([1, 4, 0])),
+            ),
             DictionaryParser::parse(
                 '<<
                     /DecodeParms
@@ -102,23 +104,24 @@ class DictionaryParserTest extends TestCase {
     /** @covers ::parse */
     public function testParseSingleLine(): void {
         static::assertEquals(
-            (new Dictionary())
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::DECODE_PARAMS)->setValue(new ArrayValue(
+            new Dictionary(
+                new DictionaryEntry(DictionaryKey::DECODE_PARAMS, new ArrayValue(
                     [
-                        (new DictionaryEntry())->setKey(DictionaryKey::COLUMNS)->setValue(new IntegerValue(5)),
-                        (new DictionaryEntry())->setKey(DictionaryKey::PREDICTOR)->setValue(new IntegerValue(12))
+                        new DictionaryEntry(DictionaryKey::COLUMNS, new IntegerValue(5)),
+                        new DictionaryEntry(DictionaryKey::PREDICTOR, new IntegerValue(12))
                     ]
-                )))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::FILTER)->setValue(FilterNameValue::FLATE_DECODE))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::ID)->setValue(new ArrayValue(['<9A27A23F6A2546448EBB340FF38477BD>', '<C5C4714E306446ABAE40FE784477D322>'])))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::INDEX)->setValue(new ArrayValue([2460, 1, 4311, 1, 4317, 2, 4414, 1, 4717, 21])))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::INFO)->setValue(new ReferenceValue(4318, 0)))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::LENGTH)->setValue(new IntegerValue(106)))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::PREVIOUS)->setValue(new IntegerValue(46153797)))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::ROOT)->setValue(new ReferenceValue(4320, 0)))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::SIZE)->setValue(new IntegerValue(4738)))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::TYPE)->setValue(TypeNameValue::X_REF))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::W)->setValue(new ArrayValue([1, 4, 0]))),
+                )),
+                new DictionaryEntry(DictionaryKey::FILTER, FilterNameValue::FLATE_DECODE),
+                new DictionaryEntry(DictionaryKey::ID, new ArrayValue(['<9A27A23F6A2546448EBB340FF38477BD>', '<C5C4714E306446ABAE40FE784477D322>'])),
+                new DictionaryEntry(DictionaryKey::INDEX, new ArrayValue([2460, 1, 4311, 1, 4317, 2, 4414, 1, 4717, 21])),
+                new DictionaryEntry(DictionaryKey::INFO, new ReferenceValue(4318, 0)),
+                new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(106)),
+                new DictionaryEntry(DictionaryKey::PREVIOUS, new IntegerValue(46153797)),
+                new DictionaryEntry(DictionaryKey::ROOT, new ReferenceValue(4320, 0)),
+                new DictionaryEntry(DictionaryKey::SIZE, new IntegerValue(4738)),
+                new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::X_REF),
+                new DictionaryEntry(DictionaryKey::W, new ArrayValue([1, 4, 0])),
+            ),
             DictionaryParser::parse('<</DecodeParms<</Columns 5/Predictor 12>>/Filter/FlateDecode/ID[<9A27A23F6A2546448EBB340FF38477BD><C5C4714E306446ABAE40FE784477D322>]/Index[2460 1 4311 1 4317 2 4414 1 4717 21]/Info 4318 0 R/Length 106/Prev 46153797/Root 4320 0 R/Size 4738/Type/XRef/W[1 4 0]>>stream', new ErrorCollection())
         );
     }
@@ -126,19 +129,20 @@ class DictionaryParserTest extends TestCase {
     /** @covers ::parse */
     public function testParseFontInfo(): void {
         static::assertEquals(
-            (new Dictionary())
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::TYPE)->setValue(TypeNameValue::FONT_DESCRIPTOR))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::FONT_NAME)->setValue(new TextStringValue('/TAIPAH+CMR10')))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::FLAGS)->setValue(new IntegerValue(4)))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::FONT_B_BOX)->setValue(new Rectangle(-40, -250, 1009, 750)))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::ASCENT)->setValue(new FloatValue(694)))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::CAP_HEIGHT)->setValue(new IntegerValue(683)))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::DESCENT)->setValue(new IntegerValue(-194)))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::ITALIC_ANGLE)->setValue(new IntegerValue(0)))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::STEM_V)->setValue(new IntegerValue(69)))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::X_HEIGHT)->setValue(new IntegerValue(431)))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::CHAR_SET)->setValue(new TextStringValue('(/S/a/c/d/e/fi/g/l/n/o/one/p/r/s/t/two)')))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::FONT_FILE)->setValue(new TextStringValue('11 0 R'))),
+            new Dictionary(
+                new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::FONT_DESCRIPTOR),
+                new DictionaryEntry(DictionaryKey::FONT_NAME, new TextStringValue('/TAIPAH+CMR10')),
+                new DictionaryEntry(DictionaryKey::FLAGS, new IntegerValue(4)),
+                new DictionaryEntry(DictionaryKey::FONT_B_BOX, new Rectangle(-40, -250, 1009, 750)),
+                new DictionaryEntry(DictionaryKey::ASCENT, new FloatValue(694)),
+                new DictionaryEntry(DictionaryKey::CAP_HEIGHT, new IntegerValue(683)),
+                new DictionaryEntry(DictionaryKey::DESCENT, new IntegerValue(-194)),
+                new DictionaryEntry(DictionaryKey::ITALIC_ANGLE, new IntegerValue(0)),
+                new DictionaryEntry(DictionaryKey::STEM_V, new IntegerValue(69)),
+                new DictionaryEntry(DictionaryKey::X_HEIGHT, new IntegerValue(431)),
+                new DictionaryEntry(DictionaryKey::CHAR_SET, new TextStringValue('(/S/a/c/d/e/fi/g/l/n/o/one/p/r/s/t/two)')),
+                new DictionaryEntry(DictionaryKey::FONT_FILE, new TextStringValue('11 0 R')),
+            ),
             DictionaryParser::parse(
                 '<<' . PHP_EOL .
                 '/Type /FontDescriptor' . PHP_EOL .
@@ -162,13 +166,14 @@ class DictionaryParserTest extends TestCase {
     /** @covers ::parse */
     public function testParseValuesEncapsulatedInParentheses(): void {
         static::assertEquals(
-            (new Dictionary())
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::PRODUCER)->setValue(new TextStringValue('(pdfTeX-1.40.18)')))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::CREATOR)->setValue(new TextStringValue('(TeX)')))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::CREATION_DATE)->setValue(new DateValue('(D:20220506201153+02\'00\')')))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::MOD_DATE)->setValue(new DateValue('(D:20220506201153+02\'00\')')))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::TRAPPED)->setValue(TrappedNameValue::FALSE))
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::PTEX_FULL_BANNER)->setValue(new TextStringValue('(This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) kpathsea version 6.2.3)'))),
+            new Dictionary(
+                new DictionaryEntry(DictionaryKey::PRODUCER, new TextStringValue('(pdfTeX-1.40.18)')),
+                new DictionaryEntry(DictionaryKey::CREATOR, new TextStringValue('(TeX)')),
+                new DictionaryEntry(DictionaryKey::CREATION_DATE, new DateValue('(D:20220506201153+02\'00\')')),
+                new DictionaryEntry(DictionaryKey::MOD_DATE, new DateValue('(D:20220506201153+02\'00\')')),
+                new DictionaryEntry(DictionaryKey::TRAPPED, TrappedNameValue::FALSE),
+                new DictionaryEntry(DictionaryKey::PTEX_FULL_BANNER, new TextStringValue('(This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) kpathsea version 6.2.3)')),
+            ),
             DictionaryParser::parse(
                 '<<' . PHP_EOL .
                 '/Producer (pdfTeX-1.40.18)' . PHP_EOL .
@@ -186,8 +191,9 @@ class DictionaryParserTest extends TestCase {
     /** @covers ::parse */
     public function testIgnoreCommentedLines(): void {
         static::assertEquals(
-            (new Dictionary())
-                ->addEntry((new DictionaryEntry())->setKey(DictionaryKey::PRODUCER)->setValue(new TextStringValue('(pdfTeX-1.40.18)'))),
+            new Dictionary(
+                new DictionaryEntry(DictionaryKey::PRODUCER, new TextStringValue('(pdfTeX-1.40.18)')),
+            ),
             DictionaryParser::parse(
                 '<<' . PHP_EOL .
                 '/Producer (pdfTeX-1.40.18)' . PHP_EOL .

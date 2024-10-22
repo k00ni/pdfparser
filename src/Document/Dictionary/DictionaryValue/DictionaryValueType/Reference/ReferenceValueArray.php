@@ -8,7 +8,7 @@ use PrinsFrank\PdfParser\Exception\InvalidDictionaryValueTypeFormatException;
 
 class ReferenceValueArray implements DictionaryValueType {
     /** @var array<ReferenceValue> */
-    public array $referenceValues;
+    public readonly array $referenceValues;
 
     public function __construct(ReferenceValue ...$referenceValues) {
         $this->referenceValues = $referenceValues;

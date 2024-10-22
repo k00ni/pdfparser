@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Object\ObjectStream;
 
-use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\Entry\UncompressedDataEntry;
-use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\CrossReferenceTable;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
@@ -20,7 +18,7 @@ class ObjectStreamParser {
         $byteOffsets = [...$document->crossReferenceSource->getByteOffsets(), $document->contentLength];
         sort($byteOffsets);
         if (count($byteOffsets) === 1) {
-            $document->errorCollection->addError('Only 1 byte offset was retrieved.');
+            $document->errorCollection->addError(new Error('Only 1 byte offset was retrieved.'));
         }
 
         $previousByteOffset = strlen(Marker::VERSION->value) + Version::length() + strlen(PHP_EOL);

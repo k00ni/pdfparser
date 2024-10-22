@@ -23,8 +23,8 @@ enum FilterNameValue: string implements NameValue {
     }
 
     /** @throws ParseFailureException */
-    public static function decode(self $filter, string $content): ?string {
-        return match($filter) {
+    public function decode(string $content): ?string {
+        return match($this) {
             self::DCT_DECODE => $content, // Dont decode JPEG content
             self::FLATE_DECODE => FlateDecode::decode($content),
             default => throw new ParseFailureException('Content "' . $content . '" cannot be decoded for filter "' . $filter->name . '"')

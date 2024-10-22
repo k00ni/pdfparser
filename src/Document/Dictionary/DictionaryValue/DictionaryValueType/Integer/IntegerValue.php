@@ -7,7 +7,9 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType
 use PrinsFrank\PdfParser\Exception\InvalidDictionaryValueTypeFormatException;
 
 class IntegerValue implements DictionaryValueType {
-    public function __construct(public int $value) {
+    public function __construct(
+        public readonly int $value
+    ) {
     }
 
     public static function fromValue(string $valueString): DictionaryValueType {
