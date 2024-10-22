@@ -37,7 +37,7 @@ class ObjectParser
             }
             $objectId = array_search($objectOffset, $objectLocations, true);
             $objectItemCollection->addObjectItem(
-                    new ObjectItem(
+                new ObjectItem(
                     (int) $objectId,
                     $objectContent,
                     DictionaryParser::parse($objectContent, $errorCollection)
