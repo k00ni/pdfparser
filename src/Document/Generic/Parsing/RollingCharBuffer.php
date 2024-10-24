@@ -62,12 +62,12 @@ class RollingCharBuffer {
     }
 
     /** @throws BufferTooSmallException */
-    public function seenBackedEnumValue(BackedEnum $backedEnum): bool {
-        if (strlen($backedEnum->value) > $this->length) {
-            throw new BufferTooSmallException('Buffer length of "' . $this->length . '" configured, but enum with length "' . strlen($backedEnum->value) . '" requested');
+    public function seenString(string $string): bool {
+        if (strlen($string) > $this->length) {
+            throw new BufferTooSmallException(sprintf('Buffer length of %d configured, but enum with length %d requested', $this->length, strlen($string)));
         }
 
-        foreach (array_reverse(str_split($backedEnum->value)) as $index => $char) {
+        foreach (array_reverse(str_split($string)) as $index => $char) {
             $previousChar = $this->getPreviousCharacter($index);
             if ($previousChar !== $char) {
                 return false;
@@ -75,6 +75,27 @@ class RollingCharBuffer {
         }
 
         return true;
+    }
+
+    /** @throws BufferTooSmallException */
+    public function seenReverseString(string $string): bool {
+        if (strlen($string) > $this->length) {
+            throw new BufferTooSmallException(sprintf('Buffer length of %d configured, but enum with length %d requested', $this->length, strlen($string)));
+        }
+
+        foreach (str_split($string) as $index => $char) {
+            $previousChar = $this->getPreviousCharacter($index);
+            if ($previousChar !== $char) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /** @throws BufferTooSmallException */
+    public function seenBackedEnumValue(BackedEnum $backedEnum): bool {
+        return $this->seenString($backedEnum->value);
     }
 
     /**

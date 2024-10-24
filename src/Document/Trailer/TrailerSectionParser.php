@@ -26,31 +26,31 @@ class TrailerSectionParser {
     public static function parse(Document $document): Trailer {
         $trailer = new Trailer($document);
 
-        $eofMarkerPos = strrpos($document->content, Marker::EOF->value);
-        if ($eofMarkerPos === false) {
+        $eofMarkerPos = $document->file->strrpos(Marker::EOF->value, 0);
+        if ($eofMarkerPos === null) {
             throw new MarkerNotFoundException(Marker::EOF->value);
         }
         $trailer->setEofMarkerPos($eofMarkerPos);
 
-        $startXrefMarkerPos = strrpos($document->content, Marker::START_XREF->value, -($document->contentLength - $eofMarkerPos));
-        if ($startXrefMarkerPos === false) {
+        $startXrefMarkerPos = $document->file->strrpos(Marker::START_XREF->value, $document->file->getSizeInBytes() - $eofMarkerPos);
+        if ($startXrefMarkerPos === null) {
             throw new MarkerNotFoundException(Marker::START_XREF->value);
         }
         $trailer->setStartXrefMarkerPos($startXrefMarkerPos);
 
-        $byteOffsetLastCrossReferenceSection = substr($document->content, $startXrefMarkerPos + strlen(Marker::START_XREF->value), -($document->contentLength - $eofMarkerPos));
-        if ($byteOffsetLastCrossReferenceSection === false) {
+        $byteOffsetLastCrossReferenceSection = $document->file->read($startXrefMarkerPos + strlen(Marker::START_XREF->value), $document->file->getSizeInBytes() - $eofMarkerPos);
+        if ($byteOffsetLastCrossReferenceSection === null) {
             throw new ParseFailureException('Failed to retrieve the byte offset for the last cross reference section. Document length: "' . $document->contentLength . '", eof marker pos: "' . $eofMarkerPos . '"');
         }
         $trailer->setByteOffsetLastCrossReferenceSection((int) $byteOffsetLastCrossReferenceSection);
 
-        $trailerMarkerPos = strrpos($document->content, Marker::TRAILER->value, -($document->contentLength - $startXrefMarkerPos));
-        if ($trailerMarkerPos === false) {
+        $trailerMarkerPos = $document->file->strrpos(Marker::TRAILER->value, $document->file->getSizeInBytes() - $startXrefMarkerPos);
+        if ($trailerMarkerPos === null) {
             $trailer->setStartTrailerMarkerPos(null);
             $trailer->setDictionary(null);
         } else {
             $trailer->setStartTrailerMarkerPos($trailerMarkerPos);
-            $trailer->setDictionary(DictionaryParser::parse(substr($document->content, $trailer->startTrailerMarkerPos, $trailer->startXrefMarkerPos - $trailer->startTrailerMarkerPos), $document->errorCollection));
+            $trailer->setDictionary(DictionaryParser::parse($document->file->read($trailer->startTrailerMarkerPos, $trailer->startXrefMarkerPos - $trailer->startTrailerMarkerPos), $document->errorCollection));
         }
 
         return $trailer;

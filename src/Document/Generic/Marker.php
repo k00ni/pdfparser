@@ -11,4 +11,8 @@ enum Marker: string {
     case START_XREF = 'startxref';
     case STREAM = 'stream';
     case END_STREAM = 'endstream';
+
+    public function length(): int {
+        return strlen($this->value);
+    }
 }

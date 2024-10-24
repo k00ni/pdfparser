@@ -10,10 +10,9 @@ use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamCollection;
 use PrinsFrank\PdfParser\Document\Page\PageCollection;
 use PrinsFrank\PdfParser\Document\Trailer\Trailer;
 use PrinsFrank\PdfParser\Document\Version\Version;
+use PrinsFrank\PdfParser\File;
 
 final class Document {
-    public readonly string                 $content;
-    public readonly int                    $contentLength;
     public readonly ObjectStreamCollection $objectStreamCollection;
     public readonly Version                $version;
     public readonly CrossReferenceSource   $crossReferenceSource;
@@ -21,9 +20,9 @@ final class Document {
     public readonly PageCollection         $pageCollection;
     public readonly ErrorCollection        $errorCollection;
 
-    public function __construct(string $content) {
-        $this->content = $content;
-        $this->contentLength = strlen($content);
+    public function __construct(
+        public readonly File $file
+    ){
         $this->errorCollection = new ErrorCollection();
     }
 

@@ -13,8 +13,8 @@ use PrinsFrank\PdfParser\Exception\PdfParserException;
 
 final class PdfParser {
     /** @throws PdfParserException */
-    public function parse(string $fileContent): Document {
-        $document = new Document($fileContent);
+    public function parse(File $file): Document {
+        $document = new Document($file);
 
         return $document->setVersion(VersionParser::parse($document))
             ->setTrailer(TrailerSectionParser::parse($document))

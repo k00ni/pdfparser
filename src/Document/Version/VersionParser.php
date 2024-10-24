@@ -14,11 +14,11 @@ class VersionParser {
      * @throws UnsupportedPdfVersionException
      */
     public static function parse(Document $document): Version {
-        if (str_starts_with($document->content, Marker::VERSION->value) === false) {
+        if ($document->file->read(0, Marker::VERSION->length()) !== Marker::VERSION->value) {
             throw new UnsupportedFileFormatException();
         }
 
-        $versionString = substr($document->content, strlen(Marker::VERSION->value), Version::length());
+        $versionString = $document->file->read(strlen(Marker::VERSION->value), Version::length());
         $version = Version::tryFrom($versionString);
         if ($version === null) {
             throw new UnsupportedPdfVersionException($versionString);

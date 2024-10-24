@@ -26,7 +26,7 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 class CrossReferenceSourceParser {
     /** @throws ParseFailureException */
     public static function parse(Document $document): CrossReferenceSource {
-        $content = substr($document->content, $document->trailer->byteOffsetLastCrossReferenceSection);
+        $content = $document->file->read($document->trailer->byteOffsetLastCrossReferenceSection, $document->file->getSizeInBytes());
         $dictionary = DictionaryParser::parse($content, $document->errorCollection);
         if ($dictionary->getEntryWithKey(DictionaryKey::TYPE)?->value === TypeNameValue::X_REF) {
             return self::parseStream($dictionary, $content);
