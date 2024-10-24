@@ -5,38 +5,37 @@ namespace PrinsFrank\PdfParser\Document\Object\ObjectStream;
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Document;
-use PrinsFrank\PdfParser\Document\Generic\Marker;
+use PrinsFrank\PdfParser\Document\Errors\Error;
+use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
 use PrinsFrank\PdfParser\Document\Object\ObjectParser;
 use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamContent\ObjectStreamContentParser;
-use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\Exception\BufferTooSmallException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class ObjectStreamParser {
     /** @throws ParseFailureException|BufferTooSmallException */
     public static function parse(Document $document): ObjectStreamCollection {
-        $byteOffsets = [...$document->crossReferenceSource->getByteOffsets(), $document->contentLength];
-        sort($byteOffsets);
+        $byteOffsets = array_unique($document->crossReferenceSource->getByteOffsets());
         if (count($byteOffsets) === 1) {
             $document->errorCollection->addError(new Error('Only 1 byte offset was retrieved.'));
         }
 
-        $previousByteOffset = strlen(Marker::VERSION->value) + Version::length() + strlen(PHP_EOL);
         $objectStreams = [];
-        foreach ($byteOffsets as $index => $byteOffset) {
-            $firstLine = substr($document->content, $previousByteOffset, strpos($document->content, "\n", $previousByteOffset) - $previousByteOffset);
-            if (($index === 1 || $index === 0) && preg_match('//u', $firstLine) === false) { // If a PDF file contains binary data, the header line shall be immediately followed by a comment line and at least 4 binary characters 7.5.2 TODO: Proper comment handling
-                $previousByteOffset = $byteOffset;
-
-                continue;
+        sort($byteOffsets);
+        foreach ($byteOffsets as $key => $byteOffset) {
+            if ($byteOffset === 0) {
+                continue; // Contains PDF header and binary data to indicate document contains binary data
             }
 
+            $firstNewLinePos = self::getFirstNewLinePos($document, $byteOffset);
+            $firstNewLinePos = ($firstNewLinePos === $byteOffset ? self::getFirstNewLinePos($document, $byteOffset + 1) : $firstNewLinePos);
+            $firstLine = substr($document->content, $byteOffset, $firstNewLinePos - $byteOffset);
             $objectIndicators = explode(' ', $firstLine);
             if (count($objectIndicators) !== 3 || $objectIndicators[2] !== 'obj') {
-                throw new \Exception();
+                throw new ParseFailureException(sprintf('Expected an object identifier in format (\d \d obj), got "%s" with offset %d and first new line at %d', $firstLine, $byteOffset, $firstNewLinePos));
             }
 
-            $content = substr($document->content, $previousByteOffset, $byteOffset - $previousByteOffset);
+            $content = substr($document->content, $byteOffset, $byteOffsets[$key + 1] ?? $document->contentLength);
             $dictionary = DictionaryParser::parse($content, $document->errorCollection);
             $decodedStream = ObjectStreamContentParser::parse($content, $dictionary);
             $objectStreams[] = new ObjectStream(
@@ -47,9 +46,32 @@ class ObjectStreamParser {
                 ObjectParser::parse($decodedStream, $document->errorCollection),
                 $dictionary,
             );
-            $previousByteOffset = $byteOffset;
         }
 
         return new ObjectStreamCollection(...$objectStreams);
+    }
+
+    /**
+     * @param Document $document
+     * @param int $byteOffset
+     * @return mixed
+     */
+    public static function getFirstNewLinePos(Document $document, int $byteOffset): mixed
+    {
+        $firstLineFeed = strpos($document->content, WhitespaceCharacter::LINE_FEED->value, $byteOffset);
+        $firstCarriageReturn = strpos($document->content, WhitespaceCharacter::CARRIAGE_RETURN->value, $byteOffset);
+        if ($firstLineFeed === false && $firstCarriageReturn === false) {
+            throw new ParseFailureException('Expected a line field ...');
+        }
+
+        if ($firstCarriageReturn === false) {
+            return $firstLineFeed;
+        }
+
+        if ($firstLineFeed === false) {
+            return $firstCarriageReturn;
+        }
+
+        return min($firstLineFeed, $firstCarriageReturn);
     }
 }

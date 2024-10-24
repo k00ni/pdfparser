@@ -44,7 +44,7 @@ class ParsedResultTest extends TestCase {
         static::assertCount(0, $document->errorCollection);
     }
 
-    public function pdfs(): iterable {
+    public static function pdfs(): iterable {
         $basePath = dirname(__DIR__, 2) . '/_samples/pdf/samples/';
 
         $files = scandir($basePath);
@@ -52,7 +52,7 @@ class ParsedResultTest extends TestCase {
             return;
         }
 
-        foreach (array_diff($files, ['.', '..']) as $file) {
+        foreach (array_diff($files, ['.', '..', '.gitkeep']) as $file) {
             yield $file => [$basePath . $file];
         }
     }
