@@ -12,10 +12,10 @@ class CrossReferenceStream implements CrossReferenceSource {
     /** @var array<CompressedObjectEntry|LinkedListFreeObjectEntry|UncompressedDataEntry> */
     public array $entries = [];
 
-    public function addEntry(CompressedObjectEntry|LinkedListFreeObjectEntry|UncompressedDataEntry $data): self {
-        $this->entries[] = $data;
-
-        return $this;
+    public function __construct(
+        CompressedObjectEntry|LinkedListFreeObjectEntry|UncompressedDataEntry... $entries
+    ) {
+        $this->entries = $entries;
     }
 
     public function getByteOffsets(): array {

@@ -83,21 +83,19 @@ class CrossReferenceSourceParser {
         $byteLengthRecord1 = ((int) ($wValue[0] ?? 0)) * 2;
         $byteLengthRecord2 = ((int) ($wValue[1] ?? 0)) * 2;
         $byteLengthRecord3 = ((int) ($wValue[2] ?? 0)) * 2;
-        $crossReferenceStream = new CrossReferenceStream();
+        $entries = [];
         foreach (str_split(bin2hex(ObjectStreamContentParser::parse($pdf, $startPos, $nrOfBytes, $dictionary)), $byteLengthRecord1 + $byteLengthRecord2 + $byteLengthRecord3) as $referenceRow) {
             $field1 = CrossReferenceStreamType::from(hexdec(substr($referenceRow, 0, $byteLengthRecord1)));
             $field2 = hexdec(substr($referenceRow, $byteLengthRecord1, $byteLengthRecord2));
             $field3 = hexdec(substr($referenceRow, $byteLengthRecord2 + $byteLengthRecord1, $byteLengthRecord3));
 
-            $crossReferenceStream->addEntry(
-                match ($field1) {
-                    CrossReferenceStreamType::LINKED_LIST_FREE_OBJECT => new LinkedListFreeObjectEntry($field2, $field3),
-                    CrossReferenceStreamType::UNCOMPRESSED_OBJECT => new UncompressedDataEntry($field2, $field3),
-                    CrossReferenceStreamType::COMPRESSED_OBJECT => new CompressedObjectEntry($field2, $field3),
-                }
-            );
+            $entries[] = match ($field1) {
+                CrossReferenceStreamType::LINKED_LIST_FREE_OBJECT => new LinkedListFreeObjectEntry($field2, $field3),
+                CrossReferenceStreamType::UNCOMPRESSED_OBJECT => new UncompressedDataEntry($field2, $field3),
+                CrossReferenceStreamType::COMPRESSED_OBJECT => new CompressedObjectEntry($field2, $field3),
+            };
         }
 
-        return $crossReferenceStream;
+        return new CrossReferenceStream(... $entries);
     }
 }
