@@ -20,11 +20,8 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\TextString\TextStringValue;
 use PrinsFrank\PdfParser\Document\Errors\ErrorCollection;
 
-/**
- * @coversDefaultClass \PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser
- */
+#[Covers(DictionaryParser::class)]
 class DictionaryParserTest extends TestCase {
-    /** @covers ::parse */
     public function testParseCrossReference(): void {
         static::assertEquals(
             new Dictionary(
@@ -57,7 +54,6 @@ class DictionaryParserTest extends TestCase {
         );
     }
 
-    /** @covers ::parse */
     public function testObjectStream(): void {
         static::assertEquals(
             new Dictionary(
@@ -101,7 +97,7 @@ class DictionaryParserTest extends TestCase {
         );
     }
 
-    /** @covers ::parse */
+
     public function testParseSingleLine(): void {
         static::assertEquals(
             new Dictionary(
@@ -126,7 +122,7 @@ class DictionaryParserTest extends TestCase {
         );
     }
 
-    /** @covers ::parse */
+
     public function testParseFontInfo(): void {
         static::assertEquals(
             new Dictionary(
@@ -163,7 +159,7 @@ class DictionaryParserTest extends TestCase {
         );
     }
 
-    /** @covers ::parse */
+
     public function testParseValuesEncapsulatedInParentheses(): void {
         static::assertEquals(
             new Dictionary(
@@ -188,7 +184,7 @@ class DictionaryParserTest extends TestCase {
         );
     }
 
-    /** @covers ::parse */
+
     public function testIgnoreCommentedLines(): void {
         static::assertEquals(
             new Dictionary(

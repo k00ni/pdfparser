@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Tests\Unit\Document\Text;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextPositioningOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextShowingOperator;
@@ -12,9 +13,8 @@ use PrinsFrank\PdfParser\Document\Text\TextObjectCollection;
 use PrinsFrank\PdfParser\Document\Text\TextOperator;
 use PrinsFrank\PdfParser\Document\Text\TextParser;
 
-/** @coversDefaultClass \PrinsFrank\PdfParser\Document\Text\TextParser */
+#[CoversClass(TextParser::class)]
 class TextParserTest extends TestCase {
-    /** @covers ::parse */
     public function testParseText(): void {
         static::assertEquals(
             (new TextObjectCollection())

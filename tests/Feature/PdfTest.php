@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Pdf;
 
 #[CoversClass(Pdf::class)]
-class FileTest extends TestCase {
+class PdfTest extends TestCase {
     public function testFoo(): void {
         $file = Pdf::open(__DIR__ . '/test.txt');
         static::assertSame(

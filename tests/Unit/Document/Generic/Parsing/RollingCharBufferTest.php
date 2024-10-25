@@ -3,19 +3,15 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Tests\Unit\Document\Generic\Parsing;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Document\Generic\Parsing\RollingCharBuffer;
 use PrinsFrank\PdfParser\Exception\BufferTooSmallException;
 
-/**
- * @coversDefaultClass \PrinsFrank\PdfParser\Document\Generic\Parsing\RollingCharBuffer
- */
-class RollingBufferTest extends TestCase {
+#[CoversClass(RollingCharBuffer::class)]
+class RollingCharBufferTest extends TestCase {
     /**
-     * @covers ::setCharacter
-     * @covers ::getPreviousCharacter
-     *
      * @throws BufferTooSmallException
      */
     public function testGetPreviousCharacter(): void {
@@ -41,7 +37,6 @@ class RollingBufferTest extends TestCase {
         static::assertSame('c', $charBuffer->getPreviousCharacter(2));
     }
 
-    /** @covers ::seenBackedEnumValue */
     public function testSeenMarker(): void {
         $charBuffer = new RollingCharBuffer(6);
         static::assertFalse($charBuffer->seenBackedEnumValue(Marker::STREAM));

@@ -3,15 +3,15 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Tests\Feature;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Pdf;
 use PrinsFrank\PdfParser\PdfParser;
 
-/**
- * @coversNothing
- */
+#[CoversNothing]
 class ParsedResultTest extends TestCase {
     /** @throws PdfParserException */
     public function testSimpleDocument(): void {
@@ -34,10 +34,9 @@ class ParsedResultTest extends TestCase {
     }
 
     /**
-     * @dataProvider pdfs
-     *
      * @throws PdfParserException
      */
+    #[DataProvider('pdfs')]
     public function testExternalSourcePDFs(string $pdfPath): void {
         $parser = new PdfParser();
 
