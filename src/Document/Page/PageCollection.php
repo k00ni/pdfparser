@@ -6,10 +6,12 @@ namespace PrinsFrank\PdfParser\Document\Page;
 use Countable;
 
 class PageCollection implements Countable {
-    /** @var array<Page> */
+    /** @var list<Page> */
     public readonly array $pages;
 
-    public function __construct(Page ...$pages) {
+    public function __construct(
+        Page ...$pages
+    ) {
         $this->pages = $pages;
     }
 

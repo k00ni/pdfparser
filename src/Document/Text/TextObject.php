@@ -6,12 +6,8 @@ namespace PrinsFrank\PdfParser\Document\Text;
 use Stringable;
 
 class TextObject implements Stringable {
-    /** @var array<TextOperator> */
-    public array $textOperators;
-
-    public function __construct(TextOperator... $textOperators) {
-        $this->textOperators = $textOperators;
-    }
+    /** @var list<TextOperator> */
+    public array $textOperators = [];
 
     public function addTextOperator(TextOperator $textOperator): self {
         $this->textOperators[] = $textOperator;

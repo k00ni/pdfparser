@@ -6,12 +6,8 @@ namespace PrinsFrank\PdfParser\Document\Text;
 use Stringable;
 
 class TextObjectCollection implements Stringable {
-    /** @var array<TextObject> */
-    public array $textObjects;
-
-    public function __construct(TextObject... $textObjects) {
-        $this->textObjects = $textObjects;
-    }
+    /** @var list<TextObject> */
+    public array $textObjects = [];
 
     public function addTextObject(TextObject $textObject): self {
         $this->textObjects[] = $textObject;

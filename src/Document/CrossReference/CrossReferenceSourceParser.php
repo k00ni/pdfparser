@@ -65,7 +65,7 @@ class CrossReferenceSourceParser {
             }
         }
 
-        return new CrossReferenceTable($crossReferenceSubSections);
+        return new CrossReferenceTable(... $crossReferenceSubSections);
     }
 
     /** @throws ParseFailureException */
