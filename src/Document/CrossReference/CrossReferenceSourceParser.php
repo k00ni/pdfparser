@@ -61,7 +61,7 @@ class CrossReferenceSourceParser {
                     $crossReferenceSubSection->addCrossReferenceEntry(new CrossReferenceEntry((int) $sections[0], (int) $sections[1], ObjectInUseOrFreeCharacter::from(trim($sections[2]))));
                     break;
                 default:
-                    throw new InvalidCrossReferenceLineException('Invalid line "' . trim($line) . '", 2 or 3 sections expected, "' . count($sections) . '" found: ' . json_encode($sections, JSON_THROW_ON_ERROR) . '" content: "' . $content . '"');
+                    throw new InvalidCrossReferenceLineException(sprintf('Invalid line "%s", 2 or 3 sections expected, "%d" found', substr(trim($line), 0, 30), count($sections)));
             }
         }
 
@@ -77,7 +77,7 @@ class CrossReferenceSourceParser {
 
         $wValue = $dictionary->getEntryWithKey(DictionaryKey::W)?->value?->value;
         if ($wValue === null) {
-            throw new ParseFailureException('Missing W value, can\'t decode stream.');
+            throw new ParseFailureException('Missing W value, can\'t decode xref stream.');
         }
 
         $byteLengthRecord1 = ((int) ($wValue[0] ?? 0)) * 2;
