@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document\Generic\Character;
 
 /**
- * @see PDF 32000-1:2008 7.2.2 (Table 2)
+ * @see Pdf 32000-1:2008 7.2.2 (Table 2)
  *
  * The delimiter characters are special They delimit syntactic entities such as arrays,
  * names, and comments. Any of these characters terminates the entity preceding it and is not included in the

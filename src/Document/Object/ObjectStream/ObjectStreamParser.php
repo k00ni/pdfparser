@@ -29,13 +29,13 @@ class ObjectStreamParser {
 
             $firstNewLinePos = self::getFirstNewLinePos($document, $byteOffset);
             $firstNewLinePos = ($firstNewLinePos === $byteOffset ? self::getFirstNewLinePos($document, $byteOffset + 1) : $firstNewLinePos);
-            $firstLine = $document->file->read($byteOffset, $firstNewLinePos - $byteOffset);
+            $firstLine = $document->pdf->read($byteOffset, $firstNewLinePos - $byteOffset);
             $objectIndicators = explode(' ', $firstLine);
             if (count($objectIndicators) !== 3 || $objectIndicators[2] !== 'obj') {
                 throw new ParseFailureException(sprintf('Expected an object identifier in format (\d \d obj), got "%s" with offset %d and first new line at %d', $firstLine, $byteOffset, $firstNewLinePos));
             }
 
-            $content = $document->file->read($byteOffset, $byteOffsets[$key + 1] ?? $document->file->getSizeInBytes());
+            $content = $document->pdf->read($byteOffset, $byteOffsets[$key + 1] ?? $document->pdf->getSizeInBytes());
             $dictionary = DictionaryParser::parse($content, $document->errorCollection);
             $decodedStream = ObjectStreamContentParser::parse($content, $dictionary);
             $objectStreams[] = new ObjectStream(
@@ -58,8 +58,8 @@ class ObjectStreamParser {
      */
     public static function getFirstNewLinePos(Document $document, int $byteOffset): mixed
     {
-        $firstLineFeed = $document->file->strpos(WhitespaceCharacter::LINE_FEED->value, $byteOffset);
-        $firstCarriageReturn = $document->file->strpos(WhitespaceCharacter::CARRIAGE_RETURN->value, $byteOffset);
+        $firstLineFeed = $document->pdf->strpos(WhitespaceCharacter::LINE_FEED->value, $byteOffset);
+        $firstCarriageReturn = $document->pdf->strpos(WhitespaceCharacter::CARRIAGE_RETURN->value, $byteOffset);
         if ($firstLineFeed === null && $firstCarriageReturn === null) {
             throw new ParseFailureException('Expected a line field ...');
         }

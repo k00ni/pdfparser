@@ -17,17 +17,20 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Document;
+use PrinsFrank\PdfParser\Document\Errors\ErrorCollection;
 use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamContent\ObjectStreamContentParser;
+use PrinsFrank\PdfParser\Document\Trailer\Trailer;
 use PrinsFrank\PdfParser\Exception\InvalidCrossReferenceLineException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Pdf;
 
 class CrossReferenceSourceParser {
     /** @throws ParseFailureException */
-    public static function parse(Document $document): CrossReferenceSource {
-        $content = $document->file->read($document->trailer->byteOffsetLastCrossReferenceSection, $document->file->getSizeInBytes());
-        $dictionary = DictionaryParser::parse($content, $document->errorCollection);
+    public static function parse(Pdf $pdf, Trailer $trailer, ErrorCollection $errorCollection): CrossReferenceSource {
+        $content = $pdf->read($trailer->byteOffsetLastCrossReferenceSection, $pdf->getSizeInBytes());
+        $dictionary = DictionaryParser::parse($content, $errorCollection);
         if ($dictionary->getEntryWithKey(DictionaryKey::TYPE)?->value === TypeNameValue::X_REF) {
             return self::parseStream($dictionary, $content);
         }

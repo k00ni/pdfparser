@@ -4,12 +4,12 @@ namespace PrinsFrank\PdfParser\Tests\Feature;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use PrinsFrank\PdfParser\File;
+use PrinsFrank\PdfParser\Pdf;
 
-#[CoversClass(File::class)]
+#[CoversClass(Pdf::class)]
 class FileTest extends TestCase {
     public function testFoo(): void {
-        $file = File::open(__DIR__ . '/test.txt');
+        $file = Pdf::open(__DIR__ . '/test.txt');
         static::assertSame(
             3,
             $file->strrpos('abc', 0)

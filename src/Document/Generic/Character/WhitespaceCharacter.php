@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document\Generic\Character;
 
 /**
- * @see PDF 32000-1:2008 7.2.2 (Table 1)
+ * @see Pdf 32000-1:2008 7.2.2 (Table 1)
  *
  * The White-space characters separate syntactic constructs such as names and numbers from
  * each other. All white-space characters are equivalent, except in comments, strings, and streams. In all other

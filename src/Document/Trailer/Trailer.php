@@ -11,16 +11,11 @@ use PrinsFrank\PdfParser\Document\Document;
  * The trailer of a PDF file enables a conforming reader to quickly find the cross-reference table and certain special objects
  */
 final class Trailer {
-    public readonly Document    $document;
     public readonly int         $eofMarkerPos;
     public readonly int         $startXrefMarkerPos;
     public readonly int         $byteOffsetLastCrossReferenceSection;
     public readonly ?int        $startTrailerMarkerPos;
     public readonly ?Dictionary $dictionary;
-
-    public function __construct(Document $document) {
-        $this->document = $document;
-    }
 
     public function setEofMarkerPos(int $eofMarkerPos): self {
         $this->eofMarkerPos = $eofMarkerPos;

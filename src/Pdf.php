@@ -6,7 +6,7 @@ use PrinsFrank\PdfParser\Document\Generic\Parsing\RollingCharBuffer;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use RuntimeException;
 
-class File {
+class Pdf {
     /** @var resource */
     private readonly mixed $handle;
 

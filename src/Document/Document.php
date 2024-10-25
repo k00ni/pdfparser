@@ -6,53 +6,17 @@ namespace PrinsFrank\PdfParser\Document;
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceSource;
 
 use PrinsFrank\PdfParser\Document\Errors\ErrorCollection;
-use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamCollection;
-use PrinsFrank\PdfParser\Document\Page\PageCollection;
 use PrinsFrank\PdfParser\Document\Trailer\Trailer;
 use PrinsFrank\PdfParser\Document\Version\Version;
-use PrinsFrank\PdfParser\File;
+use PrinsFrank\PdfParser\Pdf;
 
 final class Document {
-    public readonly ObjectStreamCollection $objectStreamCollection;
-    public readonly Version                $version;
-    public readonly CrossReferenceSource   $crossReferenceSource;
-    public readonly Trailer                $trailer;
-    public readonly PageCollection         $pageCollection;
-    public readonly ErrorCollection        $errorCollection;
-
     public function __construct(
-        public readonly File $file
+        public readonly Pdf                  $pdf,
+        public readonly Version              $version,
+        public readonly Trailer              $trailer,
+        public readonly CrossReferenceSource $crossReferenceSource,
+        public readonly ErrorCollection      $errorCollection,
     ){
-        $this->errorCollection = new ErrorCollection();
-    }
-
-    public function setTrailer(Trailer $trailer): self {
-        $this->trailer = $trailer;
-
-        return $this;
-    }
-
-    public function setVersion(Version $version): self {
-        $this->version = $version;
-
-        return $this;
-    }
-
-    public function setCrossReferenceSource(CrossReferenceSource $crossReferenceSource): self {
-        $this->crossReferenceSource = $crossReferenceSource;
-
-        return $this;
-    }
-
-    public function setObjectStreamCollection(ObjectStreamCollection $objectStreamCollection): self {
-        $this->objectStreamCollection = $objectStreamCollection;
-
-        return $this;
-    }
-
-    public function setPageCollection(PageCollection $pageCollection): self {
-        $this->pageCollection = $pageCollection;
-
-        return $this;
     }
 }
