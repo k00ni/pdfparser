@@ -48,6 +48,20 @@ class Pdf {
         return fread($this->handle, $nrOfBytes);
     }
 
+    /** @param int<1, max> $nrOfBytes */
+    public function chars(int $from, int $nrOfBytes): iterable {
+        if ($nrOfBytes <= 0) {
+            throw new InvalidArgumentException(sprintf('$nrOfBytes must be greater than 0, %d given', $nrOfBytes));
+        }
+
+        fseek($this->handle, $from);
+        $bytesRead = 0;
+        while ($bytesRead < $nrOfBytes) {
+            yield fread($this->handle, 1);
+            $bytesRead++;
+        }
+    }
+
     public function strpos(string $needle, int $offset): ?int {
         $rollingCharBuffer = new RollingCharBuffer($needleLength = strlen($needle));
         fseek($this->handle, $offset);

@@ -26,35 +26,32 @@ class TrailerSectionParser {
      * @throws ParseFailureException
      */
     public static function parse(Pdf $pdf, ErrorCollection $errorCollection): Trailer {
-        $trailer = new Trailer();
-
         $eofMarkerPos = $pdf->strrpos(Marker::EOF->value, 0);
         if ($eofMarkerPos === null) {
             throw new MarkerNotFoundException(Marker::EOF->value);
         }
-        $trailer->setEofMarkerPos($eofMarkerPos);
 
         $startXrefMarkerPos = $pdf->strrpos(Marker::START_XREF->value, $pdf->getSizeInBytes() - $eofMarkerPos);
         if ($startXrefMarkerPos === null) {
             throw new MarkerNotFoundException(Marker::START_XREF->value);
         }
-        $trailer->setStartXrefMarkerPos($startXrefMarkerPos);
 
-        $byteOffsetLastCrossReferenceSection = $pdf->read($startXrefMarkerPos + strlen(Marker::START_XREF->value), $pdf->getSizeInBytes() - $eofMarkerPos);
-        if ($byteOffsetLastCrossReferenceSection === null) {
-            throw new ParseFailureException('Failed to retrieve the byte offset for the last cross reference section. Document length: "' . $pdf->getSizeInBytes() . '", eof marker pos: "' . $eofMarkerPos . '"');
+        $byteOffsetLastCrossReferenceSection = trim($pdf->read($startXrefMarkerPos + strlen(Marker::START_XREF->value), $pdf->getSizeInBytes() - $eofMarkerPos));
+        if ($byteOffsetLastCrossReferenceSection !== (string)(int) $byteOffsetLastCrossReferenceSection) {
+            throw new ParseFailureException(sprintf('Invalid byte offset last crossReference section "%s"', $byteOffsetLastCrossReferenceSection));
         }
-        $trailer->setByteOffsetLastCrossReferenceSection((int) $byteOffsetLastCrossReferenceSection);
 
         $trailerMarkerPos = $pdf->strrpos(Marker::TRAILER->value, $pdf->getSizeInBytes() - $startXrefMarkerPos);
-        if ($trailerMarkerPos === null) {
-            $trailer->setStartTrailerMarkerPos(null);
-            $trailer->setDictionary(null);
-        } else {
-            $trailer->setStartTrailerMarkerPos($trailerMarkerPos);
-            $trailer->setDictionary(DictionaryParser::parse($pdf->read($trailer->startTrailerMarkerPos, $trailer->startXrefMarkerPos - $trailer->startTrailerMarkerPos), $errorCollection));
-        }
+        $dictionary = $trailerMarkerPos !== null
+            ? DictionaryParser::parse($pdf, $trailerMarkerPos, $startXrefMarkerPos - $trailerMarkerPos, $errorCollection)
+            : null;
 
-        return $trailer;
+        return new Trailer(
+            $eofMarkerPos,
+            $startXrefMarkerPos,
+            (int) $byteOffsetLastCrossReferenceSection,
+            $trailerMarkerPos,
+            $dictionary,
+        );
     }
 }

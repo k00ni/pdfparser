@@ -16,7 +16,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TypeNameValue;
-use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Errors\ErrorCollection;
 use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
@@ -29,20 +28,19 @@ use PrinsFrank\PdfParser\Pdf;
 class CrossReferenceSourceParser {
     /** @throws ParseFailureException */
     public static function parse(Pdf $pdf, Trailer $trailer, ErrorCollection $errorCollection): CrossReferenceSource {
-        $content = $pdf->read($trailer->byteOffsetLastCrossReferenceSection, $pdf->getSizeInBytes());
-        $dictionary = DictionaryParser::parse($content, $errorCollection);
+        $dictionary = DictionaryParser::parse($pdf, $trailer->byteOffsetLastCrossReferenceSection, $pdf->getSizeInBytes(), $errorCollection);
         if ($dictionary->getEntryWithKey(DictionaryKey::TYPE)?->value === TypeNameValue::X_REF) {
-            return self::parseStream($dictionary, $content);
+            return self::parseStream($dictionary, $pdf, $trailer->byteOffsetLastCrossReferenceSection, $pdf->getSizeInBytes());
         }
 
-        return static::parseTable($content);
+        return static::parseTable($pdf, $trailer->byteOffsetLastCrossReferenceSection, $pdf->getSizeInBytes());
     }
 
     /** @throws InvalidCrossReferenceLineException */
-    public static function parseTable(string $content): CrossReferenceTable {
+    public static function parseTable(Pdf $pdf, int $startPos, int $nrOfBytes): CrossReferenceTable {
         $crossReferenceSubSection = null;
         $crossReferenceSubSections = [];
-        $content = str_replace([WhitespaceCharacter::CARRIAGE_RETURN->value], WhitespaceCharacter::LINE_FEED->value, $content);
+        $content = str_replace([WhitespaceCharacter::CARRIAGE_RETURN->value], WhitespaceCharacter::LINE_FEED->value, $pdf->read($startPos, $nrOfBytes));
         foreach (explode(WhitespaceCharacter::LINE_FEED->value, $content) as $index => $line) {
             if (($index === 0 && $line === Marker::XREF->value)
                 || trim($line) === '') {
@@ -71,7 +69,7 @@ class CrossReferenceSourceParser {
     }
 
     /** @throws ParseFailureException */
-    public static function parseStream(Dictionary $dictionary, string $content): CrossReferenceStream {
+    public static function parseStream(Dictionary $dictionary, Pdf $pdf, int $startPos, int $nrOfBytes): CrossReferenceStream {
         $dictionaryType = $dictionary->getEntryWithKey(DictionaryKey::TYPE)?->value;
         if ($dictionaryType !== TypeNameValue::X_REF) {
             throw new ParseFailureException('Expected stream of type xref, got "' . ($dictionaryType?->name ?? 'null') . '" Dictionary: ' . json_encode($dictionary));
@@ -86,7 +84,7 @@ class CrossReferenceSourceParser {
         $byteLengthRecord2 = ((int) ($wValue[1] ?? 0)) * 2;
         $byteLengthRecord3 = ((int) ($wValue[2] ?? 0)) * 2;
         $crossReferenceStream = new CrossReferenceStream();
-        foreach (str_split(bin2hex(ObjectStreamContentParser::parse($content, $dictionary)), $byteLengthRecord1 + $byteLengthRecord2 + $byteLengthRecord3) as $referenceRow) {
+        foreach (str_split(bin2hex(ObjectStreamContentParser::parse($pdf, $startPos, $nrOfBytes, $dictionary)), $byteLengthRecord1 + $byteLengthRecord2 + $byteLengthRecord3) as $referenceRow) {
             $field1 = CrossReferenceStreamType::from(hexdec(substr($referenceRow, 0, $byteLengthRecord1)));
             $field2 = hexdec(substr($referenceRow, $byteLengthRecord1, $byteLengthRecord2));
             $field3 = hexdec(substr($referenceRow, $byteLengthRecord2 + $byteLengthRecord1, $byteLengthRecord3));
