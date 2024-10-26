@@ -15,7 +15,7 @@ final class Document {
         public readonly Pdf                  $pdf,
         public readonly Version              $version,
         public readonly Trailer              $trailer,
-//        public readonly CrossReferenceSource $crossReferenceSource,
+        public readonly CrossReferenceSource $crossReferenceSource,
         public readonly ErrorCollection      $errorCollection,
     ){
     }
