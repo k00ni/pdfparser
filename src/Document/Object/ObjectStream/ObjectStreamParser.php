@@ -56,8 +56,7 @@ class ObjectStreamParser {
      * @param int $byteOffset
      * @return mixed
      */
-    public static function getFirstNewLinePos(Document $document, int $byteOffset): mixed
-    {
+    public static function getFirstNewLinePos(Document $document, int $byteOffset): mixed {
         $firstLineFeed = $document->stream->strpos(WhitespaceCharacter::LINE_FEED->value, $byteOffset);
         $firstCarriageReturn = $document->stream->strpos(WhitespaceCharacter::CARRIAGE_RETURN->value, $byteOffset);
         if ($firstLineFeed === null && $firstCarriageReturn === null) {

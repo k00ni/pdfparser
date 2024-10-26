@@ -11,9 +11,7 @@ use PrinsFrank\PdfParser\Exception\BufferTooSmallException;
 
 #[CoversClass(RollingCharBuffer::class)]
 class RollingCharBufferTest extends TestCase {
-    /**
-     * @throws BufferTooSmallException
-     */
+    /** @throws BufferTooSmallException */
     public function testGetPreviousCharacter(): void {
         $charBuffer = new RollingCharBuffer(3);
         $charBuffer->setCharacter('a');

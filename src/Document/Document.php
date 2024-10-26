@@ -17,6 +17,6 @@ final class Document {
         public readonly Trailer              $trailer,
         public readonly CrossReferenceSource $crossReferenceSource,
         public readonly ErrorCollection      $errorCollection,
-    ){
+    ) {
     }
 }

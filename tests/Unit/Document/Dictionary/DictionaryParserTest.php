@@ -107,7 +107,6 @@ class DictionaryParserTest extends TestCase {
         );
     }
 
-
     public function testParseSingleLine(): void {
         static::assertEquals(
             new Dictionary(
@@ -136,7 +135,6 @@ class DictionaryParserTest extends TestCase {
             )
         );
     }
-
 
     public function testParseFontInfo(): void {
         static::assertEquals(
@@ -177,7 +175,6 @@ class DictionaryParserTest extends TestCase {
             )
         );
     }
-
 
     public function testParseValuesEncapsulatedInParentheses(): void {
         static::assertEquals(

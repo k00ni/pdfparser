@@ -20,7 +20,7 @@ class ParsedResultTest extends TestCase {
         $parsedDocument = $parser->parse(Stream::openFile(dirname(__DIR__, 2) . '/_samples/pdf/simple_document.pdf'));
         static::assertEquals(Version::V1_5, $parsedDocument->version);
         static::assertCount(0, $parsedDocument->errorCollection);
-//        static::assertCount(2, $parsedDocument->pageCollection);
+        //        static::assertCount(2, $parsedDocument->pageCollection);
     }
 
     /** @throws PdfParserException */
@@ -30,12 +30,10 @@ class ParsedResultTest extends TestCase {
         $parsedDocument = $parser->parse(Stream::openFile(dirname(__DIR__, 2) . '/_samples/pdf/simple_document_with_titles.pdf'));
         static::assertEquals(Version::V1_5, $parsedDocument->version);
         static::assertCount(0, $parsedDocument->errorCollection);
-//        static::assertCount(2, $parsedDocument->pageCollection);
+        //        static::assertCount(2, $parsedDocument->pageCollection);
     }
 
-    /**
-     * @throws PdfParserException
-     */
+    /** @throws PdfParserException */
     #[DataProvider('pdfs')]
     public function testExternalSourcePDFs(string $pdfPath): void {
         $parser = new PdfParser();

@@ -32,7 +32,7 @@ class Stream {
     /** When useTemp is set to false, the string will be kept completely in memory increasing base memory footprint */
     public static function fromString(string $content, bool $useTemp = true): self {
         $handle = fopen(
-            $useTemp ? 'php://temp': 'php://memory',
+            $useTemp ? 'php://temp' : 'php://memory',
             'rb+'
         );
         fwrite($handle, $content);
