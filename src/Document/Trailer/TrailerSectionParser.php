@@ -4,12 +4,11 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document\Trailer;
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
-use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Errors\ErrorCollection;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Exception\MarkerNotFoundException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
-use PrinsFrank\PdfParser\Pdf;
+use PrinsFrank\PdfParser\Stream;
 
 /**
  * PDF 32000-1:2008
@@ -25,35 +24,35 @@ class TrailerSectionParser {
      * @throws MarkerNotFoundException
      * @throws ParseFailureException
      */
-    public static function parse(Pdf $pdf, ErrorCollection $errorCollection): Trailer {
-        $eofMarkerPos = $pdf->strrpos(Marker::EOF->value, 0);
+    public static function parse(Stream $stream, ErrorCollection $errorCollection): Trailer {
+        $eofMarkerPos = $stream->strrpos(Marker::EOF->value, 0);
         if ($eofMarkerPos === null) {
             throw new MarkerNotFoundException(Marker::EOF->value);
         }
 
-        $startXrefMarkerPos = $pdf->strrpos(Marker::START_XREF->value, $pdf->getSizeInBytes() - $eofMarkerPos);
+        $startXrefMarkerPos = $stream->strrpos(Marker::START_XREF->value, $stream->getSizeInBytes() - $eofMarkerPos);
         if ($startXrefMarkerPos === null) {
             throw new MarkerNotFoundException(Marker::START_XREF->value);
         }
 
-        $startByteOffset = $pdf->getStartOfNextLine($startXrefMarkerPos);
+        $startByteOffset = $stream->getStartOfNextLine($startXrefMarkerPos);
         if ($startByteOffset === null) {
             throw new ParseFailureException('Expected a carriage return or line feed after startxref marker, none found');
         }
 
-        $endByteOffset = $pdf->getEndOfCurrentLine($startByteOffset);
+        $endByteOffset = $stream->getEndOfCurrentLine($startByteOffset);
         if ($endByteOffset === null) {
             throw new ParseFailureException('Expected a carriage return or line feed after the byte offset, nonen found');
         }
 
-        $byteOffsetLastCrossReferenceSection = $pdf->read($startByteOffset, $endByteOffset - $startByteOffset);
+        $byteOffsetLastCrossReferenceSection = $stream->read($startByteOffset, $endByteOffset - $startByteOffset);
         if ($byteOffsetLastCrossReferenceSection !== (string)(int) $byteOffsetLastCrossReferenceSection) {
-            throw new ParseFailureException(sprintf('Invalid byte offset last crossReference section "%s", "%s"', $byteOffsetLastCrossReferenceSection, $pdf->read($startXrefMarkerPos, $pdf->getSizeInBytes() - $startXrefMarkerPos)));
+            throw new ParseFailureException(sprintf('Invalid byte offset last crossReference section "%s", "%s"', $byteOffsetLastCrossReferenceSection, $stream->read($startXrefMarkerPos, $stream->getSizeInBytes() - $startXrefMarkerPos)));
         }
 
-        $trailerMarkerPos = $pdf->strrpos(Marker::TRAILER->value, $pdf->getSizeInBytes() - $startXrefMarkerPos);
+        $trailerMarkerPos = $stream->strrpos(Marker::TRAILER->value, $stream->getSizeInBytes() - $startXrefMarkerPos);
         $dictionary = $trailerMarkerPos !== null
-            ? DictionaryParser::parse($pdf, $trailerMarkerPos, $startXrefMarkerPos - $trailerMarkerPos, $errorCollection)
+            ? DictionaryParser::parse($stream, $trailerMarkerPos, $startXrefMarkerPos - $trailerMarkerPos, $errorCollection)
             : null;
 
         return new Trailer(

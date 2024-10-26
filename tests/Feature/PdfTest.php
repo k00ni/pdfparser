@@ -5,44 +5,44 @@ namespace PrinsFrank\PdfParser\Tests\Feature;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
-use PrinsFrank\PdfParser\Pdf;
+use PrinsFrank\PdfParser\Stream;
 
-#[CoversClass(Pdf::class)]
+#[CoversClass(Stream::class)]
 class PdfTest extends TestCase {
     public function testStrrpos(): void {
-        $file = Pdf::open(__DIR__ . '/fixtures/test.txt');
+        $stream = Stream::openFile(__DIR__ . '/fixtures/test.txt');
         static::assertSame(
             3,
-            $file->strrpos('abc', 0)
+            $stream->strrpos('abc', 0)
         );
         static::assertSame(
             6,
-            $file->strrpos('123', 0)
+            $stream->strrpos('123', 0)
         );
         static::assertSame(
             7,
-            $file->strrpos('23', 0)
+            $stream->strrpos('23', 0)
         );
         static::assertSame(
             8,
-            $file->strrpos('3', 0)
+            $stream->strrpos('3', 0)
         );
     }
 
     public function testFileStructure(): void {
-        $file = Pdf::open(__DIR__ . '/fixtures/file_structure.txt');
-        $eofMarkerPos = $file->strrpos(Marker::EOF->value, 0);
+        $stream = Stream::openFile(__DIR__ . '/fixtures/file_structure.txt');
+        $eofMarkerPos = $stream->strrpos(Marker::EOF->value, 0);
         static::assertNotNull($eofMarkerPos);
-        static::assertSame(Marker::EOF->value, $file->read($eofMarkerPos, strlen(Marker::EOF->value)));
+        static::assertSame(Marker::EOF->value, $stream->read($eofMarkerPos, strlen(Marker::EOF->value)));
 
-        $startXrefPos = $file->strrpos(Marker::START_XREF->value, $file->getSizeInBytes() - $eofMarkerPos);
+        $startXrefPos = $stream->strrpos(Marker::START_XREF->value, $stream->getSizeInBytes() - $eofMarkerPos);
         static::assertNotNull($startXrefPos);
-        static::assertSame(Marker::START_XREF->value, $file->read($startXrefPos, strlen(Marker::START_XREF->value)));
+        static::assertSame(Marker::START_XREF->value, $stream->read($startXrefPos, strlen(Marker::START_XREF->value)));
 
-        $byteOffsetPos = $file->getStartOfNextLine($startXrefPos);
+        $byteOffsetPos = $stream->getStartOfNextLine($startXrefPos);
         static::assertNotNull($byteOffsetPos);
-        $byteOffsetEndPos = $file->getEndOfCurrentLine($byteOffsetPos);
+        $byteOffsetEndPos = $stream->getEndOfCurrentLine($byteOffsetPos);
         static::assertNotNull($byteOffsetEndPos);
-        static::assertSame('1234', $file->read($byteOffsetPos, $byteOffsetEndPos - $byteOffsetPos));
+        static::assertSame('1234', $stream->read($byteOffsetPos, $byteOffsetEndPos - $byteOffsetPos));
     }
 }

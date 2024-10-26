@@ -7,7 +7,7 @@ use PrinsFrank\PdfParser\Document\Generic\Parsing\RollingCharBuffer;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use RuntimeException;
 
-class Pdf {
+class Stream {
     /** @var resource */
     private readonly mixed $handle;
 
@@ -20,11 +20,23 @@ class Pdf {
         $this->handle = $handle;
     }
 
-    public static function open(string $path): self {
+    public static function openFile(string $path): self {
         $handle = fopen($path, 'rb');
         if ($handle === false) {
             throw new InvalidArgumentException(sprintf('Failed to open file at path "%s"', $path));
         }
+
+        return new self($handle);
+    }
+
+    /** When useTemp is set to false, the string will be kept completely in memory increasing base memory footprint */
+    public static function fromString(string $content, bool $useTemp = true): self {
+        $handle = fopen(
+            $useTemp ? 'php://temp': 'php://memory',
+            'rb+'
+        );
+        fwrite($handle, $content);
+        rewind($handle);
 
         return new self($handle);
     }

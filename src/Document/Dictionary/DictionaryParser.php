@@ -13,7 +13,7 @@ use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Document\Generic\Parsing\RollingCharBuffer;
 use PrinsFrank\PdfParser\Exception\BufferTooSmallException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
-use PrinsFrank\PdfParser\Pdf;
+use PrinsFrank\PdfParser\Stream;
 
 /**
  * << start object
@@ -27,11 +27,11 @@ class DictionaryParser {
      * @throws BufferTooSmallException
      * @throws ParseFailureException
      */
-    public static function parse(Pdf $pdf, int $startPos, int $nrOfBytes, ErrorCollection $errorCollection): Dictionary {
+    public static function parse(Stream $stream, int $startPos, int $nrOfBytes, ErrorCollection $errorCollection): Dictionary {
         $dictionaryArray = [];
         $rollingCharBuffer = new RollingCharBuffer(6);
         $nestingContext = (new NestingContext())->setContext(DictionaryParseContext::ROOT);
-        foreach ($pdf->chars($startPos, $nrOfBytes) as $char) {
+        foreach ($stream->chars($startPos, $nrOfBytes) as $char) {
             $rollingCharBuffer->next()->setCharacter($char);
             if ($rollingCharBuffer->seenBackedEnumValue(Marker::STREAM)) {
                 break;

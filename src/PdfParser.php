@@ -12,13 +12,13 @@ use PrinsFrank\PdfParser\Exception\PdfParserException;
 
 final class PdfParser {
     /** @throws PdfParserException */
-    public function parse(Pdf $pdf): Document {
+    public function parse(Stream $stream): Document {
         $errorCollection = new ErrorCollection();
 
-        $version = VersionParser::parse($pdf);
-        $trailer = TrailerSectionParser::parse($pdf, $errorCollection);
-        $crossReferenceSource = CrossReferenceSourceParser::parse($pdf, $trailer, $errorCollection);
+        $version = VersionParser::parse($stream);
+        $trailer = TrailerSectionParser::parse($stream, $errorCollection);
+        $crossReferenceSource = CrossReferenceSourceParser::parse($stream, $trailer, $errorCollection);
 
-        return new Document($pdf, $version, $trailer, $crossReferenceSource, $errorCollection);
+        return new Document($stream, $version, $trailer, $crossReferenceSource, $errorCollection);
     }
 }
