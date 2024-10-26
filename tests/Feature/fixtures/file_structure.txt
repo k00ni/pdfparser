@@ -1,0 +1,4 @@
+trailer
+startxref
+1234
+%%EOF

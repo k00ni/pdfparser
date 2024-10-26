@@ -2,6 +2,7 @@
 
 namespace PrinsFrank\PdfParser;
 
+use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Parsing\RollingCharBuffer;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use RuntimeException;
@@ -62,15 +63,15 @@ class Pdf {
         }
     }
 
-    public function strpos(string $needle, int $offset): ?int {
+    public function strpos(string $needle, int $offsetFromStart): ?int {
         $rollingCharBuffer = new RollingCharBuffer($needleLength = strlen($needle));
-        fseek($this->handle, $offset);
-        $currentCharPos = $offset;
-        while (feof($this->handle) === false) {
-            $rollingCharBuffer->next()->setCharacter(fgetc($this->handle));
-            $currentCharPos++;
+        while ($offsetFromStart < $this->getSizeInBytes()) {
+            fseek($this->handle, $offsetFromStart);
+            $character = fgetc($this->handle);
+            $rollingCharBuffer->next()->setCharacter($character);
+            $offsetFromStart++;
             if ($rollingCharBuffer->seenString($needle)) {
-                return $currentCharPos - $needleLength;
+                return $offsetFromStart - $needleLength;
             }
         }
 
@@ -90,6 +91,43 @@ class Pdf {
         }
 
         return null;
+    }
+
+    public function getStartOfNextLine(int $byteOffset): ?int {
+        $firstLineFeedPos = $this->strpos(WhitespaceCharacter::LINE_FEED->value, $byteOffset);
+        $firstCarriageReturnPos = $this->strpos(WhitespaceCharacter::CARRIAGE_RETURN->value, $byteOffset);
+        if ($firstLineFeedPos === null && $firstCarriageReturnPos === null) {
+            return null;
+        }
+
+        if ($firstCarriageReturnPos === null) {
+            return $firstLineFeedPos + 1;
+        }
+
+        if ($firstLineFeedPos === null) {
+            return $firstCarriageReturnPos + 1;
+        }
+
+        return min($firstLineFeedPos, $firstCarriageReturnPos)
+            + (abs($firstCarriageReturnPos - $firstLineFeedPos) === 1 ? 2 : 1); // If the CR and LF are next to each other, we need to add 2 bytes, otherwise 1
+    }
+
+    public function getEndOfCurrentLine(int $byteOffset): ?int {
+        $firstLineFeedPos = $this->strpos(WhitespaceCharacter::LINE_FEED->value, $byteOffset);
+        $firstCarriageReturnPos = $this->strpos(WhitespaceCharacter::CARRIAGE_RETURN->value, $byteOffset);
+        if ($firstLineFeedPos === null && $firstCarriageReturnPos === null) {
+            return null;
+        }
+
+        if ($firstCarriageReturnPos === null) {
+            return $firstLineFeedPos;
+        }
+
+        if ($firstLineFeedPos === null) {
+            return $firstCarriageReturnPos;
+        }
+
+        return min($firstLineFeedPos, $firstCarriageReturnPos);
     }
 
     public function __destruct() {

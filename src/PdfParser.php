@@ -17,8 +17,8 @@ final class PdfParser {
 
         $version = VersionParser::parse($pdf);
         $trailer = TrailerSectionParser::parse($pdf, $errorCollection);
-        $crossReferenceSource = CrossReferenceSourceParser::parse($pdf, $trailer, $errorCollection);
+//        $crossReferenceSource = CrossReferenceSourceParser::parse($pdf, $trailer, $errorCollection);
 
-        return new Document($pdf, $version, $trailer, $crossReferenceSource, $errorCollection);
+        return new Document($pdf, $version, $trailer, $errorCollection);
     }
 }

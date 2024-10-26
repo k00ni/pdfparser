@@ -36,9 +36,19 @@ class TrailerSectionParser {
             throw new MarkerNotFoundException(Marker::START_XREF->value);
         }
 
-        $byteOffsetLastCrossReferenceSection = trim($pdf->read($startXrefMarkerPos + strlen(Marker::START_XREF->value), $pdf->getSizeInBytes() - $eofMarkerPos));
+        $startByteOffset = $pdf->getStartOfNextLine($startXrefMarkerPos);
+        if ($startByteOffset === null) {
+            throw new ParseFailureException('Expected a carriage return or line feed after startxref marker, none found');
+        }
+
+        $endByteOffset = $pdf->getEndOfCurrentLine($startByteOffset);
+        if ($endByteOffset === null) {
+            throw new ParseFailureException('Expected a carriage return or line feed after the byte offset, nonen found');
+        }
+
+        $byteOffsetLastCrossReferenceSection = $pdf->read($startByteOffset, $endByteOffset - $startByteOffset);
         if ($byteOffsetLastCrossReferenceSection !== (string)(int) $byteOffsetLastCrossReferenceSection) {
-            throw new ParseFailureException(sprintf('Invalid byte offset last crossReference section "%s"', $byteOffsetLastCrossReferenceSection));
+            throw new ParseFailureException(sprintf('Invalid byte offset last crossReference section "%s", "%s"', $byteOffsetLastCrossReferenceSection, $pdf->read($startXrefMarkerPos, $pdf->getSizeInBytes() - $startXrefMarkerPos)));
         }
 
         $trailerMarkerPos = $pdf->strrpos(Marker::TRAILER->value, $pdf->getSizeInBytes() - $startXrefMarkerPos);
