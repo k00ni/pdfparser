@@ -19,6 +19,12 @@ final class PdfParser {
         $trailer = TrailerSectionParser::parse($stream, $errorCollection);
         $crossReferenceSource = CrossReferenceSourceParser::parse($stream, $trailer, $errorCollection);
 
-        return new Document($stream, $version, $trailer, $crossReferenceSource, $errorCollection);
+        return new Document(
+            $stream,
+            $version,
+            $trailer,
+            $crossReferenceSource,
+            $errorCollection
+        );
     }
 }

@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Object\ObjectStream;
+namespace PrinsFrank\PdfParser\Unused\ObjectStream;
 
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
-use PrinsFrank\PdfParser\Document\Object\ObjectItemCollection;
+use PrinsFrank\PdfParser\Unused\ObjectItemCollection;
 
 class ObjectStream {
     public function __construct(

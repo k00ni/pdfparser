@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Page;
+namespace PrinsFrank\PdfParser\Unused\Page;
 
 use Countable;
 

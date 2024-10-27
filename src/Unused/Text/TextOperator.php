@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Text;
+namespace PrinsFrank\PdfParser\Unused\Text;
 
-use PrinsFrank\PdfParser\Document\Text\OperatorString\TextPositioningOperator;
-use PrinsFrank\PdfParser\Document\Text\OperatorString\TextShowingOperator;
-use PrinsFrank\PdfParser\Document\Text\OperatorString\TextStateOperator;
+use PrinsFrank\PdfParser\Unused\Text\OperatorString\TextPositioningOperator;
+use PrinsFrank\PdfParser\Unused\Text\OperatorString\TextShowingOperator;
+use PrinsFrank\PdfParser\Unused\Text\OperatorString\TextStateOperator;
 use Stringable;
 
 class TextOperator implements Stringable {

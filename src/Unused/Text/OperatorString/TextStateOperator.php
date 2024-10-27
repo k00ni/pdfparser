@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Text\OperatorString;
+namespace PrinsFrank\PdfParser\Unused\Text\OperatorString;
 
 enum TextStateOperator: string {
     case CHAR_SIZE = 'Tc';

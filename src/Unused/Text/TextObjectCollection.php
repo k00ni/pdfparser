@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Text;
+namespace PrinsFrank\PdfParser\Unused\Text;
 
 use Stringable;
 

@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Text;
+namespace PrinsFrank\PdfParser\Unused\Text;
 
 use PrinsFrank\PdfParser\Document\Generic\Parsing\InfiniteBuffer;
 use PrinsFrank\PdfParser\Document\Generic\Parsing\RollingCharBuffer;
-use PrinsFrank\PdfParser\Document\Text\OperatorString\TextObjectOperator;
-use PrinsFrank\PdfParser\Document\Text\OperatorString\TextPositioningOperator;
-use PrinsFrank\PdfParser\Document\Text\OperatorString\TextShowingOperator;
-use PrinsFrank\PdfParser\Document\Text\OperatorString\TextStateOperator;
 use PrinsFrank\PdfParser\Exception\BufferTooSmallException;
+use PrinsFrank\PdfParser\Unused\Text\OperatorString\TextObjectOperator;
+use PrinsFrank\PdfParser\Unused\Text\OperatorString\TextPositioningOperator;
+use PrinsFrank\PdfParser\Unused\Text\OperatorString\TextShowingOperator;
+use PrinsFrank\PdfParser\Unused\Text\OperatorString\TextStateOperator;
 
 class TextParser {
     /** @throws BufferTooSmallException */
