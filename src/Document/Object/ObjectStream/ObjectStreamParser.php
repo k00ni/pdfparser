@@ -8,8 +8,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Errors\Error;
 use PrinsFrank\PdfParser\Document\Errors\ErrorCollection;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
-use PrinsFrank\PdfParser\Document\Object\ObjectItem\ObjectItemParser;
-use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamContent\ObjectStreamContentParser;
 use PrinsFrank\PdfParser\Exception\BufferTooSmallException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream;
@@ -38,12 +36,9 @@ class ObjectStreamParser {
             }
 
             $dictionary = DictionaryParser::parse($stream, $byteOffset, ($byteOffsets[$key + 1] ?? $stream->getSizeInBytes()) - $byteOffset, $errorCollection);
-            $decodedStream = ObjectStreamContentParser::parse($stream, $byteOffset, ($byteOffsets[$key + 1] ?? $stream->getSizeInBytes()) - $byteOffset, $dictionary);
             $objectStreams[] = new ObjectStream(
                 (int) $objectIndicators[0],
                 (int) $objectIndicators[1],
-                $decodedStream,
-                ObjectItemParser::parse($decodedStream, $errorCollection),
                 $dictionary,
             );
         }
