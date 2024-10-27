@@ -13,13 +13,7 @@ use PrinsFrank\PdfParser\Stream;
 class ObjectStreamContentParser {
     /** @throws ParseFailureException */
     public static function parse(Stream $stream, int $startPos, int $nrOfBytes, Dictionary $dictionary): ?string {
-        $startStream = $stream->strpos(Marker::STREAM->value, $startPos);
-        $endStream = $stream->strpos(Marker::END_STREAM->value, $startStream);
-        if ($startStream === null || $endStream === null) {
-            return null;
-        }
-
-        $streamContent = $stream->read($startStream + strlen(Marker::STREAM->value), $endStream - $startStream - strlen(Marker::STREAM->value));
+        $streamContent = $stream->read($startPos, $nrOfBytes);
         $streamFilter = $dictionary->getEntryWithKey(DictionaryKey::FILTER)?->value;
         if ($streamFilter instanceof FilterNameValue) {
             $streamContent = $streamFilter->decode($streamContent);

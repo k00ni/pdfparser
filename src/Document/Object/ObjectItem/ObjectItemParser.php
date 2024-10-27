@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Unused;
+namespace PrinsFrank\PdfParser\Document\Object\ObjectItem;
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Errors\ErrorCollection;
 
-class ObjectParser {
+class ObjectItemParser {
     public static function parse(?string $decodedStream, ErrorCollection $errorCollection): ObjectItemCollection {
         if ($decodedStream === null) {
             return new ObjectItemCollection();

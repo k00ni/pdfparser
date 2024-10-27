@@ -5,9 +5,9 @@ namespace PrinsFrank\PdfParser\Unused\Page;
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TypeNameValue;
+use PrinsFrank\PdfParser\Document\Object\ObjectItem\ObjectItem;
+use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStream;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
-use PrinsFrank\PdfParser\Unused\ObjectItem;
-use PrinsFrank\PdfParser\Unused\ObjectStream\ObjectStream;
 
 class Page {
     /** @var list<ObjectItem|ObjectStream> */

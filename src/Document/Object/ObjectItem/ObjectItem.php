@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Unused;
+namespace PrinsFrank\PdfParser\Document\Object\ObjectItem;
 
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 

@@ -12,6 +12,7 @@ class CrossReferenceTable implements CrossReferenceSource {
     public function __construct(
         CrossReferenceSubSection... $crossReferenceSubSections,
     ) {
+        $this->crossReferenceSubSections = $crossReferenceSubSections;
     }
 
     public function getByteOffsets(): array {

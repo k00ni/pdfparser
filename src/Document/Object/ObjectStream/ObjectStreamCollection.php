@@ -1,12 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Unused\ObjectStream;
+namespace PrinsFrank\PdfParser\Document\Object\ObjectStream;
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValueArray;
+use PrinsFrank\PdfParser\Document\Object\ObjectItem\ObjectItem;
 
 class ObjectStreamCollection {
     /** @var list<ObjectStream> */
@@ -29,7 +30,7 @@ class ObjectStreamCollection {
         return $objectStreams;
     }
 
-    public function getObjectByReference(ReferenceValue $referenceValue): ObjectStream|ObjectStream|null {
+    public function getObjectByReference(ReferenceValue $referenceValue): ObjectItem|ObjectStream|null {
         foreach ($this->objectStreams as $objectStream) {
             if ($objectStream->objectNumber === $referenceValue->objectNumber) {
                 return $objectStream;
@@ -45,7 +46,7 @@ class ObjectStreamCollection {
         return null;
     }
 
-    /** @return ObjectStream */
+    /** @return array<ObjectStream|ObjectItem> */
     public function getObjectsByReference(ReferenceValueArray $referenceValue): array {
         $objects = [];
         foreach ($this->objectStreams as $objectStream) {

@@ -50,6 +50,10 @@ class TrailerSectionParser {
             throw new ParseFailureException(sprintf('Invalid byte offset last crossReference section "%s", "%s"', $byteOffsetLastCrossReferenceSection, $stream->read($startXrefMarkerPos, $stream->getSizeInBytes() - $startXrefMarkerPos)));
         }
 
+        if ($byteOffsetLastCrossReferenceSection > $stream->getSizeInBytes()) {
+            throw new ParseFailureException(sprintf('Invalid byte offset: position of last crossReference section %d is greater than total size of stream %d', (int) $byteOffsetLastCrossReferenceSection, $stream->getSizeInBytes()));
+        }
+
         $trailerMarkerPos = $stream->strrpos(Marker::TRAILER->value, $stream->getSizeInBytes() - $startXrefMarkerPos);
         $dictionary = $trailerMarkerPos !== null
             ? DictionaryParser::parse($stream, $trailerMarkerPos, $startXrefMarkerPos - $trailerMarkerPos, $errorCollection)

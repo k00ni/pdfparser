@@ -29,9 +29,10 @@ use PrinsFrank\PdfParser\Stream;
 class CrossReferenceSourceParser {
     /** @throws ParseFailureException */
     public static function parse(Stream $stream, Trailer $trailer, ErrorCollection $errorCollection): CrossReferenceSource {
-        $dictionary = DictionaryParser::parse($stream, $trailer->byteOffsetLastCrossReferenceSection, $stream->getSizeInBytes(), $errorCollection);
+        $crossReferenceSourceLength = $trailer->startTrailerMarkerPos !== null ? $trailer->startTrailerMarkerPos - $trailer->byteOffsetLastCrossReferenceSection : $trailer->eofMarkerPos;
+        $dictionary = DictionaryParser::parse($stream, $trailer->byteOffsetLastCrossReferenceSection, $crossReferenceSourceLength, $errorCollection);
         if ($dictionary->getEntryWithKey(DictionaryKey::TYPE)?->value === TypeNameValue::X_REF) {
-            return self::parseStream($dictionary, $stream, $trailer->byteOffsetLastCrossReferenceSection, $stream->getSizeInBytes());
+            return self::parseStream($dictionary, $stream, $trailer->byteOffsetLastCrossReferenceSection, $crossReferenceSourceLength);
         }
 
         return static::parseTable($stream, $trailer->byteOffsetLastCrossReferenceSection, $stream->getSizeInBytes());
@@ -69,7 +70,11 @@ class CrossReferenceSourceParser {
         return new CrossReferenceTable(... $crossReferenceSubSections);
     }
 
-    /** @throws ParseFailureException */
+    /**
+     * @throws ParseFailureException
+     * @param positive-int $startPos
+     * @param positive-int $nrOfBytes
+     */
     public static function parseStream(Dictionary $dictionary, Stream $stream, int $startPos, int $nrOfBytes): CrossReferenceStream {
         $dictionaryType = $dictionary->getEntryWithKey(DictionaryKey::TYPE)?->value;
         if ($dictionaryType !== TypeNameValue::X_REF) {
@@ -81,11 +86,21 @@ class CrossReferenceSourceParser {
             throw new ParseFailureException('Missing W value, can\'t decode xref stream.');
         }
 
+        $startStream = $stream->strpos(Marker::STREAM->value, $startPos);
+        if ($startStream === null || $startStream > ($startPos + $nrOfBytes)) {
+            throw new ParseFailureException(sprintf('Expected stream content marked by %s, none found', Marker::STREAM->value));
+        }
+
+        $endStream = $stream->strpos(Marker::END_STREAM->value, $startStream);
+        if ($endStream === null || $endStream > ($startPos + $nrOfBytes)) {
+            throw new ParseFailureException(sprintf('Expected end of stream content marked by %s, none found',Marker::END_STREAM->value));
+        }
+
         $byteLengthRecord1 = ((int) ($wValue[0] ?? 0)) * 2;
         $byteLengthRecord2 = ((int) ($wValue[1] ?? 0)) * 2;
         $byteLengthRecord3 = ((int) ($wValue[2] ?? 0)) * 2;
         $entries = [];
-        foreach (str_split(bin2hex(ObjectStreamContentParser::parse($stream, $startPos, $nrOfBytes, $dictionary)), $byteLengthRecord1 + $byteLengthRecord2 + $byteLengthRecord3) as $referenceRow) {
+        foreach (str_split(bin2hex(ObjectStreamContentParser::parse($stream, $startStream  + strlen(Marker::STREAM->value), $endStream - $startStream - strlen(Marker::STREAM->value), $dictionary)), $byteLengthRecord1 + $byteLengthRecord2 + $byteLengthRecord3) as $referenceRow) {
             $field1 = CrossReferenceStreamType::tryFrom(hexdec(substr($referenceRow, 0, $byteLengthRecord1)));
             $field2 = hexdec(substr($referenceRow, $byteLengthRecord1, $byteLengthRecord2));
             $field3 = hexdec(substr($referenceRow, $byteLengthRecord2 + $byteLengthRecord1, $byteLengthRecord3));
