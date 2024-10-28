@@ -19,7 +19,7 @@ final class PdfParser {
         $version = VersionParser::parse($stream);
         $trailer = TrailerSectionParser::parse($stream, $errorCollection);
         $crossReferenceSource = CrossReferenceSourceParser::parse($stream, $trailer, $errorCollection);
-        $objectStreamCollection = ObjectStreamParser::parse($stream, $crossReferenceSource, $errorCollection);
+//        $objectStreamCollection = ObjectStreamParser::parse($stream, $crossReferenceSource, $errorCollection);
 
         return new Document(
             $stream,
