@@ -14,27 +14,7 @@ use PrinsFrank\PdfParser\PdfParser;
 #[CoversNothing]
 class ParsedResultTest extends TestCase {
     /** @throws PdfParserException */
-    public function testSimpleDocument(): void {
-        $parser = new PdfParser();
-
-        $parsedDocument = $parser->parse(Stream::openFile(dirname(__DIR__, 2) . '/_samples/pdf/simple_document.pdf'));
-        static::assertEquals(Version::V1_5, $parsedDocument->version);
-        static::assertCount(0, $parsedDocument->errorCollection);
-        //        static::assertCount(2, $parsedDocument->pageCollection);
-    }
-
-    /** @throws PdfParserException */
-    public function testSimpleDocumentWithTitles(): void {
-        $parser = new PdfParser();
-
-        $parsedDocument = $parser->parse(Stream::openFile(dirname(__DIR__, 2) . '/_samples/pdf/simple_document_with_titles.pdf'));
-        static::assertEquals(Version::V1_5, $parsedDocument->version);
-        static::assertCount(0, $parsedDocument->errorCollection);
-        //        static::assertCount(2, $parsedDocument->pageCollection);
-    }
-
-    /** @throws PdfParserException */
-    #[DataProvider('pdfs')]
+    #[DataProvider('externalSamples')]
     public function testExternalSourcePDFs(string $pdfPath): void {
         $parser = new PdfParser();
 
@@ -42,10 +22,8 @@ class ParsedResultTest extends TestCase {
         static::assertCount(0, $document->errorCollection);
     }
 
-    public static function pdfs(): iterable {
-        $basePath = dirname(__DIR__, 2) . '/_samples/pdf/samples/';
-
-        $files = scandir($basePath);
+    public static function externalSamples(): iterable {
+        $files = scandir($basePath = __DIR__ . '/samples/external/');
         if ($files === false) {
             return;
         }

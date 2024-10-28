@@ -3,7 +3,7 @@
 composer.lock
 
 # Sample files
-/_samples/pdf/*
+/tests/Feature/samples/external/*
 
 # Cache folder
 /cache
