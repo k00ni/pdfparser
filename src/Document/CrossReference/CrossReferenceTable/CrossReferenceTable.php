@@ -14,15 +14,4 @@ class CrossReferenceTable implements CrossReferenceSource {
     ) {
         $this->crossReferenceSubSections = $crossReferenceSubSections;
     }
-
-    public function getByteOffsets(): array {
-        $byteOffsets = [];
-        foreach ($this->crossReferenceSubSections as $crossReferenceSubSection) {
-            foreach ($crossReferenceSubSection->crossReferenceEntries as $crossReferenceEntry) {
-                $byteOffsets[] = $crossReferenceEntry->offset;
-            }
-        }
-
-        return $byteOffsets;
-    }
 }

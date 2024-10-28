@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Object\ObjectStream;
+namespace PrinsFrank\PdfParser\Unused\Object\ObjectStream;
 
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceSource;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;

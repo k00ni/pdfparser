@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Object\ObjectItem;
+namespace PrinsFrank\PdfParser\Unused\Object\ObjectItem;
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Errors\ErrorCollection;

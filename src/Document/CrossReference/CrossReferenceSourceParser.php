@@ -63,7 +63,7 @@ class CrossReferenceSourceParser {
                     $crossReferenceSubSection->addCrossReferenceEntry(new CrossReferenceEntry((int) $sections[0], (int) $sections[1], ObjectInUseOrFreeCharacter::from(trim($sections[2]))));
                     break;
                 default:
-                    throw new InvalidCrossReferenceLineException(sprintf('Invalid line "%s", 2 or 3 sections expected, "%d" found', substr(trim($line), 0, 30), count($sections)));
+                    throw new InvalidCrossReferenceLineException(sprintf('Invalid line "%s", 2 or 3 sections expected, %d found', substr(trim($line), 0, 30), count($sections)));
             }
         }
 

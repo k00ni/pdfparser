@@ -18,15 +18,4 @@ class CrossReferenceStream implements CrossReferenceSource {
     ) {
         $this->entries = $entries;
     }
-
-    public function getByteOffsets(): array {
-        $byteOffsets = [];
-        foreach ($this->entries as $crossReferenceData) {
-            if ($crossReferenceData instanceof UncompressedDataEntry) {
-                $byteOffsets[] = $crossReferenceData->objNumberOrByteOffset;
-            }
-        }
-
-        return $byteOffsets;
-    }
 }

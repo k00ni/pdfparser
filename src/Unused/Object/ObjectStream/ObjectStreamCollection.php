@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Object\ObjectStream;
+namespace PrinsFrank\PdfParser\Unused\Object\ObjectStream;
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValueArray;
-use PrinsFrank\PdfParser\Document\Object\ObjectItem\ObjectItem;
+use PrinsFrank\PdfParser\Unused\Object\ObjectItem\ObjectItem;
 
 class ObjectStreamCollection {
     /** @var list<ObjectStream> */
