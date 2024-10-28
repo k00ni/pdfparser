@@ -42,7 +42,7 @@ class TrailerSectionParser {
 
         $endByteOffset = $stream->getEndOfCurrentLine($startByteOffset);
         if ($endByteOffset === null) {
-            throw new ParseFailureException('Expected a carriage return or line feed after the byte offset, nonen found');
+            throw new ParseFailureException('Expected a carriage return or line feed after the byte offset, none found');
         }
 
         $byteOffsetLastCrossReferenceSection = $stream->read($startByteOffset, $endByteOffset - $startByteOffset);
