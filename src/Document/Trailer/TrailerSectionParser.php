@@ -55,10 +55,11 @@ class TrailerSectionParser {
         }
 
         $trailerMarkerPos = $stream->strrpos(Marker::TRAILER->value, $stream->getSizeInBytes() - $startXrefMarkerPos);
-        $dictionary = $trailerMarkerPos !== null
-            ? DictionaryParser::parse($stream, $trailerMarkerPos, $startXrefMarkerPos - $trailerMarkerPos, $errorCollection)
-            : null;
+        if ($trailerMarkerPos === null) {
+            throw new ParseFailureException('Unable to locate trailer');
+        }
 
+        $dictionary = DictionaryParser::parse($stream, $trailerMarkerPos, $startXrefMarkerPos - $trailerMarkerPos, $errorCollection);
         return new Trailer(
             $eofMarkerPos,
             $startXrefMarkerPos,

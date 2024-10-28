@@ -6,7 +6,6 @@ namespace PrinsFrank\PdfParser\Tests\Feature;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Stream;
 use PrinsFrank\PdfParser\PdfParser;
