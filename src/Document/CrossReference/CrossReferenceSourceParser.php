@@ -14,7 +14,7 @@ use PrinsFrank\PdfParser\Stream;
 class CrossReferenceSourceParser {
     /** @throws ParseFailureException */
     public static function parse(Stream $stream, Trailer $trailer, ErrorCollection $errorCollection): CrossReferenceSource {
-        $eolPosByteOffset = $stream->getEndOfCurrentLine($trailer->byteOffsetLastCrossReferenceSection);
+        $eolPosByteOffset = $stream->getEndOfCurrentLine($trailer->byteOffsetLastCrossReferenceSection, $stream->getSizeInBytes());
         if ($eolPosByteOffset === null) {
             throw new ParseFailureException('Expected a newline after byte offset for last cross reference stream');
         }
@@ -24,7 +24,8 @@ class CrossReferenceSourceParser {
             return CrossReferenceTableParser::parse($stream, $trailer->byteOffsetLastCrossReferenceSection, $trailer->startTrailerMarkerPos - $trailer->byteOffsetLastCrossReferenceSection);
         }
 
-        var_dump($trailer);exit;
+        var_dump($trailer);
+        exit;
         return CrossReferenceStreamParser::parse();
     }
 }

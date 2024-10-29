@@ -64,7 +64,7 @@ class Stream {
     /** @param int<1, max> $nrOfBytes */
     public function chars(int $from, int $nrOfBytes): iterable {
         if ($nrOfBytes <= 0) {
-            throw new InvalidArgumentException(sprintf('$nrOfBytes must be greater than 0, %d given', $nrOfBytes));
+            throw new InvalidArgumentException(sprintf('$nrOfBytes to read must be greater than 0, %d given', $nrOfBytes));
         }
 
         fseek($this->handle, $from);
@@ -75,9 +75,9 @@ class Stream {
         }
     }
 
-    public function strpos(string $needle, int $offsetFromStart): ?int {
+    public function strpos(string $needle, int $offsetFromStart, int $before): ?int {
         $rollingCharBuffer = new RollingCharBuffer($needleLength = strlen($needle));
-        while ($offsetFromStart < $this->getSizeInBytes()) {
+        while ($offsetFromStart < $before) {
             fseek($this->handle, $offsetFromStart);
             $character = fgetc($this->handle);
             $rollingCharBuffer->next()->setCharacter($character);
@@ -105,9 +105,9 @@ class Stream {
         return null;
     }
 
-    public function getStartOfNextLine(int $byteOffset): ?int {
-        $firstLineFeedPos = $this->strpos(WhitespaceCharacter::LINE_FEED->value, $byteOffset);
-        $firstCarriageReturnPos = $this->strpos(WhitespaceCharacter::CARRIAGE_RETURN->value, $byteOffset);
+    public function getStartOfNextLine(int $byteOffset, int $before): ?int {
+        $firstLineFeedPos = $this->strpos(WhitespaceCharacter::LINE_FEED->value, $byteOffset, $before);
+        $firstCarriageReturnPos = $this->strpos(WhitespaceCharacter::CARRIAGE_RETURN->value, $byteOffset, $before);
         if ($firstLineFeedPos === null && $firstCarriageReturnPos === null) {
             return null;
         }
@@ -124,9 +124,9 @@ class Stream {
             + (abs($firstCarriageReturnPos - $firstLineFeedPos) === 1 ? 2 : 1); // If the CR and LF are next to each other, we need to add 2 bytes, otherwise 1
     }
 
-    public function getEndOfCurrentLine(int $byteOffset): ?int {
-        $firstLineFeedPos = $this->strpos(WhitespaceCharacter::LINE_FEED->value, $byteOffset);
-        $firstCarriageReturnPos = $this->strpos(WhitespaceCharacter::CARRIAGE_RETURN->value, $byteOffset);
+    public function getEndOfCurrentLine(int $byteOffset, int $before): ?int {
+        $firstLineFeedPos = $this->strpos(WhitespaceCharacter::LINE_FEED->value, $byteOffset, $before);
+        $firstCarriageReturnPos = $this->strpos(WhitespaceCharacter::CARRIAGE_RETURN->value, $byteOffset, $before);
         if ($firstLineFeedPos === null && $firstCarriageReturnPos === null) {
             return null;
         }

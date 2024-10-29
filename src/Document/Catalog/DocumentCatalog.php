@@ -3,5 +3,4 @@
 namespace PrinsFrank\PdfParser\Document\Catalog;
 
 class DocumentCatalog {
-
 }

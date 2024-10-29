@@ -6,7 +6,6 @@ namespace PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamContent;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\FilterNameValue;
-use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream;
 

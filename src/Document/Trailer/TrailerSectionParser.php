@@ -35,12 +35,12 @@ class TrailerSectionParser {
             throw new MarkerNotFoundException(Marker::START_XREF->value);
         }
 
-        $startByteOffset = $stream->getStartOfNextLine($startXrefMarkerPos);
+        $startByteOffset = $stream->getStartOfNextLine($startXrefMarkerPos, $stream->getSizeInBytes());
         if ($startByteOffset === null) {
             throw new ParseFailureException('Expected a carriage return or line feed after startxref marker, none found');
         }
 
-        $endByteOffset = $stream->getEndOfCurrentLine($startByteOffset);
+        $endByteOffset = $stream->getEndOfCurrentLine($startByteOffset, $stream->getSizeInBytes());
         if ($endByteOffset === null) {
             throw new ParseFailureException('Expected a carriage return or line feed after the byte offset, none found');
         }

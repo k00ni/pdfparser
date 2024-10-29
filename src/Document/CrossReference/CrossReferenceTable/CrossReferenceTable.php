@@ -25,4 +25,20 @@ class CrossReferenceTable implements CrossReferenceSource {
 
         return null;
     }
+
+    public function getNextByteOffset(int $currentByteOffset): ?int {
+        $byteOffsets = [];
+        foreach ($this->crossReferenceSubSections as $crossReferenceSubSection) {
+            $byteOffsets = [... $byteOffsets, ...$crossReferenceSubSection->getByteOffsets()];
+        }
+
+        sort($byteOffsets);
+        foreach ($byteOffsets as $byteOffset) {
+            if ($byteOffset > $currentByteOffset) {
+                return $byteOffset;
+            }
+        }
+
+        return null;
+    }
 }

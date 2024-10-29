@@ -16,9 +16,9 @@ use PrinsFrank\PdfParser\Stream;
 
 class CrossReferenceStreamParser {
     /**
-     * @throws ParseFailureException
      * @param positive-int $startPos
      * @param positive-int $nrOfBytes
+     * @throws ParseFailureException
      */
     public static function parse(Dictionary $dictionary, Stream $stream, int $startPos, int $nrOfBytes): CrossReferenceStream {
         $dictionaryType = $dictionary->getEntryWithKey(DictionaryKey::TYPE)?->value;
@@ -31,14 +31,14 @@ class CrossReferenceStreamParser {
             throw new ParseFailureException('Missing W value, can\'t decode xref stream.');
         }
 
-        $startStream = $stream->strpos(Marker::STREAM->value, $startPos);
+        $startStream = $stream->strpos(Marker::STREAM->value, $startPos, $startPos + $nrOfBytes);
         if ($startStream === null || $startStream > ($startPos + $nrOfBytes)) {
             throw new ParseFailureException(sprintf('Expected stream content marked by %s, none found', Marker::STREAM->value));
         }
 
-        $endStream = $stream->strpos(Marker::END_STREAM->value, $startStream);
+        $endStream = $stream->strpos(Marker::END_STREAM->value, $startStream, $startPos + $nrOfBytes);
         if ($endStream === null || $endStream > ($startPos + $nrOfBytes)) {
-            throw new ParseFailureException(sprintf('Expected end of stream content marked by %s, none found',Marker::END_STREAM->value));
+            throw new ParseFailureException(sprintf('Expected end of stream content marked by %s, none found', Marker::END_STREAM->value));
         }
 
         $byteLengthRecord1 = ((int) ($wValue[0] ?? 0)) * 2;

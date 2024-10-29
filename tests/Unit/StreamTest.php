@@ -46,9 +46,9 @@ class StreamTest extends TestCase {
         static::assertNotNull($startXrefPos);
         static::assertSame(Marker::START_XREF->value, $stream->read($startXrefPos, strlen(Marker::START_XREF->value)));
 
-        $byteOffsetPos = $stream->getStartOfNextLine($startXrefPos);
+        $byteOffsetPos = $stream->getStartOfNextLine($startXrefPos, $stream->getSizeInBytes());
         static::assertNotNull($byteOffsetPos);
-        $byteOffsetEndPos = $stream->getEndOfCurrentLine($byteOffsetPos);
+        $byteOffsetEndPos = $stream->getEndOfCurrentLine($byteOffsetPos, $stream->getSizeInBytes());
         static::assertNotNull($byteOffsetEndPos);
         static::assertSame('1234', $stream->read($byteOffsetPos, $byteOffsetEndPos - $byteOffsetPos));
     }

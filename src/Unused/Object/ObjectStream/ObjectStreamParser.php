@@ -27,8 +27,8 @@ class ObjectStreamParser {
                 continue; // Contains PDF header and binary data to indicate document contains binary data
             }
 
-            $firstNewLinePos = $stream->getEndOfCurrentLine($byteOffset);
-            $firstNewLinePos = ($firstNewLinePos === $byteOffset ? $stream->getEndOfCurrentLine($byteOffset + 1) : $firstNewLinePos);
+            $firstNewLinePos = $stream->getEndOfCurrentLine($byteOffset, $byteOffsets[$key + 1] ?? $stream->getSizeInBytes());
+            $firstNewLinePos = ($firstNewLinePos === $byteOffset ? $stream->getEndOfCurrentLine($byteOffset + 1, $byteOffsets[$key + 1] ?? $stream->getSizeInBytes()) : $firstNewLinePos);
             $firstLine = $stream->read($byteOffset, $firstNewLinePos - $byteOffset);
             $objectIndicators = explode(' ', $firstLine);
             if (count($objectIndicators) !== 3 || $objectIndicators[2] !== Marker::OBJ->value) {

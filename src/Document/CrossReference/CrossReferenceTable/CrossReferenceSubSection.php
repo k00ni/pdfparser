@@ -17,9 +17,9 @@ class CrossReferenceSubSection {
         public readonly int $nrOfEntries,
         CrossReferenceEntryInUseObject|CrossReferenceEntryFreeObject... $crossReferenceEntries
     ) {
-//        if ($this->nrOfEntries !== count($crossReferenceEntries)) {
-//            throw new InvalidArgumentException(sprintf('Cross reference subsection defines %d entries, got %d', $this->nrOfEntries, count($crossReferenceEntries)));
-//        }
+        //        if ($this->nrOfEntries !== count($crossReferenceEntries)) {
+        //            throw new InvalidArgumentException(sprintf('Cross reference subsection defines %d entries, got %d', $this->nrOfEntries, count($crossReferenceEntries)));
+        //        }
 
         $this->crossReferenceEntries = $crossReferenceEntries;
     }
@@ -35,5 +35,17 @@ class CrossReferenceSubSection {
         }
 
         return $this->crossReferenceEntries[$objNumber - $this->firstObjectNumber] ?? throw new RuntimeException(sprintf('Object with key %d should exist when self::containsObject is true', $objNumber - $this->firstObjectNumber));
+    }
+
+    /** @return list<int> */
+    public function getByteOffsets(): array {
+        $byteOffsets = [];
+        foreach ($this->crossReferenceEntries as $crossReferenceEntry) {
+            if ($crossReferenceEntry instanceof CrossReferenceEntryInUseObject) {
+                $byteOffsets[] = $crossReferenceEntry->byteOffsetInDecodedStream;
+            }
+        }
+
+        return $byteOffsets;
     }
 }
