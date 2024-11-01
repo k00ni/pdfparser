@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document\Dictionary;
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntryFactory;
-use PrinsFrank\PdfParser\Document\Errors\ErrorCollection;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class DictionaryFactory {

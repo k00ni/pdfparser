@@ -5,7 +5,6 @@ namespace PrinsFrank\PdfParser\Document;
 
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceSource;
 
-use PrinsFrank\PdfParser\Document\Errors\ErrorCollection;
 use PrinsFrank\PdfParser\Document\Object\ObjectItem;
 use PrinsFrank\PdfParser\Document\Object\ObjectItemParser;
 use PrinsFrank\PdfParser\Document\Trailer\Trailer;

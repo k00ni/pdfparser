@@ -5,7 +5,6 @@ namespace PrinsFrank\PdfParser\Document\Dictionary;
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParseContext\DictionaryParseContext;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParseContext\NestingContext;
-use PrinsFrank\PdfParser\Document\Errors\ErrorCollection;
 use PrinsFrank\PdfParser\Document\Generic\Character\DelimiterCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Character\LiteralStringEscapeCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;

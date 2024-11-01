@@ -4,10 +4,9 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Unused\Object\ObjectItem;
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
-use PrinsFrank\PdfParser\Document\Errors\ErrorCollection;
 
 class ObjectItemParser {
-    public static function parse(?string $decodedStream, ErrorCollection $errorCollection): ObjectItemCollection {
+    public static function parse(?string $decodedStream): ObjectItemCollection {
         if ($decodedStream === null) {
             return new ObjectItemCollection();
         }
@@ -36,7 +35,7 @@ class ObjectItemParser {
             $objectItems[] = new ObjectItem(
                 (int) $objectId,
                 $objectContent,
-                DictionaryParser::parse($objectContent, $errorCollection)
+                DictionaryParser::parse($objectContent)
             );
         }
 

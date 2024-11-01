@@ -5,8 +5,6 @@ namespace PrinsFrank\PdfParser\Unused\Object\ObjectStream;
 
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceSource;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
-use PrinsFrank\PdfParser\Document\Errors\Error;
-use PrinsFrank\PdfParser\Document\Errors\ErrorCollection;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Exception\BufferTooSmallException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
@@ -14,10 +12,10 @@ use PrinsFrank\PdfParser\Stream;
 
 class ObjectStreamParser {
     /** @throws ParseFailureException|BufferTooSmallException */
-    public static function parse(Stream $stream, CrossReferenceSource $crossReferenceSource, ErrorCollection $errorCollection): ObjectStreamCollection {
+    public static function parse(Stream $stream, CrossReferenceSource $crossReferenceSource): ObjectStreamCollection {
         $byteOffsets = array_unique($crossReferenceSource->getByteOffsets());
         if (count($byteOffsets) === 1) {
-            $errorCollection->addError(new Error('Only 1 byte offset was retrieved.'));
+            throw new ParseFailureException('Only 1 byte offset was retrieved');
         }
 
         $objectStreams = [];
@@ -35,7 +33,7 @@ class ObjectStreamParser {
                 throw new ParseFailureException(sprintf('Expected an object identifier in format (\d \d obj), got "%s" with offset %d and first new line at %d', $firstLine, $byteOffset, $firstNewLinePos));
             }
 
-            $dictionary = DictionaryParser::parse($stream, $byteOffset, ($byteOffsets[$key + 1] ?? $stream->getSizeInBytes()) - $byteOffset, $errorCollection);
+            $dictionary = DictionaryParser::parse($stream, $byteOffset, ($byteOffsets[$key + 1] ?? $stream->getSizeInBytes()) - $byteOffset);
             $objectStreams[] = new ObjectStream(
                 (int) $objectIndicators[0],
                 (int) $objectIndicators[1],

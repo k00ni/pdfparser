@@ -19,7 +19,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Rectangle\Rectangle;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\TextString\TextStringValue;
-use PrinsFrank\PdfParser\Document\Errors\ErrorCollection;
 use PrinsFrank\PdfParser\Stream;
 
 #[CoversClass(DictionaryParser::class)]
@@ -55,7 +54,6 @@ class DictionaryParserTest extends TestCase {
                 ),
                 0,
                 $stream->getSizeInBytes(),
-                new ErrorCollection(),
             )
         );
     }
@@ -102,7 +100,6 @@ class DictionaryParserTest extends TestCase {
                 ),
                 0,
                 $stream->getSizeInBytes(),
-                new ErrorCollection(),
             )
         );
     }
@@ -131,7 +128,6 @@ class DictionaryParserTest extends TestCase {
                 $stream = Stream::fromString('<</DecodeParms<</Columns 5/Predictor 12>>/Filter/FlateDecode/ID[<9A27A23F6A2546448EBB340FF38477BD><C5C4714E306446ABAE40FE784477D322>]/Index[2460 1 4311 1 4317 2 4414 1 4717 21]/Info 4318 0 R/Length 106/Prev 46153797/Root 4320 0 R/Size 4738/Type/XRef/W[1 4 0]>>stream'),
                 0,
                 $stream->getSizeInBytes(),
-                new ErrorCollection()
             )
         );
     }
@@ -171,7 +167,6 @@ class DictionaryParserTest extends TestCase {
                 ),
                 0,
                 $stream->getSizeInBytes(),
-                new ErrorCollection()
             )
         );
     }
@@ -199,7 +194,6 @@ class DictionaryParserTest extends TestCase {
                 ),
                 0,
                 $stream->getSizeInBytes(),
-                new ErrorCollection()
             )
         );
     }
@@ -219,7 +213,6 @@ class DictionaryParserTest extends TestCase {
                 ),
                 0,
                 $stream->getSizeInBytes(),
-                new ErrorCollection()
             )
         );
     }
