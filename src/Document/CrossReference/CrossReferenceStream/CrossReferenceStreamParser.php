@@ -8,6 +8,7 @@ use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\Entry\Null
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\Entry\UncompressedDataEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamContent\ObjectStreamContentParser;
@@ -20,7 +21,8 @@ class CrossReferenceStreamParser {
      * @param positive-int $nrOfBytes
      * @throws ParseFailureException
      */
-    public static function parse(Dictionary $dictionary, Stream $stream, int $startPos, int $nrOfBytes): CrossReferenceStream {
+    public static function parse(Stream $stream, int $startPos, int $nrOfBytes): CrossReferenceStream {
+        $dictionary = DictionaryParser::parse($stream, $startPos, $nrOfBytes);
         $dictionaryType = $dictionary->getEntryWithKey(DictionaryKey::TYPE)?->value;
         if ($dictionaryType !== TypeNameValue::X_REF) {
             throw new ParseFailureException('Expected stream of type xref, got "' . ($dictionaryType?->name ?? 'null') . '" Dictionary: ' . json_encode($dictionary));
@@ -58,6 +60,6 @@ class CrossReferenceStreamParser {
             };
         }
 
-        return new CrossReferenceStream(... $entries);
+        return new CrossReferenceStream($dictionary, ... $entries);
     }
 }

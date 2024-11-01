@@ -13,14 +13,14 @@ class ObjectItemParser {
     public static function parseObject(int $objectNumber, CrossReferenceTable $crossReferenceSource, Stream $stream, Trailer $trailer): ObjectItem {
         $crossReferenceEntry = $crossReferenceSource->getCrossReferenceEntry($objectNumber);
         if ($crossReferenceEntry === null) {
-            throw new ParseFailureException();
+            throw new ParseFailureException(sprintf('No crossReference entry found for object with number %d', $objectNumber));
         }
 
         $nextByteOffset = $crossReferenceSource->getNextByteOffset($crossReferenceEntry->byteOffsetInDecodedStream) ?? $trailer->startTrailerMarkerPos;
         $firstLine = $stream->read($crossReferenceEntry->byteOffsetInDecodedStream, $stream->getEndOfCurrentLine($crossReferenceEntry->byteOffsetInDecodedStream, $nextByteOffset) - $crossReferenceEntry->byteOffsetInDecodedStream);
         $objHeaderParts = explode(WhitespaceCharacter::SPACE->value, $firstLine);
         if (count($objHeaderParts) !== 3 || (int) $objHeaderParts[0] !== $objectNumber || (int) $objHeaderParts[1] !== $crossReferenceEntry->generationNumber || $objHeaderParts[2] !== Marker::OBJ->value) {
-            throw new ParseFailureException(sprintf('Expected %d %d %s on first line, got "%s"', $objectNumber, $crossReferenceEntry->generationNumber, Marker::OBJ->value, $firstLine));
+            throw new ParseFailureException(sprintf('Expected "%d %d %s" on first line, got "%s"', $objectNumber, $crossReferenceEntry->generationNumber, Marker::OBJ->value, $firstLine));
         }
 
         return new ObjectItem(

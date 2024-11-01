@@ -31,9 +31,7 @@ class CrossReferenceSourceParser {
             throw new ParseFailureException('Unable to locate end of crossReferenceStream object');
         }
 
-        $dictionary = DictionaryParser::parse($stream, $trailer->byteOffsetLastCrossReferenceSection, $endCrossReferenceStream - $trailer->byteOffsetLastCrossReferenceSection);
         return CrossReferenceStreamParser::parse(
-            $dictionary,
             $stream,
             $trailer->byteOffsetLastCrossReferenceSection,
             $endCrossReferenceStream - $trailer->byteOffsetLastCrossReferenceSection

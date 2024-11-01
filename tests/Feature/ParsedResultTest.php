@@ -17,7 +17,9 @@ class ParsedResultTest extends TestCase {
     public function testExternalSourcePDFs(string $pdfPath): void {
         $parser = new PdfParser();
 
-        $parser->parse(Stream::openFile($pdfPath));
+        $document = $parser->parse(Stream::openFile($pdfPath));
+        $catalog = $document->getCatalog();
+        static::assertNotNull($catalog, 'Every document should have a catalog');
         $this->addToAssertionCount(1);
     }
 
