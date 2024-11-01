@@ -9,10 +9,10 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class DictionaryFactory {
     /** @throws ParseFailureException */
-    public static function fromArray(array $dictionaryArray, ErrorCollection $errorCollection): Dictionary {
+    public static function fromArray(array $dictionaryArray): Dictionary {
         $dictionaryEntries = [];
         foreach ($dictionaryArray as $keyString => $value) {
-            $dictionaryEntry = DictionaryEntryFactory::fromKeyValuePair($keyString, $value, $errorCollection);
+            $dictionaryEntry = DictionaryEntryFactory::fromKeyValuePair($keyString, $value);
             if ($dictionaryEntry === null) {
                 continue;
             }

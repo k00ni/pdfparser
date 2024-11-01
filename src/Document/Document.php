@@ -18,7 +18,6 @@ final class Document {
         public readonly Version              $version,
         public readonly CrossReferenceSource $crossReferenceSource,
         public readonly Trailer              $trailer,
-        public readonly ErrorCollection      $errorCollection,
     ) {
     }
 
@@ -28,7 +27,6 @@ final class Document {
             $this->crossReferenceSource,
             $this->stream,
             $this->trailer,
-            $this->errorCollection
         );
     }
 }

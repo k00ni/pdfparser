@@ -12,18 +12,16 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class DictionaryEntryFactory {
     /** @throws ParseFailureException */
-    public static function fromKeyValuePair(string $keyString, array|string $dictionaryValue, ErrorCollection $errorCollection): ?DictionaryEntry {
+    public static function fromKeyValuePair(string $keyString, array|string $dictionaryValue): ?DictionaryEntry {
         $dictionaryKey = DictionaryKey::tryFromKeyString(trim($keyString));
         if ($dictionaryKey === null) {
-            $errorCollection->addError(new Error('DictionaryKey "' . $keyString . '" not supported'));
-
-            return null;
+            throw new ParseFailureException(sprintf('Dictionarykey %s is not supported', $keyString));
         }
 
         if (is_array($dictionaryValue)) {
             $arrayValues = [];
             foreach ($dictionaryValue as $dictionaryItemKey => $dictionaryItemValue) {
-                $arrayValues[] = self::fromKeyValuePair($dictionaryItemKey, $dictionaryItemValue, $errorCollection);
+                $arrayValues[] = self::fromKeyValuePair($dictionaryItemKey, $dictionaryItemValue);
             }
             $value = new ArrayValue($arrayValues);
         } else {

@@ -24,7 +24,7 @@ class TrailerSectionParser {
      * @throws MarkerNotFoundException
      * @throws ParseFailureException
      */
-    public static function parse(Stream $stream, ErrorCollection $errorCollection): Trailer {
+    public static function parse(Stream $stream): Trailer {
         $eofMarkerPos = $stream->strrpos(Marker::EOF->value, 0);
         if ($eofMarkerPos === null) {
             throw new MarkerNotFoundException(Marker::EOF->value);
@@ -59,7 +59,7 @@ class TrailerSectionParser {
             throw new ParseFailureException('Unable to locate trailer');
         }
 
-        $dictionary = DictionaryParser::parse($stream, $trailerMarkerPos, $startXrefMarkerPos - $trailerMarkerPos, $errorCollection);
+        $dictionary = DictionaryParser::parse($stream, $trailerMarkerPos, $startXrefMarkerPos - $trailerMarkerPos);
         return new Trailer(
             $eofMarkerPos,
             $startXrefMarkerPos,

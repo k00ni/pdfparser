@@ -27,7 +27,7 @@ class DictionaryParser {
      * @throws BufferTooSmallException
      * @throws ParseFailureException
      */
-    public static function parse(Stream $stream, int $startPos, int $nrOfBytes, ErrorCollection $errorCollection): Dictionary {
+    public static function parse(Stream $stream, int $startPos, int $nrOfBytes): Dictionary {
         $dictionaryArray = [];
         $rollingCharBuffer = new RollingCharBuffer(6);
         $nestingContext = (new NestingContext())->setContext(DictionaryParseContext::ROOT);
@@ -95,7 +95,7 @@ class DictionaryParser {
             };
         }
 
-        return DictionaryFactory::fromArray($dictionaryArray, $errorCollection);
+        return DictionaryFactory::fromArray($dictionaryArray);
     }
 
     private static function flush(array &$dictionaryArray, NestingContext $nestingContext): void {

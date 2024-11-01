@@ -65,72 +65,105 @@ class H2MinimalTest extends TestCase {
             ),
             $document->crossReferenceSource,
         );
+        $obj1 = $document->getObject(1);
         static::assertEquals(
             new ObjectItem(
                 1,
                 0,
-                new Dictionary(
-                    new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::CATALOG),
-                    new DictionaryEntry(DictionaryKey::OUTLINES, new ReferenceValue(2, 0)),
-                    new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(3, 0)),
-                )
+                9,
+                74,
             ),
-            $document->getObject(1),
+            $obj1,
         );
+        static::assertEquals(
+            new Dictionary(
+                new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::CATALOG),
+                new DictionaryEntry(DictionaryKey::OUTLINES, new ReferenceValue(2, 0)),
+                new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(3, 0)),
+            ),
+            $obj1->getDictionary($document->stream)
+        );
+        $obj2 = $document->getObject(2);
         static::assertEquals(
             new ObjectItem(
                 2,
                 0,
-                new Dictionary(
-                    new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::OUTLINES),
-                    new DictionaryEntry(DictionaryKey::COUNT, new IntegerValue(0)),
-                )
+                74,
+                120,
             ),
-            $document->getObject(2),
+            $obj2,
         );
+        static::assertEquals(
+            new Dictionary(
+                new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::OUTLINES),
+                new DictionaryEntry(DictionaryKey::COUNT, new IntegerValue(0)),
+            ),
+            $obj2->getDictionary($document->stream)
+        );
+        $obj3 = $document->getObject(3);
         static::assertEquals(
             new ObjectItem(
                 3,
                 0,
-                new Dictionary(
-                    new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::PAGES),
-                    new DictionaryEntry(DictionaryKey::KIDS, new ReferenceValueArray(new ReferenceValue(4, 0))),
-                    new DictionaryEntry(DictionaryKey::COUNT, new IntegerValue(1)),
-                )
+                120,
+                179,
             ),
-            $document->getObject(3),
+            $obj3,
         );
+        static::assertEquals(
+            new Dictionary(
+                new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::PAGES),
+                new DictionaryEntry(DictionaryKey::KIDS, new ReferenceValueArray(new ReferenceValue(4, 0))),
+                new DictionaryEntry(DictionaryKey::COUNT, new IntegerValue(1)),
+            ),
+            $obj3->getDictionary($document->stream)
+        );
+        $obj4 = $document->getObject(4);
         static::assertEquals(
             new ObjectItem(
                 4,
                 0,
-                new Dictionary(
-                    new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::PAGE),
-                    new DictionaryEntry(DictionaryKey::PARENT, new ReferenceValue(3, 0)),
-                    new DictionaryEntry(DictionaryKey::MEDIABOX, new Rectangle(0.0, 0.0, 0.0, 612.0)),
-                    new DictionaryEntry(DictionaryKey::CONTENTS, new ReferenceValueArray(new ReferenceValue(5, 0))),
-                    new DictionaryEntry(DictionaryKey::RESOURCES, new ArrayValue([new DictionaryEntry(DictionaryKey::PROCSET, new ReferenceValue(6, 0))])),
-                )
+                179,
+                300,
             ),
-            $document->getObject(4),
+            $obj4,
         );
+        static::assertEquals(
+            new Dictionary(
+                new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::PAGE),
+                new DictionaryEntry(DictionaryKey::PARENT, new ReferenceValue(3, 0)),
+                new DictionaryEntry(DictionaryKey::MEDIABOX, new Rectangle(0.0, 0.0, 0.0, 612.0)),
+                new DictionaryEntry(DictionaryKey::CONTENTS, new ReferenceValueArray(new ReferenceValue(5, 0))),
+                new DictionaryEntry(DictionaryKey::RESOURCES, new ArrayValue([new DictionaryEntry(DictionaryKey::PROCSET, new ReferenceValue(6, 0))])),
+            ),
+            $obj4->getDictionary($document->stream)
+        );
+        $obj5 = $document->getObject(5);
         static::assertEquals(
             new ObjectItem(
                 5,
                 0,
-                new Dictionary(
-                    new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(35)),
-                )
+                300,
+                384,
             ),
-            $document->getObject(5),
+            $obj5,
         );
+        static::assertEquals(
+            new Dictionary(
+                new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(35)),
+            ),
+            $obj5->getDictionary($document->stream)
+        );
+        $obj6 = $document->getObject(6);
         static::assertEquals(
             new ObjectItem(
                 6,
                 0,
-                null,
+                384,
+                550,
             ),
-            $document->getObject(6),
+            $obj6,
         );
+        static::assertNull($obj6->getDictionary($document->stream));
     }
 }
