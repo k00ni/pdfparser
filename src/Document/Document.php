@@ -16,13 +16,19 @@ final class Document {
     public function __construct(
         public readonly Stream               $stream,
         public readonly Version              $version,
-        public readonly Trailer              $trailer,
         public readonly CrossReferenceSource $crossReferenceSource,
+        public readonly Trailer              $trailer,
         public readonly ErrorCollection      $errorCollection,
     ) {
     }
 
     public function getObject(int $objectNumber): ?ObjectItem {
-        return ObjectItemParser::parseObject($objectNumber, $this->crossReferenceSource, $this->stream, $this->trailer, $this->errorCollection);
+        return ObjectItemParser::parseObject(
+            $objectNumber,
+            $this->crossReferenceSource,
+            $this->stream,
+            $this->trailer,
+            $this->errorCollection
+        );
     }
 }

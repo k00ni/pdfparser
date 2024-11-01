@@ -22,8 +22,8 @@ final class PdfParser {
         return new Document(
             $stream,
             $version,
-            $trailer,
             $crossReferenceSource,
+            $trailer,
             $errorCollection
         );
     }
