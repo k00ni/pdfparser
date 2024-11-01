@@ -14,7 +14,7 @@ final class Trailer {
         public readonly int         $eofMarkerPos,
         public readonly int         $startXrefMarkerPos,
         public readonly int         $byteOffsetLastCrossReferenceSection,
-        public readonly int         $startTrailerMarkerPos,
+        public readonly ?int        $startTrailerMarkerPos,
         public readonly ?Dictionary $dictionary,
     ) {
     }

@@ -5,6 +5,7 @@ namespace PrinsFrank\PdfParser\Document\CrossReference;
 
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\CrossReferenceStreamParser;
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\CrossReferenceTableParser;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Document\Trailer\Trailer;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
@@ -23,8 +24,17 @@ class CrossReferenceSourceParser {
             return CrossReferenceTableParser::parse($stream, $trailer->byteOffsetLastCrossReferenceSection, $trailer->startTrailerMarkerPos - $trailer->byteOffsetLastCrossReferenceSection);
         }
 
-        var_dump($trailer);
-        exit;
-        return CrossReferenceStreamParser::parse();
+        $endCrossReferenceStream = $stream->strpos(Marker::END_OBJ->value, $trailer->byteOffsetLastCrossReferenceSection, $stream->getSizeInBytes());
+        if ($endCrossReferenceStream === null) {
+            throw new ParseFailureException('Unable to locate end of crossReferenceStream object');
+        }
+
+        $dictionary = DictionaryParser::parse($stream, $trailer->byteOffsetLastCrossReferenceSection, $endCrossReferenceStream - $trailer->byteOffsetLastCrossReferenceSection);
+        return CrossReferenceStreamParser::parse(
+            $dictionary,
+            $stream,
+            $trailer->byteOffsetLastCrossReferenceSection,
+            $endCrossReferenceStream - $trailer->byteOffsetLastCrossReferenceSection
+        );
     }
 }
