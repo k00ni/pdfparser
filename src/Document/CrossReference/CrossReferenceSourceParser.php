@@ -21,7 +21,9 @@ class CrossReferenceSourceParser {
 
         $firstLineCrossReferenceSource = $stream->read($trailer->byteOffsetLastCrossReferenceSection, $eolPosByteOffset - $trailer->byteOffsetLastCrossReferenceSection);
         if ($firstLineCrossReferenceSource === Marker::XREF->value) {
-            return CrossReferenceTableParser::parse($stream, $trailer->byteOffsetLastCrossReferenceSection, $trailer->startTrailerMarkerPos - $trailer->byteOffsetLastCrossReferenceSection);
+            $nextTrailerPos = $stream->strpos(Marker::TRAILER->value, $trailer->byteOffsetLastCrossReferenceSection, $stream->getSizeInBytes());
+
+            return CrossReferenceTableParser::parse($stream, $trailer->byteOffsetLastCrossReferenceSection, $nextTrailerPos - $trailer->byteOffsetLastCrossReferenceSection);
         }
 
         $endCrossReferenceStream = $stream->strpos(Marker::END_OBJ->value, $trailer->byteOffsetLastCrossReferenceSection, $stream->getSizeInBytes());
