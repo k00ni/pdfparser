@@ -5,7 +5,6 @@ namespace PrinsFrank\PdfParser\Document\CrossReference;
 
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\CrossReferenceStreamParser;
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\CrossReferenceTableParser;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Document\Trailer\Trailer;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
