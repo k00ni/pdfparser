@@ -17,10 +17,10 @@ class ObjectItemParser {
         }
 
         $nextByteOffset = $crossReferenceSource->getNextByteOffset($crossReferenceEntry->byteOffsetInDecodedStream) ?? $trailer->startTrailerMarkerPos;
-        $firstLine = $stream->read($crossReferenceEntry->byteOffsetInDecodedStream, $stream->getEndOfCurrentLine($crossReferenceEntry->byteOffsetInDecodedStream, $nextByteOffset) - $crossReferenceEntry->byteOffsetInDecodedStream);
-        $objHeaderParts = explode(WhitespaceCharacter::SPACE->value, $firstLine);
+        $objHeader = $stream->read($crossReferenceEntry->byteOffsetInDecodedStream, $stream->strpos(Marker::OBJ->value, $crossReferenceEntry->byteOffsetInDecodedStream, $nextByteOffset) + strlen(Marker::OBJ->value) - $crossReferenceEntry->byteOffsetInDecodedStream);
+        $objHeaderParts = explode(WhitespaceCharacter::SPACE->value, str_replace([WhitespaceCharacter::LINE_FEED->value], ' ', trim($objHeader)));
         if (count($objHeaderParts) !== 3 || (int) $objHeaderParts[0] !== $objectNumber || (int) $objHeaderParts[1] !== $crossReferenceEntry->generationNumber || $objHeaderParts[2] !== Marker::OBJ->value) {
-            throw new ParseFailureException(sprintf('Expected "%d %d %s" on first line, got "%s"', $objectNumber, $crossReferenceEntry->generationNumber, Marker::OBJ->value, $firstLine));
+            throw new ParseFailureException(sprintf('Expected "%d %d %s" on first line, got "%s"', $objectNumber, $crossReferenceEntry->generationNumber, Marker::OBJ->value, $objHeader));
         }
 
         return new ObjectItem(
