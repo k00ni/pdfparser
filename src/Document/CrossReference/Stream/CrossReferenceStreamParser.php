@@ -66,7 +66,7 @@ class CrossReferenceStreamParser {
 
         $crossReferenceSubSections = [];
         foreach (array_chunk($startObjNrOfItemsArray, 2) as $startNrNrOfObjects) {
-            $crossReferenceSubSections[] = new CrossReferenceSubSection($startNrNrOfObjects[0], $startObjNrOfItemsArray[1], ... array_slice($entries, 0, $startNrNrOfObjects[1]));
+            $crossReferenceSubSections[] = new CrossReferenceSubSection($startNrNrOfObjects[0], $startNrNrOfObjects[1], ... array_slice($entries, 0, $startNrNrOfObjects[1]));
             $entries = array_slice($entries, $startNrNrOfObjects[1]);
         }
 
