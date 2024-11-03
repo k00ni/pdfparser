@@ -4,11 +4,11 @@ namespace PrinsFrank\PdfParser\Tests\Unit\Document\CrossReference\CrossReference
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\CrossReferenceSubSection;
-use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\CrossReferenceTable;
-use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\CrossReferenceTableParser;
-use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\Entry\CrossReferenceEntryFreeObject;
-use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\Entry\CrossReferenceEntryInUseObject;
+use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\SubSection\CrossReferenceSubSection;
+use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\SubSection\Entry\CrossReferenceEntryFreeObject;
+use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\SubSection\Entry\CrossReferenceEntryInUseObject;
+use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\Table\CrossReferenceSource;
+use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\Table\CrossReferenceTableParser;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Stream;
 
@@ -50,7 +50,7 @@ class CrossReferenceTableParserTest extends TestCase {
             EOD
         );
         static::assertEquals(
-            new CrossReferenceTable(
+            new CrossReferenceSource(
                 new CrossReferenceSubSection(
                     0,
                     6,
@@ -91,7 +91,7 @@ class CrossReferenceTableParserTest extends TestCase {
             EOD
         );
         static::assertEquals(
-            new CrossReferenceTable(
+            new CrossReferenceSource(
                 (new CrossReferenceSubSection(
                     0,
                     1,

@@ -1,9 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable;
+namespace PrinsFrank\PdfParser\Document\CrossReference\Table;
 
-use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\Entry\CrossReferenceEntryFreeObject;
-use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\Entry\CrossReferenceEntryInUseObject;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\CrossReferenceSource;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\CrossReferenceSubSection;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry\CrossReferenceEntryFreeObject;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry\CrossReferenceEntryInUseObject;
 use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Exception\InvalidCrossReferenceLineException;
@@ -11,7 +13,7 @@ use PrinsFrank\PdfParser\Stream;
 
 class CrossReferenceTableParser {
     /** @throws InvalidCrossReferenceLineException */
-    public static function parse(Stream $stream, int $startPos, int $nrOfBytes): CrossReferenceTable {
+    public static function parse(Stream $stream, int $startPos, int $nrOfBytes): CrossReferenceSource {
         $objectNumber = $nrOfEntries = null;
         $crossReferenceSubSections = $crossReferenceEntries = [];
         $content = trim($stream->read($startPos + strlen(Marker::XREF->value . PHP_EOL), $nrOfBytes - strlen(Marker::XREF->value . PHP_EOL)));
@@ -28,9 +30,9 @@ class CrossReferenceTableParser {
                     $nrOfEntries = (int) $sections[1];
                     break;
                 case 3:
-                    $crossReferenceEntries[] = match (ObjectInUseOrFreeCharacter::from(trim($sections[2]))) {
-                        ObjectInUseOrFreeCharacter::IN_USE => new CrossReferenceEntryInUseObject((int) $sections[0], (int) $sections[1]),
-                        ObjectInUseOrFreeCharacter::FREE => new CrossReferenceEntryFreeObject((int) $sections[0], (int) $sections[1]),
+                    $crossReferenceEntries[] = match (CrossReferenceTableInUseOrFree::from(trim($sections[2]))) {
+                        CrossReferenceTableInUseOrFree::IN_USE => new CrossReferenceEntryInUseObject((int) $sections[0], (int) $sections[1]),
+                        CrossReferenceTableInUseOrFree::FREE => new CrossReferenceEntryFreeObject((int) $sections[0], (int) $sections[1]),
                     };
                     break;
                 default:
@@ -42,6 +44,6 @@ class CrossReferenceTableParser {
             $crossReferenceSubSections[] = new CrossReferenceSubSection($objectNumber, $nrOfEntries, ... $crossReferenceEntries);
         }
 
-        return new CrossReferenceTable(... $crossReferenceSubSections);
+        return new CrossReferenceSource(null, ... $crossReferenceSubSections);
     }
 }

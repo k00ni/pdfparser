@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream;
+namespace PrinsFrank\PdfParser\Document\CrossReference\Stream;
 
 enum CrossReferenceStreamType: int {
     case LINKED_LIST_FREE_OBJECT = 0;

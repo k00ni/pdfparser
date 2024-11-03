@@ -1,16 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable;
+namespace PrinsFrank\PdfParser\Document\CrossReference\Source;
 
-use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceSource;
-use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\Entry\CrossReferenceEntryInUseObject;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\CrossReferenceSubSection;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry\CrossReferenceEntryInUseObject;
+use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 
-class CrossReferenceTable implements CrossReferenceSource {
+/** Can be both from a crossReferenceTable or a crossReferenceStream */
+class CrossReferenceSource {
     /** @param list<CrossReferenceSubSection> $crossReferenceSubSections */
     public readonly array $crossReferenceSubSections;
 
     public function __construct(
+        public readonly ?Dictionary $dictionary,
         CrossReferenceSubSection... $crossReferenceSubSections,
     ) {
         $this->crossReferenceSubSections = $crossReferenceSubSections;

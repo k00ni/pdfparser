@@ -1,21 +1,21 @@
 <?php
 declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable;
+namespace PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection;
 
-use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\Entry\CrossReferenceEntryFreeObject;
-use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\Entry\CrossReferenceEntryInUseObject;
-use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry\CompressedObjectEntry;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry\CrossReferenceEntryFreeObject;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry\CrossReferenceEntryInUseObject;
 use RuntimeException;
 
 class CrossReferenceSubSection {
-    /** @var array<CrossReferenceEntryInUseObject|CrossReferenceEntryFreeObject> */
+    /** @var array<CrossReferenceEntryInUseObject|CrossReferenceEntryFreeObject|CompressedObjectEntry> */
     public array $crossReferenceEntries = [];
 
     public function __construct(
         public readonly int $firstObjectNumber,
         public readonly int $nrOfEntries,
-        CrossReferenceEntryInUseObject|CrossReferenceEntryFreeObject... $crossReferenceEntries
+        CrossReferenceEntryInUseObject|CrossReferenceEntryFreeObject|CompressedObjectEntry... $crossReferenceEntries
     ) {
         //        if ($this->nrOfEntries !== count($crossReferenceEntries)) {
         //            throw new InvalidArgumentException(sprintf('Cross reference subsection defines %d entries, got %d', $this->nrOfEntries, count($crossReferenceEntries)));

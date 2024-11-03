@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document;
 
-use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceSource;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\CrossReferenceSource;
 
 use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\CrossReferenceStream;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;

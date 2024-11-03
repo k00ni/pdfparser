@@ -1,11 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream;
+namespace PrinsFrank\PdfParser\Document\CrossReference\Stream;
 
-use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\Entry\CompressedObjectEntry;
-use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\Entry\LinkedListFreeObjectEntry;
-use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\Entry\NullObjectEntry;
-use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\Entry\UncompressedDataEntry;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\CrossReferenceSource;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\CrossReferenceSubSection;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry\CompressedObjectEntry;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry\CrossReferenceEntryFreeObject;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry\CrossReferenceEntryInUseObject;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TypeNameValue;
@@ -20,7 +21,7 @@ class CrossReferenceStreamParser {
      * @param positive-int $nrOfBytes
      * @throws ParseFailureException
      */
-    public static function parse(Stream $stream, int $startPos, int $nrOfBytes): CrossReferenceStream {
+    public static function parse(Stream $stream, int $startPos, int $nrOfBytes): CrossReferenceSource {
         $dictionary = DictionaryParser::parse($stream, $startPos, $nrOfBytes);
         $dictionaryType = $dictionary->getEntryWithKey(DictionaryKey::TYPE)?->value;
         if ($dictionaryType !== TypeNameValue::X_REF) {
@@ -47,18 +48,28 @@ class CrossReferenceStreamParser {
         $byteLengthRecord3 = ((int) ($wValue[2] ?? 0)) * 2;
         $entries = [];
         foreach (str_split(bin2hex(ObjectStreamContentParser::parse($stream, $startStream + strlen(Marker::STREAM->value), $endStream - $startStream - strlen(Marker::STREAM->value), $dictionary)), $byteLengthRecord1 + $byteLengthRecord2 + $byteLengthRecord3) as $referenceRow) {
-            $field1 = CrossReferenceStreamType::tryFrom(hexdec(substr($referenceRow, 0, $byteLengthRecord1)));
+            $field1 = CrossReferenceStreamType::tryFrom($typeNr = hexdec(substr($referenceRow, 0, $byteLengthRecord1)));
             $field2 = hexdec(substr($referenceRow, $byteLengthRecord1, $byteLengthRecord2));
             $field3 = hexdec(substr($referenceRow, $byteLengthRecord2 + $byteLengthRecord1, $byteLengthRecord3));
 
             $entries[] = match ($field1) {
-                CrossReferenceStreamType::LINKED_LIST_FREE_OBJECT => new LinkedListFreeObjectEntry($field2, $field3),
-                CrossReferenceStreamType::UNCOMPRESSED_OBJECT => new UncompressedDataEntry($field2, $field3),
+                CrossReferenceStreamType::LINKED_LIST_FREE_OBJECT => new CrossReferenceEntryFreeObject($field2, $field3),
+                CrossReferenceStreamType::UNCOMPRESSED_OBJECT => new CrossReferenceEntryInUseObject($field2, $field3),
                 CrossReferenceStreamType::COMPRESSED_OBJECT => new CompressedObjectEntry($field2, $field3),
-                null => new NullObjectEntry(),
+                null => throw new ParseFailureException(sprintf('Unrecognized CrossReferenceStream type "%s"', $typeNr)),
             };
         }
 
-        return new CrossReferenceStream($dictionary, ... $entries);
+        /** @var list<int> $startObjNrOfItemsArray where all even items are the start object number and all odd items are the number of objects */
+        $startObjNrOfItemsArray = $dictionary->getEntryWithKey(DictionaryKey::INDEX)->value->value
+            ?? [0, $dictionary->getEntryWithKey(DictionaryKey::SIZE)->value->value];
+
+        $crossReferenceSubSections = [];
+        foreach (array_chunk($startObjNrOfItemsArray, 2) as $startNrNrOfObjects) {
+            $crossReferenceSubSections[] = new CrossReferenceSubSection($startNrNrOfObjects[0], $startObjNrOfItemsArray[1], ... array_slice($entries, 0, $startNrNrOfObjects[1]));
+            $entries = array_slice($entries, $startNrNrOfObjects[1]);
+        }
+
+        return new CrossReferenceSource($dictionary, ... $crossReferenceSubSections);
     }
 }
