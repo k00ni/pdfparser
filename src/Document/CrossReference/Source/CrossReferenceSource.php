@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document\CrossReference\Source;
 
 use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\CrossReferenceSubSection;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry\CrossReferenceEntryCompressed;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry\CrossReferenceEntryInUseObject;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 
@@ -19,7 +20,7 @@ class CrossReferenceSource {
         $this->crossReferenceSubSections = $crossReferenceSubSections;
     }
 
-    public function getCrossReferenceEntry(int $objNumber): ?CrossReferenceEntryInUseObject {
+    public function getCrossReferenceEntry(int $objNumber): CrossReferenceEntryInUseObject|CrossReferenceEntryCompressed|null {
         foreach ($this->crossReferenceSubSections as $crossReferenceSubSection) {
             if ($crossReferenceSubSection->containsObject($objNumber)) {
                 return $crossReferenceSubSection->getCrossReferenceEntry($objNumber);

@@ -3,6 +3,7 @@
 namespace PrinsFrank\PdfParser\Document\Object;
 
 use PrinsFrank\PdfParser\Document\CrossReference\Source\CrossReferenceSource;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry\CrossReferenceEntryCompressed;
 use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Document\Trailer\Trailer;
@@ -14,6 +15,10 @@ class ObjectItemParser {
         $crossReferenceEntry = $crossReferenceSource->getCrossReferenceEntry($objectNumber);
         if ($crossReferenceEntry === null) {
             throw new ParseFailureException(sprintf('No crossReference entry found for object with number %d', $objectNumber));
+        }
+
+        if ($crossReferenceEntry instanceof CrossReferenceEntryCompressed) {
+            throw new ParseFailureException('Compressed objects are currently not supported');
         }
 
         $nextByteOffset = $crossReferenceSource->getNextByteOffset($crossReferenceEntry->byteOffsetInDecodedStream) ?? $trailer->startTrailerMarkerPos;

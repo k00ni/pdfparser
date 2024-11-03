@@ -3,19 +3,19 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection;
 
-use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry\CompressedObjectEntry;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry\CrossReferenceEntryCompressed;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry\CrossReferenceEntryFreeObject;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry\CrossReferenceEntryInUseObject;
 use RuntimeException;
 
 class CrossReferenceSubSection {
-    /** @var array<CrossReferenceEntryInUseObject|CrossReferenceEntryFreeObject|CompressedObjectEntry> */
+    /** @var array<CrossReferenceEntryInUseObject|CrossReferenceEntryFreeObject|CrossReferenceEntryCompressed> */
     public array $crossReferenceEntries = [];
 
     public function __construct(
         public readonly int $firstObjectNumber,
         public readonly int $nrOfEntries,
-        CrossReferenceEntryInUseObject|CrossReferenceEntryFreeObject|CompressedObjectEntry... $crossReferenceEntries
+        CrossReferenceEntryInUseObject|CrossReferenceEntryFreeObject|CrossReferenceEntryCompressed... $crossReferenceEntries
     ) {
         //        if ($this->nrOfEntries !== count($crossReferenceEntries)) {
         //            throw new InvalidArgumentException(sprintf('Cross reference subsection defines %d entries, got %d', $this->nrOfEntries, count($crossReferenceEntries)));
@@ -29,7 +29,7 @@ class CrossReferenceSubSection {
             && $objNumber < $this->firstObjectNumber + $this->nrOfEntries;
     }
 
-    public function getCrossReferenceEntry(int $objNumber): ?CrossReferenceEntryInUseObject {
+    public function getCrossReferenceEntry(int $objNumber): CrossReferenceEntryInUseObject|CrossReferenceEntryCompressed|null {
         if (self::containsObject($objNumber) === false) {
             return null;
         }

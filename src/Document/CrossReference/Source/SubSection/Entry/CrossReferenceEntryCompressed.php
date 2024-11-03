@@ -3,7 +3,7 @@
 namespace PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry;
 
 /** 7.5.8, Table 18, only present in crossReferenceStreams */
-class CompressedObjectEntry {
+class CrossReferenceEntryCompressed {
     /**
      * @see Table 18
      *
