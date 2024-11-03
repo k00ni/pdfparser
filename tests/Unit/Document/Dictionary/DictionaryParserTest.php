@@ -58,6 +58,23 @@ class DictionaryParserTest extends TestCase {
         );
     }
 
+    public function testParseCrossReferencePaddedArrayValues(): void {
+        static::assertEquals(
+            new Dictionary(
+                new DictionaryEntry(DictionaryKey::INDEX, new ArrayValue([0, 16])),
+            ),
+            DictionaryParser::parse(
+                $stream = Stream::fromString(
+                    '<<' . PHP_EOL .
+                    '/Index [ 0 16 ]' . PHP_EOL .
+                    '>>',
+                ),
+                0,
+                $stream->getSizeInBytes(),
+            )
+        );
+    }
+
     public function testObjectStream(): void {
         static::assertEquals(
             new Dictionary(
