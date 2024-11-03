@@ -25,9 +25,8 @@ final class Document {
 
     public function getCatalog(): ?ObjectItem {
         /** @var ReferenceValue|null $catalogReference */
-        $catalogReference = $this->crossReferenceSource instanceof CrossReferenceStream
-            ? $this->crossReferenceSource->dictionary->getEntryWithKey(DictionaryKey::ROOT)->value
-            : $this->trailer->dictionary->getEntryWithKey(DictionaryKey::ROOT)->value;
+        $catalogReference = $this->crossReferenceSource->dictionary?->getEntryWithKey(DictionaryKey::ROOT)->value
+            ?? $this->trailer->dictionary->getEntryWithKey(DictionaryKey::ROOT)->value;
         if ($catalogReference instanceof ReferenceValue === false) {
             return null;
         }
