@@ -27,7 +27,7 @@ enum FilterNameValue: string implements NameValue {
         return match($this) {
             self::DCT_DECODE => $content, // Dont decode JPEG content
             self::FLATE_DECODE => FlateDecode::decode($content),
-            default => throw new ParseFailureException('Content "' . $content . '" cannot be decoded for filter "' . $filter->name . '"')
+            default => throw new ParseFailureException('Content "' . $content . '" cannot be decoded for filter "' . $this->name . '"')
         };
     }
 }
