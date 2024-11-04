@@ -32,6 +32,6 @@ class ArrayValue implements DictionaryValueType {
             }
         }
 
-        return new self($array);
+        return new static($array);
     }
 }

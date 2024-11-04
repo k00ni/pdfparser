@@ -21,7 +21,7 @@ class DictionaryEntryFactory {
             foreach ($dictionaryValue as $dictionaryItemKey => $dictionaryItemValue) {
                 $arrayValues[] = self::fromKeyValuePair($dictionaryItemKey, $dictionaryItemValue);
             }
-            $value = new ArrayValue($arrayValues);
+            $value = DictionaryValue::fromValueArray($dictionaryKey, $arrayValues);
         } else {
             $value = DictionaryValue::fromValueString($dictionaryKey, $dictionaryValue);
         }

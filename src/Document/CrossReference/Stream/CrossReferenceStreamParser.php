@@ -9,6 +9,7 @@ use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry\CrossRe
 use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry\CrossReferenceEntryInUseObject;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Array\WValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamContent\ObjectStreamContentParser;
@@ -28,8 +29,8 @@ class CrossReferenceStreamParser {
             throw new ParseFailureException('Expected stream of type xref, got "' . ($dictionaryType?->name ?? 'null') . '" Dictionary: ' . json_encode($dictionary));
         }
 
-        $wValue = $dictionary->getEntryWithKey(DictionaryKey::W)?->value?->value;
-        if ($wValue === null) {
+        $wValue = $dictionary->getEntryWithKey(DictionaryKey::W)?->value;
+        if ($wValue instanceof WValue === false) {
             throw new ParseFailureException('Missing W value, can\'t decode xref stream.');
         }
 
@@ -43,14 +44,11 @@ class CrossReferenceStreamParser {
             throw new ParseFailureException(sprintf('Expected end of stream content marked by %s, none found', Marker::END_STREAM->value));
         }
 
-        $byteLengthRecord1 = ((int) ($wValue[0] ?? 0)) * 2;
-        $byteLengthRecord2 = ((int) ($wValue[1] ?? 0)) * 2;
-        $byteLengthRecord3 = ((int) ($wValue[2] ?? 0)) * 2;
         $entries = [];
-        foreach (str_split(bin2hex(ObjectStreamContentParser::parse($stream, $startStream + strlen(Marker::STREAM->value), $endStream - $startStream - strlen(Marker::STREAM->value), $dictionary)), $byteLengthRecord1 + $byteLengthRecord2 + $byteLengthRecord3) as $referenceRow) {
-            $field1 = CrossReferenceStreamType::tryFrom($typeNr = hexdec(substr($referenceRow, 0, $byteLengthRecord1)));
-            $field2 = hexdec(substr($referenceRow, $byteLengthRecord1, $byteLengthRecord2));
-            $field3 = hexdec(substr($referenceRow, $byteLengthRecord2 + $byteLengthRecord1, $byteLengthRecord3));
+        foreach (str_split(bin2hex(ObjectStreamContentParser::parse($stream, $startStream + strlen(Marker::STREAM->value), $endStream - $startStream - strlen(Marker::STREAM->value), $dictionary)), $wValue->getTotalLengthInBytes()) as $referenceRow) {
+            $field1 = CrossReferenceStreamType::tryFrom($typeNr = hexdec(substr($referenceRow, 0, $wValue->getLengthRecord1InBytes())));
+            $field2 = hexdec(substr($referenceRow, $wValue->getLengthRecord1InBytes(), $wValue->getLengthRecord2InBytes()));
+            $field3 = hexdec(substr($referenceRow, $wValue->getLengthRecord1InBytes() + $wValue->getLengthRecord2InBytes(), $wValue->getLengthRecord3InBytes()));
 
             $entries[] = match ($field1) {
                 CrossReferenceStreamType::LINKED_LIST_FREE_OBJECT => new CrossReferenceEntryFreeObject($field2, $field3),

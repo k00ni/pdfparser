@@ -5,6 +5,7 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue;
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Array\ArrayValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Array\WValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Date\DateValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\DictionaryValueType;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Float\FloatValue;
@@ -35,8 +36,8 @@ class DictionaryValue {
                 DictionaryKey::MATRIX,
                 DictionaryKey::RECT,
                 DictionaryKey::BORDER,
-                DictionaryKey::ARTBOX,
-                DictionaryKey::W => ArrayValue::fromValue($valueString),
+                DictionaryKey::ARTBOX => ArrayValue::fromValue($valueString),
+                DictionaryKey::W => WValue::fromValue($valueString),
                 DictionaryKey::COLUMNS,
                 DictionaryKey::PREDICTOR,
                 DictionaryKey::PREVIOUS,
@@ -170,6 +171,29 @@ class DictionaryValue {
                 DictionaryKey::MEDIABOX => Rectangle::fromValue($valueString),
                 DictionaryKey::SUBTYPE => SubtypeNameValue::fromValue($valueString),
                 default => throw new ParseFailureException('Dictionary key "' . $dictionaryKey->name . '" is not supported (' . $valueString . ')'),
+            };
+        } catch (Throwable $e) {
+            throw new ParseFailureException($e->getMessage() . ' for dictionary key of type "' . $dictionaryKey->value . '"');
+        }
+    }
+
+    /** @throws ParseFailureException */
+    public static function fromValueArray(DictionaryKey $dictionaryKey, array $valueArray): TrappedNameValue|DictionaryValueType|TypeNameValue|SubtypeNameValue|FilterNameValue {
+        try {
+            return match ($dictionaryKey) {
+                DictionaryKey::INDEX,
+                DictionaryKey::ID,
+                DictionaryKey::CROP_BOX,
+                DictionaryKey::B_BOX,
+                DictionaryKey::MATRIX,
+                DictionaryKey::RECT,
+                DictionaryKey::BORDER,
+                DictionaryKey::DECODE_PARAMS,
+                DictionaryKey::RESOURCES,
+                DictionaryKey::FONT,
+                DictionaryKey::ARTBOX => new ArrayValue($valueArray),
+                DictionaryKey::W => new WValue($valueArray),
+                default => throw new ParseFailureException('Dictionary key "' . $dictionaryKey->name . '" is not supported.'),
             };
         } catch (Throwable $e) {
             throw new ParseFailureException($e->getMessage() . ' for dictionary key of type "' . $dictionaryKey->value . '"');
