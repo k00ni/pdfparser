@@ -49,11 +49,8 @@ class CrossReferenceStreamParser {
         $startStreamContent = $stream->getStartOfNextLine($startStream, $endStream)
             ?? throw new ParseFailureException('Unable to find start of stream content');
 
-        $endStreamContent = $stream->getEndOfCurrentLine($startStreamContent, $endStream)
-            ?? throw new ParseFailureException('Unable to find start of stream content');
-
         $entries = [];
-        $hexContent = ObjectStreamContentParser::parse($stream, $startStreamContent, $endStreamContent - $startStreamContent, $dictionary);
+        $hexContent = ObjectStreamContentParser::parse($stream, $startStreamContent, $endStream - $startStreamContent - 1, $dictionary);
         foreach (str_split($hexContent, $wValue->getTotalLengthInBytes() * self::HEX_CHARS_IN_BYTE) as $referenceRow) {
             $field1 = CrossReferenceStreamType::tryFrom($typeNr = hexdec(substr($referenceRow, 0, $wValue->getLengthRecord1InBytes() * self::HEX_CHARS_IN_BYTE)));
             $field2 = hexdec(substr($referenceRow, $wValue->getLengthRecord1InBytes() * self::HEX_CHARS_IN_BYTE, $wValue->getLengthRecord2InBytes() * self::HEX_CHARS_IN_BYTE));
