@@ -44,11 +44,18 @@ class CrossReferenceStreamParser {
             throw new ParseFailureException(sprintf('Expected end of stream content marked by %s, none found', Marker::END_STREAM->value));
         }
 
+        $startStreamContent = $stream->getStartOfNextLine($startStream, $endStream)
+            ?? throw new ParseFailureException('Unable to find start of stream content');
+
+        $endStreamContent = $stream->getEndOfCurrentLine($startStreamContent, $endStream)
+            ?? throw new ParseFailureException('Unable to find start of stream content');
+
         $entries = [];
-        foreach (str_split(bin2hex(ObjectStreamContentParser::parse($stream, $startStream + strlen(Marker::STREAM->value), $endStream - $startStream - strlen(Marker::STREAM->value), $dictionary)), $wValue->getTotalLengthInBytes()) as $referenceRow) {
-            $field1 = CrossReferenceStreamType::tryFrom($typeNr = hexdec(substr($referenceRow, 0, $wValue->getLengthRecord1InBytes())));
-            $field2 = hexdec(substr($referenceRow, $wValue->getLengthRecord1InBytes(), $wValue->getLengthRecord2InBytes()));
-            $field3 = hexdec(substr($referenceRow, $wValue->getLengthRecord1InBytes() + $wValue->getLengthRecord2InBytes(), $wValue->getLengthRecord3InBytes()));
+        $binaryContent = ObjectStreamContentParser::parse($stream, $startStreamContent, $endStreamContent - $startStreamContent, $dictionary);
+        foreach (str_split($binaryContent, $wValue->getTotalLengthInBytes()) as $referenceRow) {
+            $field1 = CrossReferenceStreamType::tryFrom($typeNr = bindec(substr($referenceRow, 0, $wValue->getLengthRecord1InBytes())));
+            $field2 = bindec(substr($referenceRow, $wValue->getLengthRecord1InBytes(), $wValue->getLengthRecord2InBytes()));
+            $field3 = bindec(substr($referenceRow, $wValue->getLengthRecord1InBytes() + $wValue->getLengthRecord2InBytes(), $wValue->getLengthRecord3InBytes()));
 
             $entries[] = match ($field1) {
                 CrossReferenceStreamType::LINKED_LIST_FREE_OBJECT => new CrossReferenceEntryFreeObject($field2, $field3),
