@@ -17,6 +17,8 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream;
 
 class CrossReferenceStreamParser {
+    private const HEX_CHARS_IN_BYTE = 2;
+
     /**
      * @param positive-int $startPos
      * @param positive-int $nrOfBytes
@@ -51,11 +53,11 @@ class CrossReferenceStreamParser {
             ?? throw new ParseFailureException('Unable to find start of stream content');
 
         $entries = [];
-        $binaryContent = ObjectStreamContentParser::parse($stream, $startStreamContent, $endStreamContent - $startStreamContent, $dictionary);
-        foreach (str_split($binaryContent, $wValue->getTotalLengthInBytes()) as $referenceRow) {
-            $field1 = CrossReferenceStreamType::tryFrom($typeNr = bindec(substr($referenceRow, 0, $wValue->getLengthRecord1InBytes())));
-            $field2 = bindec(substr($referenceRow, $wValue->getLengthRecord1InBytes(), $wValue->getLengthRecord2InBytes()));
-            $field3 = bindec(substr($referenceRow, $wValue->getLengthRecord1InBytes() + $wValue->getLengthRecord2InBytes(), $wValue->getLengthRecord3InBytes()));
+        $hexContent = ObjectStreamContentParser::parse($stream, $startStreamContent, $endStreamContent - $startStreamContent, $dictionary);
+        foreach (str_split($hexContent, $wValue->getTotalLengthInBytes() * self::HEX_CHARS_IN_BYTE) as $referenceRow) {
+            $field1 = CrossReferenceStreamType::tryFrom($typeNr = hexdec(substr($referenceRow, 0, $wValue->getLengthRecord1InBytes() * self::HEX_CHARS_IN_BYTE)));
+            $field2 = hexdec(substr($referenceRow, $wValue->getLengthRecord1InBytes() * self::HEX_CHARS_IN_BYTE, $wValue->getLengthRecord2InBytes() * self::HEX_CHARS_IN_BYTE));
+            $field3 = hexdec(substr($referenceRow, ($wValue->getLengthRecord1InBytes() + $wValue->getLengthRecord2InBytes()) * self::HEX_CHARS_IN_BYTE, $wValue->getLengthRecord3InBytes() * self::HEX_CHARS_IN_BYTE));
 
             $entries[] = match ($field1) {
                 CrossReferenceStreamType::LINKED_LIST_FREE_OBJECT => new CrossReferenceEntryFreeObject($field2, $field3),

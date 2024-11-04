@@ -13,9 +13,8 @@ class ObjectStreamContentParser {
     /** @throws ParseFailureException */
     public static function parse(Stream $stream, int $startPos, int $nrOfBytes, Dictionary $dictionary): ?string {
         $streamContent = $stream->read($startPos, $nrOfBytes);
-        $streamFilter = $dictionary->getEntryWithKey(DictionaryKey::FILTER)?->value;
-        if ($streamFilter instanceof FilterNameValue) {
-            $streamContent = $streamFilter->decode($streamContent);
+        if (($streamFilter = $dictionary->getEntryWithKey(DictionaryKey::FILTER)?->value) instanceof FilterNameValue) {
+            $streamContent = $streamFilter->decode($streamContent, $dictionary->getEntryWithKey(DictionaryKey::DECODE_PARAMS)?->value);
         }
 
         return $streamContent;

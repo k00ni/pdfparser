@@ -3,7 +3,10 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name;
 
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Filter\Decode\FlateDecode;
+use PrinsFrank\PdfParser\Document\Filter\Decode\LZWFlatePredictorValue;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 enum FilterNameValue: string implements NameValue {
@@ -23,10 +26,14 @@ enum FilterNameValue: string implements NameValue {
     }
 
     /** @throws ParseFailureException */
-    public function decode(string $content): ?string {
+    public function decode(string $content, ?ArrayValue $decodeParams): ?string {
         return match($this) {
             self::DCT_DECODE => $content, // Dont decode JPEG content
-            self::FLATE_DECODE => FlateDecode::decode($content),
+            self::FLATE_DECODE => FlateDecode::decode(
+                $content,
+                LZWFlatePredictorValue::from((int) $decodeParams->getEntryWithKey(DictionaryKey::PREDICTOR)?->value->value),
+                $decodeParams->getEntryWithKey(DictionaryKey::COLUMNS)?->value->value
+            ),
             default => throw new ParseFailureException('Content "' . $content . '" cannot be decoded for filter "' . $this->name . '"')
         };
     }

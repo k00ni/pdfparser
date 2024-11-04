@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Array;
 
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\DictionaryValueType;
 use PrinsFrank\PdfParser\Exception\InvalidDictionaryValueTypeFormatException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
@@ -33,5 +35,19 @@ class ArrayValue implements DictionaryValueType {
         }
 
         return new static($array);
+    }
+
+    public function getEntryWithKey(DictionaryKey $dictionaryKey): ?DictionaryEntry {
+        foreach ($this->value as $entry) {
+            if ($entry instanceof DictionaryEntry === false) {
+                continue;
+            }
+
+            if ($entry->key === $dictionaryKey) {
+                return $entry;
+            }
+        }
+
+        return null;
     }
 }
