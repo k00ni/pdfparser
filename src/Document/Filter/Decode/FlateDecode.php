@@ -31,10 +31,10 @@ class FlateDecode {
                 }
 
                 foreach ($row as $columnIndex => $columnValue) {
-                    $row[$columnIndex] = str_pad(dechex((hexdec($columnValue) + hexdec($hexTable[$rowIndex - 1][$columnIndex])) % 255), 2, '0', STR_PAD_LEFT);
+                    $hexTable[$rowIndex][$columnIndex] = str_pad(dechex((hexdec($columnValue) + hexdec($hexTable[$rowIndex - 1][$columnIndex])) % 256), 2, '0', STR_PAD_LEFT);
                 }
 
-                $decodedValue .= implode('', array_slice($row, 1));
+                $decodedValue .= implode('', array_slice($hexTable[$rowIndex], 1));
             }
         }
 
