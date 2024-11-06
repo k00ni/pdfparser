@@ -4,6 +4,7 @@ namespace PrinsFrank\PdfParser\Document\Object;
 
 use PrinsFrank\PdfParser\Document\CrossReference\Source\CrossReferenceSource;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry\CrossReferenceEntryCompressed;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry\CrossReferenceEntryInUseObject;
 use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Document\Trailer\Trailer;
@@ -11,16 +12,13 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream;
 
 class ObjectItemParser {
-    public static function parseObject(int $objectNumber, CrossReferenceSource $crossReferenceSource, Stream $stream, Trailer $trailer): ObjectItem {
-        $crossReferenceEntry = $crossReferenceSource->getCrossReferenceEntry($objectNumber);
-        if ($crossReferenceEntry === null) {
-            throw new ParseFailureException(sprintf('No crossReference entry found for object with number %d', $objectNumber));
-        }
-
-        if ($crossReferenceEntry instanceof CrossReferenceEntryCompressed) {
-            throw new ParseFailureException('Compressed objects are currently not supported');
-        }
-
+    public static function parseObject(
+        CrossReferenceEntryInUseObject $crossReferenceEntry,
+        int $objectNumber,
+        CrossReferenceSource $crossReferenceSource,
+        Stream $stream,
+        Trailer $trailer
+    ): ObjectItem {
         $nextByteOffset = $crossReferenceSource->getNextByteOffset($crossReferenceEntry->byteOffsetInDecodedStream) ?? $trailer->startTrailerMarkerPos;
         $objHeader = $stream->read($crossReferenceEntry->byteOffsetInDecodedStream, $stream->strpos(Marker::OBJ->value, $crossReferenceEntry->byteOffsetInDecodedStream, $nextByteOffset) + strlen(Marker::OBJ->value) - $crossReferenceEntry->byteOffsetInDecodedStream);
         $objHeaderParts = explode(WhitespaceCharacter::SPACE->value, str_replace([WhitespaceCharacter::LINE_FEED->value], ' ', trim($objHeader)));
