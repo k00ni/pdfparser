@@ -50,7 +50,7 @@ class TrailerSectionParser {
         }
 
         if ($byteOffsetLastCrossReferenceSection > $stream->getSizeInBytes()) {
-            throw new ParseFailureException(sprintf('Invalid byte offset: position of last crossReference section %d is greater than total size of stream %d', (int) $byteOffsetLastCrossReferenceSection, $stream->getSizeInBytes()));
+            throw new ParseFailureException(sprintf('Invalid byte offset: position of last crossReference section %d is greater than total size of stream %d. Should this be %d?', (int) $byteOffsetLastCrossReferenceSection, $stream->getSizeInBytes(), $stream->strrpos(Marker::XREF->value, $stream->getSizeInBytes() - $startXrefMarkerPos) ?? $stream->strrpos(Marker::OBJ->value, $stream->getSizeInBytes() - $startXrefMarkerPos)));
         }
 
         $trailerMarkerPos = $stream->strrpos(Marker::TRAILER->value, $stream->getSizeInBytes() - $startXrefMarkerPos);
