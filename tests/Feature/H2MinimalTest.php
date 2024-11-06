@@ -5,9 +5,10 @@ namespace PrinsFrank\PdfParser\Tests\Feature;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\CrossReferenceSource;
-use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\CrossReferenceSubSection;
-use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry\CrossReferenceEntryFreeObject;
-use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry\CrossReferenceEntryInUseObject;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\CrossReferenceSection;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\CrossReferenceSubSection;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryFreeObject;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryInUseObject;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
@@ -37,31 +38,23 @@ class H2MinimalTest extends TestCase {
 
         static::assertSame(Version::V1_4, $document->version);
         static::assertEquals(
-            new Trailer(
-                598,
-                584,
-                408,
-                550,
-                new Dictionary(
-                    new DictionaryEntry(DictionaryKey::SIZE, new IntegerValue(7)),
-                    new DictionaryEntry(DictionaryKey::ROOT, new ReferenceValue(1, 0)),
-                ),
-            ),
-            $document->trailer
-        );
-        static::assertEquals(
             new CrossReferenceSource(
-                null,
-                new CrossReferenceSubSection(
-                    0,
-                    7,
-                    new CrossReferenceEntryFreeObject(0, 65535),
-                    new CrossReferenceEntryInUseObject(9, 0),
-                    new CrossReferenceEntryInUseObject(74, 0),
-                    new CrossReferenceEntryInUseObject(120, 0),
-                    new CrossReferenceEntryInUseObject(179, 0),
-                    new CrossReferenceEntryInUseObject(300, 0),
-                    new CrossReferenceEntryInUseObject(384, 0),
+                new CrossReferenceSection(
+                    new Dictionary(
+                        new DictionaryEntry(DictionaryKey::SIZE, new IntegerValue(7)),
+                        new DictionaryEntry(DictionaryKey::ROOT, new ReferenceValue(1, 0)),
+                    ),
+                    new CrossReferenceSubSection(
+                        0,
+                        7,
+                        new CrossReferenceEntryFreeObject(0, 65535),
+                        new CrossReferenceEntryInUseObject(9, 0),
+                        new CrossReferenceEntryInUseObject(74, 0),
+                        new CrossReferenceEntryInUseObject(120, 0),
+                        new CrossReferenceEntryInUseObject(179, 0),
+                        new CrossReferenceEntryInUseObject(300, 0),
+                        new CrossReferenceEntryInUseObject(384, 0),
+                    ),
                 )
             ),
             $document->crossReferenceSource,
@@ -161,7 +154,7 @@ class H2MinimalTest extends TestCase {
                 6,
                 0,
                 384,
-                550,
+                407,
             ),
             $obj6,
         );

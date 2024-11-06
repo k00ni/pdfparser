@@ -4,9 +4,7 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document;
 
 use PrinsFrank\PdfParser\Document\CrossReference\Source\CrossReferenceSource;
-
-use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceStream\CrossReferenceStream;
-use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry\CrossReferenceEntryCompressed;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryCompressed;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Object\ObjectItem;
@@ -21,14 +19,11 @@ final class Document {
         public readonly Stream               $stream,
         public readonly Version              $version,
         public readonly CrossReferenceSource $crossReferenceSource,
-        public readonly Trailer              $trailer,
     ) {
     }
 
     public function getCatalog(): ?ObjectItem {
-        /** @var ReferenceValue|null $catalogReference */
-        $catalogReference = $this->crossReferenceSource->dictionary?->getEntryWithKey(DictionaryKey::ROOT)->value
-            ?? $this->trailer->dictionary->getEntryWithKey(DictionaryKey::ROOT)->value;
+        $catalogReference = $this->crossReferenceSource->getRoot();
         if ($catalogReference instanceof ReferenceValue === false) {
             return null;
         }
@@ -51,7 +46,6 @@ final class Document {
             $objectNumber,
             $this->crossReferenceSource,
             $this->stream,
-            $this->trailer,
         );
     }
 }

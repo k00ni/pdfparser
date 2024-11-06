@@ -14,12 +14,10 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Integer\IntegerValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\SubtypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Rectangle\Rectangle;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValueArray;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\TextString\TextStringValue;
 use PrinsFrank\PdfParser\Document\Object\ObjectItem;
 use PrinsFrank\PdfParser\Document\Trailer\Trailer;
 use PrinsFrank\PdfParser\Document\Version\Version;
@@ -29,35 +27,60 @@ use PrinsFrank\PdfParser\PdfParser;
 use PrinsFrank\PdfParser\Stream;
 
 #[CoversNothing]
-class H3SimpleStringTest extends TestCase {
+class H7Stage1UpdatingTest extends TestCase {
     /**
      * @throws InvalidArgumentException
      * @throws PdfParserException
      */
     public function testStructure(): void {
         $document = (new PdfParser())
-            ->parse(Stream::openFile(__DIR__ . '/samples/h3-simple-string.pdf'));
+            ->parse(Stream::openFile(__DIR__ . '/samples/h7-updating-stage-1.pdf'));
 
         static::assertSame(Version::V1_4, $document->version);
         static::assertEquals(
             new CrossReferenceSource(
                 new CrossReferenceSection(
                     new Dictionary(
-                        new DictionaryEntry(DictionaryKey::SIZE, new IntegerValue(8)),
+                        new DictionaryEntry(DictionaryKey::SIZE, new IntegerValue(12)),
+                        new DictionaryEntry(DictionaryKey::ROOT, new ReferenceValue(1, 0)),
+                        new DictionaryEntry(DictionaryKey::PREVIOUS, new IntegerValue(408)),
+                    ),
+                    new CrossReferenceSubSection(
+                        0,
+                        1,
+                        new CrossReferenceEntryFreeObject(0, 65535),
+                    ),
+                    new CrossReferenceSubSection(
+                        4,
+                        1,
+                        new CrossReferenceEntryInUseObject(632, 0),
+                    ),
+                    new CrossReferenceSubSection(
+                        7,
+                        5,
+                        new CrossReferenceEntryInUseObject(810, 0),
+                        new CrossReferenceEntryInUseObject(883, 0),
+                        new CrossReferenceEntryInUseObject(1024, 0),
+                        new CrossReferenceEntryInUseObject(1167, 0),
+                        new CrossReferenceEntryInUseObject(1309, 0),
+                    ),
+                ),
+                new CrossReferenceSection(
+                    new Dictionary(
+                        new DictionaryEntry(DictionaryKey::SIZE, new IntegerValue(7)),
                         new DictionaryEntry(DictionaryKey::ROOT, new ReferenceValue(1, 0)),
                     ),
                     new CrossReferenceSubSection(
                         0,
-                        8,
+                        7,
                         new CrossReferenceEntryFreeObject(0, 65535),
                         new CrossReferenceEntryInUseObject(9, 0),
                         new CrossReferenceEntryInUseObject(74, 0),
                         new CrossReferenceEntryInUseObject(120, 0),
                         new CrossReferenceEntryInUseObject(179, 0),
-                        new CrossReferenceEntryInUseObject(322, 0),
-                        new CrossReferenceEntryInUseObject(417, 0),
-                        new CrossReferenceEntryInUseObject(447, 0),
-                    ),
+                        new CrossReferenceEntryInUseObject(300, 0),
+                        new CrossReferenceEntryInUseObject(384, 0),
+                    )
                 )
             ),
             $document->crossReferenceSource,
@@ -95,7 +118,7 @@ class H3SimpleStringTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::OUTLINES),
                 new DictionaryEntry(DictionaryKey::COUNT, new IntegerValue(0)),
             ),
-            $obj2->getDictionary($document->stream),
+            $obj2->getDictionary($document->stream)
         );
         $obj3 = $document->getObject(3);
         static::assertEquals(
@@ -113,7 +136,7 @@ class H3SimpleStringTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::KIDS, new ReferenceValueArray(new ReferenceValue(4, 0))),
                 new DictionaryEntry(DictionaryKey::COUNT, new IntegerValue(1)),
             ),
-            $obj3->getDictionary($document->stream),
+            $obj3->getDictionary($document->stream)
         );
         $obj4 = $document->getObject(4);
         static::assertEquals(
@@ -121,7 +144,7 @@ class H3SimpleStringTest extends TestCase {
                 4,
                 0,
                 179,
-                322,
+                300,
             ),
             $obj4,
         );
@@ -131,61 +154,36 @@ class H3SimpleStringTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::PARENT, new ReferenceValue(3, 0)),
                 new DictionaryEntry(DictionaryKey::MEDIABOX, new Rectangle(0.0, 0.0, 0.0, 612.0)),
                 new DictionaryEntry(DictionaryKey::CONTENTS, new ReferenceValueArray(new ReferenceValue(5, 0))),
-                new DictionaryEntry(DictionaryKey::RESOURCES, new ArrayValue(
-                    [
-                        new DictionaryEntry(DictionaryKey::PROCSET, new ReferenceValue(6, 0)),
-                        new DictionaryEntry(DictionaryKey::FONT, new ArrayValue([new DictionaryEntry(DictionaryKey::F, new ReferenceValue(7, 0))])),
-                    ]
-                )),
+                new DictionaryEntry(DictionaryKey::RESOURCES, new ArrayValue([new DictionaryEntry(DictionaryKey::PROCSET, new ReferenceValue(6, 0))])),
             ),
-            $obj4->getDictionary($document->stream),
+            $obj4->getDictionary($document->stream)
         );
         $obj5 = $document->getObject(5);
         static::assertEquals(
             new ObjectItem(
                 5,
                 0,
-                322,
-                417,
+                300,
+                384,
             ),
             $obj5,
         );
         static::assertEquals(
             new Dictionary(
-                new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(73)),
+                new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(35)),
             ),
-            $obj5->getDictionary($document->stream),
+            $obj5->getDictionary($document->stream)
         );
         $obj6 = $document->getObject(6);
         static::assertEquals(
             new ObjectItem(
                 6,
                 0,
-                417,
-                447,
+                384,
+                550,
             ),
             $obj6,
         );
         static::assertNull($obj6->getDictionary($document->stream));
-        $obj7 = $document->getObject(7);
-        static::assertEquals(
-            new ObjectItem(
-                7,
-                0,
-                447,
-                554,
-            ),
-            $obj7,
-        );
-        static::assertEquals(
-            new Dictionary(
-                new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::FONT),
-                new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TYPE_1),
-                new DictionaryEntry(DictionaryKey::NAME, new TextStringValue('/F1')),
-                new DictionaryEntry(DictionaryKey::BASE_FONT, new TextStringValue('/Helvetica')),
-                new DictionaryEntry(DictionaryKey::ENCODING, new TextStringValue('/MacRomanEncoding')),
-            ),
-            $obj7->getDictionary($document->stream),
-        );
     }
 }

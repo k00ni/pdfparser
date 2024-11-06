@@ -2,21 +2,29 @@
 
 namespace PrinsFrank\PdfParser\Document\CrossReference\Table;
 
-use PrinsFrank\PdfParser\Document\CrossReference\Source\CrossReferenceSource;
-use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\CrossReferenceSubSection;
-use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry\CrossReferenceEntryFreeObject;
-use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry\CrossReferenceEntryInUseObject;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\CrossReferenceSection;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\CrossReferenceSubSection;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryFreeObject;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryInUseObject;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Exception\InvalidCrossReferenceLineException;
+use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream;
 
 class CrossReferenceTableParser {
     /** @throws InvalidCrossReferenceLineException */
-    public static function parse(Stream $stream, int $startPos, int $nrOfBytes): CrossReferenceSource {
+    public static function parse(Stream $stream, int $startPos, int $nrOfBytes): CrossReferenceSection {
+        $startTrailerPos = $stream->strpos(Marker::TRAILER->value, $startPos, $startPos + $nrOfBytes)
+            ?? throw new ParseFailureException('Unable to locate trailer for crossReferenceTable');
+        $startDictionaryPos = $stream->strpos(WhitespaceCharacter::LINE_FEED->value, $startTrailerPos, $startPos + $nrOfBytes)
+            ?? throw new ParseFailureException(sprintf('Expected a newline after %s, got none', Marker::TRAILER->value));
+        $dictionary = DictionaryParser::parse($stream, $startDictionaryPos, $nrOfBytes - ($startDictionaryPos - $startPos));
+
         $objectNumber = $nrOfEntries = null;
         $crossReferenceSubSections = $crossReferenceEntries = [];
-        $content = trim($stream->read($startPos + strlen(Marker::XREF->value . PHP_EOL), $nrOfBytes - strlen(Marker::XREF->value . PHP_EOL)));
+        $content = trim($stream->read($startPos, $startDictionaryPos - $startPos - strlen(Marker::TRAILER->value)));
         $content = str_replace([WhitespaceCharacter::CARRIAGE_RETURN->value, WhitespaceCharacter::LINE_FEED->value . WhitespaceCharacter::LINE_FEED->value], WhitespaceCharacter::LINE_FEED->value, $content);
         foreach (explode(WhitespaceCharacter::LINE_FEED->value, $content) as $line) {
             $sections = explode(WhitespaceCharacter::SPACE->value, trim($line));
@@ -44,6 +52,6 @@ class CrossReferenceTableParser {
             $crossReferenceSubSections[] = new CrossReferenceSubSection($objectNumber, $nrOfEntries, ... $crossReferenceEntries);
         }
 
-        return new CrossReferenceSource(null, ... $crossReferenceSubSections);
+        return new CrossReferenceSection($dictionary, ... $crossReferenceSubSections);
     }
 }

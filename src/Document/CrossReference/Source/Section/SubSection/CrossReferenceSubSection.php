@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection;
+namespace PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection;
 
-use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry\CrossReferenceEntryCompressed;
-use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry\CrossReferenceEntryFreeObject;
-use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry\CrossReferenceEntryInUseObject;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryCompressed;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryFreeObject;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryInUseObject;
 use RuntimeException;
 
 class CrossReferenceSubSection {

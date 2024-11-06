@@ -3,10 +3,11 @@
 namespace PrinsFrank\PdfParser\Document\CrossReference\Stream;
 
 use PrinsFrank\PdfParser\Document\CrossReference\Source\CrossReferenceSource;
-use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\CrossReferenceSubSection;
-use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry\CrossReferenceEntryCompressed;
-use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry\CrossReferenceEntryFreeObject;
-use PrinsFrank\PdfParser\Document\CrossReference\Source\SubSection\Entry\CrossReferenceEntryInUseObject;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\CrossReferenceSection;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\CrossReferenceSubSection;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryCompressed;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryFreeObject;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryInUseObject;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Array\WValue;
@@ -24,7 +25,7 @@ class CrossReferenceStreamParser {
      * @param positive-int $nrOfBytes
      * @throws ParseFailureException
      */
-    public static function parse(Stream $stream, int $startPos, int $nrOfBytes): CrossReferenceSource {
+    public static function parse(Stream $stream, int $startPos, int $nrOfBytes): CrossReferenceSection {
         $dictionary = DictionaryParser::parse($stream, $startPos, $nrOfBytes);
         $dictionaryType = $dictionary->getEntryWithKey(DictionaryKey::TYPE)?->value;
         if ($dictionaryType !== TypeNameValue::X_REF) {
@@ -74,6 +75,6 @@ class CrossReferenceStreamParser {
             $entries = array_slice($entries, $startNrNrOfObjects[1]);
         }
 
-        return new CrossReferenceSource($dictionary, ... $crossReferenceSubSections);
+        return new CrossReferenceSection($dictionary, ... $crossReferenceSubSections);
     }
 }
