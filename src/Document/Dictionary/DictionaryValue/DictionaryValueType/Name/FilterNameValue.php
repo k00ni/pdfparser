@@ -31,8 +31,8 @@ enum FilterNameValue: string implements NameValue {
             self::DCT_DECODE => $content, // Dont decode JPEG content
             self::FLATE_DECODE => FlateDecode::decode(
                 $content,
-                LZWFlatePredictorValue::from((int) $decodeParams->getEntryWithKey(DictionaryKey::PREDICTOR)?->value->value),
-                $decodeParams->getEntryWithKey(DictionaryKey::COLUMNS)?->value->value
+                $decodeParams !== null ? LZWFlatePredictorValue::from((int) $decodeParams->getEntryWithKey(DictionaryKey::PREDICTOR)?->value->value) : LZWFlatePredictorValue::None,
+                $decodeParams?->getEntryWithKey(DictionaryKey::COLUMNS)?->value->value
             ),
             default => throw new ParseFailureException('Content "' . $content . '" cannot be decoded for filter "' . $this->name . '"')
         };
