@@ -19,6 +19,7 @@ class CrossReferenceTableParser {
         $startTrailerPos = $stream->strpos(Marker::TRAILER->value, $startPos, $startPos + $nrOfBytes)
             ?? throw new ParseFailureException('Unable to locate trailer for crossReferenceTable');
         $startDictionaryPos = $stream->strpos(WhitespaceCharacter::LINE_FEED->value, $startTrailerPos, $startPos + $nrOfBytes)
+            ?? $stream->strpos(WhitespaceCharacter::CARRIAGE_RETURN->value, $startTrailerPos, $startPos + $nrOfBytes)
             ?? throw new ParseFailureException(sprintf('Expected a newline after %s, got none', Marker::TRAILER->value));
         $dictionary = DictionaryParser::parse($stream, $startDictionaryPos, $nrOfBytes - ($startDictionaryPos - $startPos));
 
