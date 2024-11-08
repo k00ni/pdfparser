@@ -25,7 +25,7 @@ class CrossReferenceTableParser {
 
         $objectNumber = $nrOfEntries = null;
         $crossReferenceSubSections = $crossReferenceEntries = [];
-        $content = trim($stream->read($startPos, $startDictionaryPos - $startPos - strlen(Marker::TRAILER->value. PHP_EOL)));
+        $content = trim($stream->read($startPos, $startDictionaryPos - $startPos - strlen(Marker::TRAILER->value . PHP_EOL)));
         $content = str_replace([WhitespaceCharacter::CARRIAGE_RETURN->value, WhitespaceCharacter::LINE_FEED->value . WhitespaceCharacter::LINE_FEED->value], WhitespaceCharacter::LINE_FEED->value, $content);
         foreach (explode(WhitespaceCharacter::LINE_FEED->value, $content) as $line) {
             $sections = explode(WhitespaceCharacter::SPACE->value, trim($line));
