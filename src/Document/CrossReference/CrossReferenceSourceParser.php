@@ -40,7 +40,7 @@ class CrossReferenceSourceParser {
 
         $isTable = $stream->read($byteOffsetLastCrossReferenceSection, $eolPosByteOffset - $byteOffsetLastCrossReferenceSection) === Marker::XREF->value;
         $endCrossReferenceSection = $isTable
-            ? ($stream->lastPos(Marker::START_XREF, $stream->getSizeInBytes() - $eofMarkerPos) ?? throw new MarkerNotFoundException(Marker::START_XREF->value))
+            ? ($stream->firstPos(Marker::START_XREF, $eolPosByteOffset, $stream->getSizeInBytes()) ?? throw new MarkerNotFoundException(Marker::START_XREF->value))
             : ($stream->firstPos(Marker::END_OBJ, $eolPosByteOffset, $stream->getSizeInBytes()) ?? throw new MarkerNotFoundException(Marker::END_OBJ->value));
         $currentCrossReferenceSection = $isTable
             ? CrossReferenceTableParser::parse($stream, $eolPosByteOffset, $endCrossReferenceSection - $eolPosByteOffset)

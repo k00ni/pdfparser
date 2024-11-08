@@ -13,6 +13,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamContent\ObjectStreamContentParser;
+use PrinsFrank\PdfParser\Exception\MarkerNotFoundException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream;
 
@@ -36,21 +37,16 @@ class CrossReferenceStreamParser {
             throw new ParseFailureException('Missing W value, can\'t decode xref stream.');
         }
 
-        $startStream = $stream->firstPos(Marker::STREAM, $startPos, $startPos + $nrOfBytes);
-        if ($startStream === null || $startStream > ($startPos + $nrOfBytes)) {
-            throw new ParseFailureException(sprintf('Expected stream content marked by %s, none found', Marker::STREAM->value));
-        }
+        $startStream = $stream->getStartNextLineAfter(Marker::STREAM, $startPos, $startPos + $nrOfBytes)
+            ?? throw new MarkerNotFoundException(Marker::STREAM->value);
 
         $endStream = $stream->firstPos(Marker::END_STREAM, $startStream, $startPos + $nrOfBytes);
         if ($endStream === null || $endStream > ($startPos + $nrOfBytes)) {
             throw new ParseFailureException(sprintf('Expected end of stream content marked by %s, none found', Marker::END_STREAM->value));
         }
 
-        $startStreamContent = $stream->getStartOfNextLine($startStream, $endStream)
-            ?? throw new ParseFailureException('Unable to find start of stream content');
-
         $entries = [];
-        $hexContent = ObjectStreamContentParser::parse($stream, $startStreamContent, $endStream - $startStreamContent - 1, $dictionary);
+        $hexContent = ObjectStreamContentParser::parse($stream, $startStream, $endStream - $startStream - 1, $dictionary);
         foreach (str_split($hexContent, $wValue->getTotalLengthInBytes() * self::HEX_CHARS_IN_BYTE) as $referenceRow) {
             $field1 = CrossReferenceStreamType::tryFrom($typeNr = hexdec(substr($referenceRow, 0, $wValue->getLengthRecord1InBytes() * self::HEX_CHARS_IN_BYTE)));
             $field2 = hexdec(substr($referenceRow, $wValue->getLengthRecord1InBytes() * self::HEX_CHARS_IN_BYTE, $wValue->getLengthRecord2InBytes() * self::HEX_CHARS_IN_BYTE));

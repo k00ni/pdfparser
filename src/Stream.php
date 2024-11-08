@@ -88,6 +88,15 @@ class Stream {
         return null;
     }
 
+    public function getStartNextLineAfter(WhitespaceCharacter|Marker|DelimiterCharacter $needle, int $offsetFromStart, int $before): ?int {
+        $markerPos = $this->firstPos($needle, $offsetFromStart, $before);
+        if ($markerPos === null) {
+            return null;
+        }
+
+        return $this->getStartOfNextLine($markerPos, $before);
+    }
+
     public function lastPos(WhitespaceCharacter|Marker|DelimiterCharacter $needle, int $offsetFromEnd): ?int {
         $rollingCharBuffer = new RollingCharBuffer(strlen($needle->value));
         $offsetFromEnd++;
