@@ -38,37 +38,24 @@ class CrossReferenceSourceParser {
         $eolPosByteOffset = $stream->getEndOfCurrentLine($byteOffsetLastCrossReferenceSection, $stream->getSizeInBytes())
             ?? throw new ParseFailureException('Expected a newline after byte offset for last cross reference stream');
 
-        $firstLineCrossReferenceSource = $stream->read($byteOffsetLastCrossReferenceSection, $eolPosByteOffset - $byteOffsetLastCrossReferenceSection);
-        if ($firstLineCrossReferenceSource === Marker::XREF->value) {
-            $currentCrossReferenceSection = CrossReferenceTableParser::parse($stream, $eolPosByteOffset, $startXrefMarkerPos - $eolPosByteOffset);
-            $crossReferenceSections = [$currentCrossReferenceSection];
-            while (($previous = $currentCrossReferenceSection->dictionary->getEntryWithKey(DictionaryKey::PREVIOUS)?->value) instanceof IntegerValue && $previous->value !== 0) {
-                $eolPosByteOffset = $stream->getEndOfCurrentLine($previous->value + 1, $stream->getSizeInBytes())
-                    ?? throw new ParseFailureException('Expected a newline after byte offset for cross reference stream');
-                $startXrefMarkerPos = $stream->strpos(Marker::START_XREF->value, $eolPosByteOffset, $stream->getSizeInBytes())
-                    ?? throw new ParseFailureException('Unable to locate startxref');
-
-                $currentCrossReferenceSection = CrossReferenceTableParser::parse($stream, $eolPosByteOffset, $startXrefMarkerPos - $eolPosByteOffset);
-                $crossReferenceSections[] = $currentCrossReferenceSection;
-            }
-
-            return new CrossReferenceSource(... $crossReferenceSections);
-        }
-
-        $endCrossReferenceStream = $stream->strpos(Marker::END_OBJ->value, $byteOffsetLastCrossReferenceSection, $stream->getSizeInBytes());
-        if ($endCrossReferenceStream === null) {
-            throw new ParseFailureException('Unable to locate end of crossReferenceStream object');
-        }
-
-        $currentCrossReferenceSection =  CrossReferenceStreamParser::parse($stream, $byteOffsetLastCrossReferenceSection, $endCrossReferenceStream - $byteOffsetLastCrossReferenceSection);
+        $isTable = $stream->read($byteOffsetLastCrossReferenceSection, $eolPosByteOffset - $byteOffsetLastCrossReferenceSection) === Marker::XREF->value;
+        $endCrossReferenceSection = $isTable
+            ? ($stream->strrpos(Marker::START_XREF->value, $stream->getSizeInBytes() - $eofMarkerPos) ?? throw new MarkerNotFoundException(Marker::START_XREF->value))
+            : ($stream->strpos(Marker::END_OBJ->value, $eolPosByteOffset, $stream->getSizeInBytes()) ?? throw new MarkerNotFoundException(Marker::END_OBJ->value));
+        $currentCrossReferenceSection = $isTable
+            ? CrossReferenceTableParser::parse($stream, $eolPosByteOffset, $endCrossReferenceSection - $eolPosByteOffset)
+            : CrossReferenceStreamParser::parse($stream, $eolPosByteOffset, $endCrossReferenceSection - $eolPosByteOffset);
         $crossReferenceSections = [$currentCrossReferenceSection];
         while (($previous = $currentCrossReferenceSection->dictionary->getEntryWithKey(DictionaryKey::PREVIOUS)?->value) instanceof IntegerValue && $previous->value !== 0) {
             $eolPosByteOffset = $stream->getEndOfCurrentLine($previous->value + 1, $stream->getSizeInBytes())
                 ?? throw new ParseFailureException('Expected a newline after byte offset for cross reference stream');
-            $endObjMarkerPos = $stream->strpos(Marker::END_OBJ->value, $eolPosByteOffset, $stream->getSizeInBytes())
-                ?? throw new ParseFailureException('Unable to locate endobj');
+            $endCrossReferenceSection = $isTable
+                ? $stream->strpos(Marker::START_XREF->value, $eolPosByteOffset, $stream->getSizeInBytes()) ?? throw new ParseFailureException('Unable to locate startxref')
+                : $stream->strpos(Marker::END_OBJ->value, $eolPosByteOffset, $stream->getSizeInBytes()) ?? throw new ParseFailureException('Unable to locate endobj');
 
-            $currentCrossReferenceSection = CrossReferenceStreamParser::parse($stream, $eolPosByteOffset, $endObjMarkerPos - $eolPosByteOffset);
+            $currentCrossReferenceSection = $isTable
+                ? CrossReferenceTableParser::parse($stream, $eolPosByteOffset, $endCrossReferenceSection - $eolPosByteOffset)
+                : CrossReferenceStreamParser::parse($stream, $eolPosByteOffset, $endCrossReferenceSection - $eolPosByteOffset);
             $crossReferenceSections[] = $currentCrossReferenceSection;
         }
 
