@@ -42,7 +42,7 @@ class CrossReferenceSourceParser {
         if ($firstLineCrossReferenceSource === Marker::XREF->value) {
             $currentCrossReferenceSection = CrossReferenceTableParser::parse($stream, $eolPosByteOffset, $startXrefMarkerPos - $eolPosByteOffset);
             $crossReferenceSections = [$currentCrossReferenceSection];
-            while (($previous = $currentCrossReferenceSection->dictionary->getEntryWithKey(DictionaryKey::PREVIOUS)?->value) instanceof IntegerValue) {
+            while (($previous = $currentCrossReferenceSection->dictionary->getEntryWithKey(DictionaryKey::PREVIOUS)?->value) instanceof IntegerValue && $previous->value !== 0) {
                 $eolPosByteOffset = $stream->getEndOfCurrentLine($previous->value + 1, $stream->getSizeInBytes())
                     ?? throw new ParseFailureException('Expected a newline after byte offset for last cross reference stream');
                 $startXrefMarkerPos = $stream->strpos(Marker::START_XREF->value, $eolPosByteOffset, $stream->getSizeInBytes())
