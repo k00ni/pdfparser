@@ -2,7 +2,9 @@
 
 namespace PrinsFrank\PdfParser;
 
+use PrinsFrank\PdfParser\Document\Generic\Character\DelimiterCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
+use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Document\Generic\Parsing\RollingCharBuffer;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use RuntimeException;
@@ -29,12 +31,8 @@ class Stream {
         return new self($handle);
     }
 
-    /** When useTemp is set to false, the string will be kept completely in memory increasing base memory footprint */
-    public static function fromString(string $content, bool $useTemp = true): self {
-        $handle = fopen(
-            $useTemp ? 'php://temp' : 'php://memory',
-            'rb+'
-        );
+    public static function fromString(string $content): self {
+        $handle = fopen('php://temp', 'rb+');
         fwrite($handle, $content);
         rewind($handle);
 
@@ -75,14 +73,14 @@ class Stream {
         }
     }
 
-    public function strpos(string $needle, int $offsetFromStart, int $before): ?int {
-        $rollingCharBuffer = new RollingCharBuffer($needleLength = strlen($needle));
+    public function firstPos(WhitespaceCharacter|Marker|DelimiterCharacter $needle, int $offsetFromStart, int $before): ?int {
+        $rollingCharBuffer = new RollingCharBuffer($needleLength = strlen($needle->value));
         while ($offsetFromStart < $before) {
             fseek($this->handle, $offsetFromStart);
             $character = fgetc($this->handle);
             $rollingCharBuffer->next()->setCharacter($character);
             $offsetFromStart++;
-            if ($rollingCharBuffer->seenString($needle)) {
+            if ($rollingCharBuffer->seenString($needle->value)) {
                 return $offsetFromStart - $needleLength;
             }
         }
@@ -90,14 +88,14 @@ class Stream {
         return null;
     }
 
-    public function strrpos(string $needle, int $offsetFromEnd): ?int {
-        $rollingCharBuffer = new RollingCharBuffer(strlen($needle));
+    public function lastPos(WhitespaceCharacter|Marker|DelimiterCharacter $needle, int $offsetFromEnd): ?int {
+        $rollingCharBuffer = new RollingCharBuffer(strlen($needle->value));
         $offsetFromEnd++;
         while (fseek($this->handle, - $offsetFromEnd, SEEK_END) !== -1) {
             $character = fgetc($this->handle);
             $rollingCharBuffer->next()->setCharacter($character);
             $offsetFromEnd++;
-            if ($rollingCharBuffer->seenReverseString($needle)) {
+            if ($rollingCharBuffer->seenReverseString($needle->value)) {
                 return $this->getSizeInBytes() - $offsetFromEnd + 1;
             }
         }
@@ -106,8 +104,8 @@ class Stream {
     }
 
     public function getStartOfNextLine(int $byteOffset, int $before): ?int {
-        $firstLineFeedPos = $this->strpos(WhitespaceCharacter::LINE_FEED->value, $byteOffset, $before);
-        $firstCarriageReturnPos = $this->strpos(WhitespaceCharacter::CARRIAGE_RETURN->value, $byteOffset, $before);
+        $firstLineFeedPos = $this->firstPos(WhitespaceCharacter::LINE_FEED, $byteOffset, $before);
+        $firstCarriageReturnPos = $this->firstPos(WhitespaceCharacter::CARRIAGE_RETURN, $byteOffset, $before);
         if ($firstLineFeedPos === null && $firstCarriageReturnPos === null) {
             return null;
         }
@@ -125,8 +123,8 @@ class Stream {
     }
 
     public function getEndOfCurrentLine(int $byteOffset, int $before): ?int {
-        $firstLineFeedPos = $this->strpos(WhitespaceCharacter::LINE_FEED->value, $byteOffset, $before);
-        $firstCarriageReturnPos = $this->strpos(WhitespaceCharacter::CARRIAGE_RETURN->value, $byteOffset, $before);
+        $firstLineFeedPos = $this->firstPos(WhitespaceCharacter::LINE_FEED, $byteOffset, $before);
+        $firstCarriageReturnPos = $this->firstPos(WhitespaceCharacter::CARRIAGE_RETURN, $byteOffset, $before);
         if ($firstLineFeedPos === null && $firstCarriageReturnPos === null) {
             return null;
         }

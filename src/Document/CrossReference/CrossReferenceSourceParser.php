@@ -16,9 +16,9 @@ use PrinsFrank\PdfParser\Stream;
 class CrossReferenceSourceParser {
     /** @throws ParseFailureException */
     public static function parse(Stream $stream): CrossReferenceSource {
-        $eofMarkerPos = $stream->strrpos(Marker::EOF->value, 0)
+        $eofMarkerPos = $stream->lastPos(Marker::EOF, 0)
             ?? throw new MarkerNotFoundException(Marker::EOF->value);
-        $startXrefMarkerPos = $stream->strrpos(Marker::START_XREF->value, $stream->getSizeInBytes() - $eofMarkerPos)
+        $startXrefMarkerPos = $stream->lastPos(Marker::START_XREF, $stream->getSizeInBytes() - $eofMarkerPos)
             ?? throw new MarkerNotFoundException(Marker::START_XREF->value);
         $startByteOffset = $stream->getStartOfNextLine($startXrefMarkerPos, $stream->getSizeInBytes())
             ?? throw new ParseFailureException('Expected a carriage return or line feed after startxref marker, none found');
@@ -32,7 +32,7 @@ class CrossReferenceSourceParser {
 
         $byteOffsetLastCrossReferenceSection = (int) $byteOffsetLastCrossReferenceSection;
         if ($byteOffsetLastCrossReferenceSection > $stream->getSizeInBytes()) {
-            throw new ParseFailureException(sprintf('Invalid byte offset: position of last crossReference section %d is greater than total size of stream %d. Should this be %d?', (int) $byteOffsetLastCrossReferenceSection, $stream->getSizeInBytes(), $stream->strrpos(Marker::XREF->value, $stream->getSizeInBytes() - $startXrefMarkerPos) ?? $stream->strrpos(Marker::OBJ->value, $stream->getSizeInBytes() - $startXrefMarkerPos)));
+            throw new ParseFailureException(sprintf('Invalid byte offset: position of last crossReference section %d is greater than total size of stream %d. Should this be %d?', (int) $byteOffsetLastCrossReferenceSection, $stream->getSizeInBytes(), $stream->lastPos(Marker::XREF, $stream->getSizeInBytes() - $startXrefMarkerPos) ?? $stream->lastPos(Marker::OBJ->value, $stream->getSizeInBytes() - $startXrefMarkerPos)));
         }
 
         $eolPosByteOffset = $stream->getEndOfCurrentLine($byteOffsetLastCrossReferenceSection, $stream->getSizeInBytes())
@@ -40,8 +40,8 @@ class CrossReferenceSourceParser {
 
         $isTable = $stream->read($byteOffsetLastCrossReferenceSection, $eolPosByteOffset - $byteOffsetLastCrossReferenceSection) === Marker::XREF->value;
         $endCrossReferenceSection = $isTable
-            ? ($stream->strrpos(Marker::START_XREF->value, $stream->getSizeInBytes() - $eofMarkerPos) ?? throw new MarkerNotFoundException(Marker::START_XREF->value))
-            : ($stream->strpos(Marker::END_OBJ->value, $eolPosByteOffset, $stream->getSizeInBytes()) ?? throw new MarkerNotFoundException(Marker::END_OBJ->value));
+            ? ($stream->lastPos(Marker::START_XREF, $stream->getSizeInBytes() - $eofMarkerPos) ?? throw new MarkerNotFoundException(Marker::START_XREF->value))
+            : ($stream->firstPos(Marker::END_OBJ, $eolPosByteOffset, $stream->getSizeInBytes()) ?? throw new MarkerNotFoundException(Marker::END_OBJ->value));
         $currentCrossReferenceSection = $isTable
             ? CrossReferenceTableParser::parse($stream, $eolPosByteOffset, $endCrossReferenceSection - $eolPosByteOffset)
             : CrossReferenceStreamParser::parse($stream, $eolPosByteOffset, $endCrossReferenceSection - $eolPosByteOffset);
@@ -50,8 +50,8 @@ class CrossReferenceSourceParser {
             $eolPosByteOffset = $stream->getEndOfCurrentLine($previous->value + 1, $stream->getSizeInBytes())
                 ?? throw new ParseFailureException('Expected a newline after byte offset for cross reference stream');
             $endCrossReferenceSection = $isTable
-                ? $stream->strpos(Marker::START_XREF->value, $eolPosByteOffset, $stream->getSizeInBytes()) ?? throw new ParseFailureException('Unable to locate startxref')
-                : $stream->strpos(Marker::END_OBJ->value, $eolPosByteOffset, $stream->getSizeInBytes()) ?? throw new ParseFailureException('Unable to locate endobj');
+                ? $stream->firstPos(Marker::START_XREF, $eolPosByteOffset, $stream->getSizeInBytes()) ?? throw new ParseFailureException('Unable to locate startxref')
+                : $stream->firstPos(Marker::END_OBJ, $eolPosByteOffset, $stream->getSizeInBytes()) ?? throw new ParseFailureException('Unable to locate endobj');
 
             $currentCrossReferenceSection = $isTable
                 ? CrossReferenceTableParser::parse($stream, $eolPosByteOffset, $endCrossReferenceSection - $eolPosByteOffset)

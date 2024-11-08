@@ -24,12 +24,12 @@ class ObjectItem {
             return $this->dictionary;
         }
 
-        $startDictionaryPos = $stream->strpos(DelimiterCharacter::LESS_THAN_SIGN->value . DelimiterCharacter::LESS_THAN_SIGN->value, $this->startOffset, $this->endOffset);
+        $startDictionaryPos = $stream->firstPos(DelimiterCharacter::LESS_THAN_SIGN, $this->startOffset, $this->endOffset);
         if ($startDictionaryPos === null) {
             return $this->dictionary = null;
         }
 
-        $endDictionaryPos = $stream->strrpos(DelimiterCharacter::GREATER_THAN_SIGN->value . DelimiterCharacter::GREATER_THAN_SIGN->value, $stream->getSizeInBytes() - $this->endOffset);
+        $endDictionaryPos = $stream->lastPos(DelimiterCharacter::GREATER_THAN_SIGN, $stream->getSizeInBytes() - $this->endOffset);
         if ($endDictionaryPos === null || $endDictionaryPos < $startDictionaryPos) {
             throw new ParseFailureException(sprintf('Couldn\'t find the end of the dictionary in "%s"', $stream->read($startDictionaryPos, $stream->getSizeInBytes() - $this->endOffset)));
         }

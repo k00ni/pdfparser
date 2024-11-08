@@ -36,12 +36,12 @@ class CrossReferenceStreamParser {
             throw new ParseFailureException('Missing W value, can\'t decode xref stream.');
         }
 
-        $startStream = $stream->strpos(Marker::STREAM->value, $startPos, $startPos + $nrOfBytes);
+        $startStream = $stream->firstPos(Marker::STREAM, $startPos, $startPos + $nrOfBytes);
         if ($startStream === null || $startStream > ($startPos + $nrOfBytes)) {
             throw new ParseFailureException(sprintf('Expected stream content marked by %s, none found', Marker::STREAM->value));
         }
 
-        $endStream = $stream->strpos(Marker::END_STREAM->value, $startStream, $startPos + $nrOfBytes);
+        $endStream = $stream->firstPos(Marker::END_STREAM, $startStream, $startPos + $nrOfBytes);
         if ($endStream === null || $endStream > ($startPos + $nrOfBytes)) {
             throw new ParseFailureException(sprintf('Expected end of stream content marked by %s, none found', Marker::END_STREAM->value));
         }

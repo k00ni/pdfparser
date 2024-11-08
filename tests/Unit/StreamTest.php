@@ -13,19 +13,19 @@ class StreamTest extends TestCase {
         $stream = Stream::fromString('123abc123');
         static::assertSame(
             3,
-            $stream->strrpos('abc', 0)
+            $stream->lastPos('abc', 0)
         );
         static::assertSame(
             6,
-            $stream->strrpos('123', 0)
+            $stream->lastPos('123', 0)
         );
         static::assertSame(
             7,
-            $stream->strrpos('23', 0)
+            $stream->lastPos('23', 0)
         );
         static::assertSame(
             8,
-            $stream->strrpos('3', 0)
+            $stream->lastPos('3', 0)
         );
     }
 
@@ -38,11 +38,11 @@ class StreamTest extends TestCase {
             %%EOF
             EOD
         );
-        $eofMarkerPos = $stream->strrpos(Marker::EOF->value, 0);
+        $eofMarkerPos = $stream->lastPos(Marker::EOF, 0);
         static::assertNotNull($eofMarkerPos);
         static::assertSame(Marker::EOF->value, $stream->read($eofMarkerPos, strlen(Marker::EOF->value)));
 
-        $startXrefPos = $stream->strrpos(Marker::START_XREF->value, $stream->getSizeInBytes() - $eofMarkerPos);
+        $startXrefPos = $stream->lastPos(Marker::START_XREF, $stream->getSizeInBytes() - $eofMarkerPos);
         static::assertNotNull($startXrefPos);
         static::assertSame(Marker::START_XREF->value, $stream->read($startXrefPos, strlen(Marker::START_XREF->value)));
 

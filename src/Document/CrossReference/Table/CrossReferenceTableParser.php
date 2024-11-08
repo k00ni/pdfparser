@@ -16,10 +16,10 @@ use PrinsFrank\PdfParser\Stream;
 class CrossReferenceTableParser {
     /** @throws InvalidCrossReferenceLineException */
     public static function parse(Stream $stream, int $startPos, int $nrOfBytes): CrossReferenceSection {
-        $startTrailerPos = $stream->strpos(Marker::TRAILER->value, $startPos, $startPos + $nrOfBytes)
+        $startTrailerPos = $stream->firstPos(Marker::TRAILER, $startPos, $startPos + $nrOfBytes)
             ?? throw new ParseFailureException('Unable to locate trailer for crossReferenceTable');
-        $startDictionaryPos = $stream->strpos(WhitespaceCharacter::LINE_FEED->value, $startTrailerPos, $startPos + $nrOfBytes)
-            ?? $stream->strpos(WhitespaceCharacter::CARRIAGE_RETURN->value, $startTrailerPos, $startPos + $nrOfBytes)
+        $startDictionaryPos = $stream->firstPos(WhitespaceCharacter::LINE_FEED, $startTrailerPos, $startPos + $nrOfBytes)
+            ?? $stream->firstPos(WhitespaceCharacter::CARRIAGE_RETURN, $startTrailerPos, $startPos + $nrOfBytes)
             ?? throw new ParseFailureException(sprintf('Expected a newline after %s, got none', Marker::TRAILER->value));
         $dictionary = DictionaryParser::parse($stream, $startDictionaryPos, $nrOfBytes - ($startDictionaryPos - $startPos));
 
