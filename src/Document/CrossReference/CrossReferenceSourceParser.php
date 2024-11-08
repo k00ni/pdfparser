@@ -32,7 +32,7 @@ class CrossReferenceSourceParser {
 
         $byteOffsetLastCrossReferenceSection = (int) $byteOffsetLastCrossReferenceSection;
         if ($byteOffsetLastCrossReferenceSection > $stream->getSizeInBytes()) {
-            throw new ParseFailureException(sprintf('Invalid byte offset: position of last crossReference section %d is greater than total size of stream %d. Should this be %d?', (int) $byteOffsetLastCrossReferenceSection, $stream->getSizeInBytes(), $stream->lastPos(Marker::XREF, $stream->getSizeInBytes() - $startXrefMarkerPos) ?? $stream->lastPos(Marker::OBJ->value, $stream->getSizeInBytes() - $startXrefMarkerPos)));
+            throw new ParseFailureException(sprintf('Invalid byte offset: position of last crossReference section %d is greater than total size of stream %d. Should this be %d?', (int) $byteOffsetLastCrossReferenceSection, $stream->getSizeInBytes(), $stream->lastPos(Marker::XREF, $stream->getSizeInBytes() - $startXrefMarkerPos) ?? $stream->lastPos(Marker::OBJ, $stream->getSizeInBytes() - $startXrefMarkerPos)));
         }
 
         $eolPosByteOffset = $stream->getEndOfCurrentLine($byteOffsetLastCrossReferenceSection, $stream->getSizeInBytes())
