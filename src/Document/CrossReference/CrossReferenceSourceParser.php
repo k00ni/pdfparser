@@ -46,7 +46,7 @@ class CrossReferenceSourceParser {
             ? CrossReferenceTableParser::parse($stream, $eolPosByteOffset, $endCrossReferenceSection - $eolPosByteOffset)
             : CrossReferenceStreamParser::parse($stream, $eolPosByteOffset, $endCrossReferenceSection - $eolPosByteOffset);
         $crossReferenceSections = [$currentCrossReferenceSection];
-        while (($previous = $currentCrossReferenceSection->dictionary->getEntryWithKey(DictionaryKey::PREVIOUS)?->value) instanceof IntegerValue && $previous->value !== 0) {
+        while (($previous = $currentCrossReferenceSection->dictionary->getValueForKey(DictionaryKey::PREVIOUS)) instanceof IntegerValue && $previous->value !== 0) {
             $eolPosByteOffset = $stream->getEndOfCurrentLine($previous->value + 1, $stream->getSizeInBytes())
                 ?? throw new ParseFailureException('Expected a newline after byte offset for cross reference stream');
             $endCrossReferenceSection = $isTable

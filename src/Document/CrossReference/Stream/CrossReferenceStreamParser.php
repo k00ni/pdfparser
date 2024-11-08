@@ -27,12 +27,12 @@ class CrossReferenceStreamParser {
      */
     public static function parse(Stream $stream, int $startPos, int $nrOfBytes): CrossReferenceSection {
         $dictionary = DictionaryParser::parse($stream, $startPos, $nrOfBytes);
-        $dictionaryType = $dictionary->getEntryWithKey(DictionaryKey::TYPE)?->value;
+        $dictionaryType = $dictionary->getValueForKey(DictionaryKey::TYPE);
         if ($dictionaryType !== TypeNameValue::X_REF) {
             throw new ParseFailureException('Expected stream of type xref, got "' . ($dictionaryType?->name ?? 'null') . '" Dictionary: ' . json_encode($dictionary));
         }
 
-        $wValue = $dictionary->getEntryWithKey(DictionaryKey::W)?->value;
+        $wValue = $dictionary->getValueForKey(DictionaryKey::W);
         if ($wValue instanceof WValue === false) {
             throw new ParseFailureException('Missing W value, can\'t decode xref stream.');
         }
@@ -66,8 +66,8 @@ class CrossReferenceStreamParser {
         }
 
         /** @var list<int> $startObjNrOfItemsArray where all even items are the start object number and all odd items are the number of objects */
-        $startObjNrOfItemsArray = $dictionary->getEntryWithKey(DictionaryKey::INDEX)->value->value
-            ?? [0, $dictionary->getEntryWithKey(DictionaryKey::SIZE)->value->value];
+        $startObjNrOfItemsArray = $dictionary->getValueForKey(DictionaryKey::INDEX)?->value
+            ?? [0, $dictionary->getValueForKey(DictionaryKey::SIZE)->value];
 
         $crossReferenceSubSections = [];
         foreach (array_chunk($startObjNrOfItemsArray, 2) as $startNrNrOfObjects) {

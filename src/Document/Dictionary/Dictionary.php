@@ -5,6 +5,7 @@ namespace PrinsFrank\PdfParser\Document\Dictionary;
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\DictionaryValueType;
 
 class Dictionary {
     /** @var array<DictionaryEntry> */
@@ -16,10 +17,10 @@ class Dictionary {
         $this->dictionaryEntries = $dictionaryEntries;
     }
 
-    public function getEntryWithKey(DictionaryKey $dictionaryKey): ?DictionaryEntry {
+    public function getValueForKey(DictionaryKey $dictionaryKey): ?DictionaryValueType {
         foreach ($this->dictionaryEntries as $dictionaryEntry) {
             if ($dictionaryEntry->key === $dictionaryKey) {
-                return $dictionaryEntry;
+                return $dictionaryEntry->value;
             }
         }
 

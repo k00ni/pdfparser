@@ -49,7 +49,7 @@ class CrossReferenceSource {
 
     public function getRoot(): ReferenceValue {
         foreach ($this->crossReferenceSections as $crossReferenceSection) {
-            if (($rootReference = $crossReferenceSection->dictionary->getEntryWithKey(DictionaryKey::ROOT)->value) instanceof ReferenceValue) {
+            if (($rootReference = $crossReferenceSection->dictionary->getValueForKey(DictionaryKey::ROOT)) instanceof ReferenceValue) {
                 return $rootReference;
             }
         }
