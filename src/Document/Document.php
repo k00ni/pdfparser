@@ -21,12 +21,9 @@ final class Document {
     }
 
     public function getCatalog(): ?ObjectItem {
-        $catalogReference = $this->crossReferenceSource->getRoot();
-        if ($catalogReference instanceof ReferenceValue === false) {
-            return null;
-        }
-
-        return $this->getObject($catalogReference->objectNumber);
+        return $this->getObject(
+            $this->crossReferenceSource->getRoot()->objectNumber
+        );
     }
 
     public function getObject(int $objectNumber): ?ObjectItem {
