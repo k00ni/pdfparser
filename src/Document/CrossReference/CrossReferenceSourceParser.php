@@ -44,7 +44,7 @@ class CrossReferenceSourceParser {
             $crossReferenceSections = [$currentCrossReferenceSection];
             while (($previous = $currentCrossReferenceSection->dictionary->getEntryWithKey(DictionaryKey::PREVIOUS)?->value) instanceof IntegerValue && $previous->value !== 0) {
                 $eolPosByteOffset = $stream->getEndOfCurrentLine($previous->value + 1, $stream->getSizeInBytes())
-                    ?? throw new ParseFailureException('Expected a newline after byte offset for last cross reference stream');
+                    ?? throw new ParseFailureException('Expected a newline after byte offset for cross reference stream');
                 $startXrefMarkerPos = $stream->strpos(Marker::START_XREF->value, $eolPosByteOffset, $stream->getSizeInBytes())
                     ?? throw new ParseFailureException('Unable to locate startxref');
 
@@ -60,13 +60,18 @@ class CrossReferenceSourceParser {
             throw new ParseFailureException('Unable to locate end of crossReferenceStream object');
         }
 
-        // TODO: Multiple
-        return new CrossReferenceSource(
-            CrossReferenceStreamParser::parse(
-                $stream,
-                $byteOffsetLastCrossReferenceSection,
-                $endCrossReferenceStream - $byteOffsetLastCrossReferenceSection
-            )
-        );
+        $currentCrossReferenceSection =  CrossReferenceStreamParser::parse($stream, $byteOffsetLastCrossReferenceSection, $endCrossReferenceStream - $byteOffsetLastCrossReferenceSection);
+        $crossReferenceSections = [$currentCrossReferenceSection];
+        while (($previous = $currentCrossReferenceSection->dictionary->getEntryWithKey(DictionaryKey::PREVIOUS)?->value) instanceof IntegerValue && $previous->value !== 0) {
+            $eolPosByteOffset = $stream->getEndOfCurrentLine($previous->value + 1, $stream->getSizeInBytes())
+                ?? throw new ParseFailureException('Expected a newline after byte offset for cross reference stream');
+            $endObjMarkerPos = $stream->strpos(Marker::END_OBJ->value, $eolPosByteOffset, $stream->getSizeInBytes())
+                ?? throw new ParseFailureException('Unable to locate endobj');
+
+            $currentCrossReferenceSection = CrossReferenceStreamParser::parse($stream, $eolPosByteOffset, $endObjMarkerPos - $eolPosByteOffset);
+            $crossReferenceSections[] = $currentCrossReferenceSection;
+        }
+
+        return new CrossReferenceSource(... $crossReferenceSections);
     }
 }
