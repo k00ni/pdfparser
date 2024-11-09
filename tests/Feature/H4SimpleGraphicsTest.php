@@ -125,7 +125,7 @@ class H4SimpleGraphicsTest extends TestCase {
             new Dictionary(
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::PAGE),
                 new DictionaryEntry(DictionaryKey::PARENT, new ReferenceValue(3, 0)),
-                new DictionaryEntry(DictionaryKey::MEDIABOX, new Rectangle(0.0, 0.0, 0.0, 612.0)),
+                new DictionaryEntry(DictionaryKey::MEDIABOX, new Rectangle(0.0, 0.0, 612.0, 792.0)),
                 new DictionaryEntry(DictionaryKey::CONTENTS, new ReferenceValueArray(new ReferenceValue(5, 0))),
                 new DictionaryEntry(DictionaryKey::RESOURCES, new ArrayValue(
                     [
