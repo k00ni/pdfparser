@@ -67,7 +67,7 @@ class H3SimpleStringTest extends TestCase {
                 1,
                 0,
                 9,
-                74,
+                73,
             ),
             $obj1,
         );
@@ -85,7 +85,7 @@ class H3SimpleStringTest extends TestCase {
                 2,
                 0,
                 74,
-                120,
+                119,
             ),
             $obj2,
         );
@@ -102,7 +102,7 @@ class H3SimpleStringTest extends TestCase {
                 3,
                 0,
                 120,
-                179,
+                178,
             ),
             $obj3,
         );
@@ -120,7 +120,7 @@ class H3SimpleStringTest extends TestCase {
                 4,
                 0,
                 179,
-                322,
+                321,
             ),
             $obj4,
         );
@@ -145,7 +145,7 @@ class H3SimpleStringTest extends TestCase {
                 5,
                 0,
                 322,
-                417,
+                416,
             ),
             $obj5,
         );
@@ -161,7 +161,7 @@ class H3SimpleStringTest extends TestCase {
                 6,
                 0,
                 417,
-                447,
+                446,
             ),
             $obj6,
         );

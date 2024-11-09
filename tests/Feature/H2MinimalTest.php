@@ -64,7 +64,7 @@ class H2MinimalTest extends TestCase {
                 1,
                 0,
                 9,
-                74,
+                73,
             ),
             $obj1,
         );
@@ -82,7 +82,7 @@ class H2MinimalTest extends TestCase {
                 2,
                 0,
                 74,
-                120,
+                119,
             ),
             $obj2,
         );
@@ -99,7 +99,7 @@ class H2MinimalTest extends TestCase {
                 3,
                 0,
                 120,
-                179,
+                178,
             ),
             $obj3,
         );
@@ -117,7 +117,7 @@ class H2MinimalTest extends TestCase {
                 4,
                 0,
                 179,
-                300,
+                299,
             ),
             $obj4,
         );
@@ -137,7 +137,7 @@ class H2MinimalTest extends TestCase {
                 5,
                 0,
                 300,
-                384,
+                383,
             ),
             $obj5,
         );

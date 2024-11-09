@@ -41,7 +41,6 @@ final class Document {
         return ObjectItemParser::parseObject(
             $crossReferenceEntry,
             $objectNumber,
-            $this->crossReferenceSource,
             $this->stream,
         );
     }
