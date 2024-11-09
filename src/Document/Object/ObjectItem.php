@@ -3,7 +3,9 @@
 namespace PrinsFrank\PdfParser\Document\Object;
 
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Generic\Character\DelimiterCharacter;
 use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamData;
 use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamDataParser;
@@ -45,6 +47,16 @@ class ObjectItem {
             return $this->objectStreamData;
         }
 
-        return $this->objectStreamData = ObjectStreamDataParser::parse($stream, $this->startOffset, $this->endOffset, $this->getDictionary($stream));
+        $dictionary = $this->getDictionary($stream);
+        if ($dictionary->getValueForKey(DictionaryKey::TYPE) !== TypeNameValue::OBJ_STM) {
+            throw new ParseFailureException('Unable to get stream data from item that is not a stream');
+        }
+
+        return $this->objectStreamData = ObjectStreamDataParser::parse(
+            $stream,
+            $this->startOffset,
+            $this->endOffset,
+            $dictionary
+        );
     }
 }

@@ -13,7 +13,7 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream;
 
 class ObjectStreamDataParser {
-    public static function parse(Stream $stream, int $startOffsetObject, int $endOffsetObject, Dictionary $dictionary) {
+    public static function parse(Stream $stream, int $startOffsetObject, int $endOffsetObject, Dictionary $dictionary): ObjectStreamData {
         $startStreamPos = $stream->getStartNextLineAfter(Marker::STREAM, $startOffsetObject, $endOffsetObject)
             ?? throw new MarkerNotFoundException(Marker::STREAM->value);
 
@@ -26,7 +26,7 @@ class ObjectStreamDataParser {
         $buffer = new InfiniteBuffer();
         $previousObjectNumber = null;
         $byteOffsets = [];
-        foreach (str_split(substr($content, 0, $dictionary->getValueForKey(DictionaryKey::FIRST)->value - 1), 2) as $char) {
+        foreach (str_split(substr($content, 0, $dictionary->getValueForKey(DictionaryKey::FIRST)->value * 2), 2) as $char) {
             $decodedChar = chr(hexdec($char));
             if (WhitespaceCharacter::tryFrom($decodedChar) !== null) {
                 $numberInBuffer = $buffer->__toString();
@@ -34,6 +34,7 @@ class ObjectStreamDataParser {
                     throw new ParseFailureException(sprintf('Number "%s" in buffer is not a valid number', $numberInBuffer));
                 }
 
+                $numberInBuffer = (int) $numberInBuffer;
                 if ($previousObjectNumber !== null) {
                     $byteOffsets[$previousObjectNumber] = $numberInBuffer;
                     $previousObjectNumber = null;
@@ -48,6 +49,17 @@ class ObjectStreamDataParser {
             $buffer->addChar($decodedChar);
         }
 
-        return new ObjectStreamData($byteOffsets);
+        return new ObjectStreamData(
+            $byteOffsets,
+            Stream::fromString(
+                implode(
+                    '',
+                    array_map(
+                        fn (string $char) => chr(hexdec($char)),
+                        str_split(substr($content, $dictionary->getValueForKey(DictionaryKey::FIRST)->value * 2), 2)
+                    )
+                )
+            )
+        );
     }
 }
