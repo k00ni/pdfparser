@@ -5,11 +5,14 @@ namespace PrinsFrank\PdfParser\Document\Object;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Generic\Character\DelimiterCharacter;
+use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamData;
+use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamDataParser;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream;
 
 class ObjectItem {
     private readonly ?Dictionary $dictionary;
+    private readonly ?ObjectStreamData $objectStreamData;
 
     public function __construct(
         public readonly int $objectNumber,
@@ -35,5 +38,13 @@ class ObjectItem {
         }
 
         return $this->dictionary = DictionaryParser::parse($stream, $startDictionaryPos, $endDictionaryPos - $startDictionaryPos + strlen(DelimiterCharacter::GREATER_THAN_SIGN->value . DelimiterCharacter::GREATER_THAN_SIGN->value));
+    }
+
+    public function getStreamData(Stream $stream): ?ObjectStreamData {
+        if (isset($this->objectStreamData)) {
+            return $this->objectStreamData;
+        }
+
+        return $this->objectStreamData = ObjectStreamDataParser::parse($stream, $this->startOffset, $this->endOffset, $this->getDictionary($stream));
     }
 }
