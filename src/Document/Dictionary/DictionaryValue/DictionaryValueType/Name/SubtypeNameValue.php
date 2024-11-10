@@ -16,6 +16,7 @@ enum SubtypeNameValue: string implements NameValue {
     case TYPE_1 = 'Type1';
     case TYPE_1_C = 'Type1C';
     case XML = 'XML';
+    case TEXT = 'Text';
 
     public static function fromValue(string $valueString): self {
         return self::from(trim(ltrim($valueString, '/')));

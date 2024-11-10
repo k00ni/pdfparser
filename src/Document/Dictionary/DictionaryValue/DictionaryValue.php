@@ -6,6 +6,7 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Array\WValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Boolean\BooleanValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Date\DateValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\DictionaryValueType;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Float\FloatValue;
@@ -25,6 +26,7 @@ use Throwable;
 class DictionaryValue {
     /** @throws ParseFailureException */
     public static function fromValueString(DictionaryKey $dictionaryKey, string $valueString): TrappedNameValue|DictionaryValueType|TypeNameValue|SubtypeNameValue|FilterNameValue {
+        $isLiteralString = str_starts_with($valueString, '(') && str_ends_with($valueString, ')');
         try {
             return match ($dictionaryKey) {
                 DictionaryKey::FILTER => FilterNameValue::fromValue($valueString),
@@ -88,7 +90,7 @@ class DictionaryValue {
                 DictionaryKey::PROCSET,
                 DictionaryKey::F,
                 DictionaryKey::ROOT => ReferenceValue::fromValue($valueString),
-                DictionaryKey::CONTENTS,
+                DictionaryKey::CONTENTS =>$isLiteralString ? TextStringValue::fromValue($valueString) :  ReferenceValueArray::fromValue($valueString),
                 DictionaryKey::RESOURCES,
                 DictionaryKey::KIDS => ReferenceValueArray::fromValue($valueString),
                 DictionaryKey::CREATOR,
@@ -172,6 +174,7 @@ class DictionaryValue {
                 DictionaryKey::MEDIABOX => Rectangle::fromValue($valueString),
                 DictionaryKey::SUBTYPE => SubtypeNameValue::fromValue($valueString),
                 DictionaryKey::PAGE_MODE => PageModeNameValue::fromValue($valueString),
+                DictionaryKey::OPEN => BooleanValue::fromValue($valueString),
                 default => throw new ParseFailureException('Dictionary key "' . $dictionaryKey->name . '" is not supported (' . $valueString . ')'),
             };
         } catch (Throwable $e) {

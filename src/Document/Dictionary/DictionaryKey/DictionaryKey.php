@@ -119,6 +119,7 @@ enum DictionaryKey: string {
     case ORDERING = 'Ordering';
     case O_P = 'OP';
     case O_P_M = 'OPM';
+    case OPEN = 'Open';
     case OUTLINES = 'Outlines';
     case OUTPUT_INTENTS = 'OutputIntents';
     case P = 'P';

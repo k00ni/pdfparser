@@ -13,11 +13,14 @@ use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Array\ArrayValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Boolean\BooleanValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Integer\IntegerValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\SubtypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Rectangle\Rectangle;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValueArray;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\TextString\TextStringValue;
 use PrinsFrank\PdfParser\Document\Object\ObjectItem;
 use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
@@ -52,16 +55,16 @@ class H7Stage1UpdatingTest extends TestCase {
                     new CrossReferenceSubSection(
                         4,
                         1,
-                        new CrossReferenceEntryInUseObject(632, 0),
+                        new CrossReferenceEntryInUseObject(604, 0),
                     ),
                     new CrossReferenceSubSection(
                         7,
                         5,
-                        new CrossReferenceEntryInUseObject(810, 0),
-                        new CrossReferenceEntryInUseObject(883, 0),
-                        new CrossReferenceEntryInUseObject(1024, 0),
-                        new CrossReferenceEntryInUseObject(1167, 0),
-                        new CrossReferenceEntryInUseObject(1309, 0),
+                        new CrossReferenceEntryInUseObject(811, 0),
+                        new CrossReferenceEntryInUseObject(856, 0),
+                        new CrossReferenceEntryInUseObject(958, 0),
+                        new CrossReferenceEntryInUseObject(1062, 0),
+                        new CrossReferenceEntryInUseObject(1165, 0),
                     ),
                 ),
                 new CrossReferenceSection(
@@ -90,7 +93,7 @@ class H7Stage1UpdatingTest extends TestCase {
                 1,
                 0,
                 9,
-                74,
+                73,
             ),
             $obj1,
         );
@@ -108,7 +111,7 @@ class H7Stage1UpdatingTest extends TestCase {
                 2,
                 0,
                 74,
-                120,
+                119,
             ),
             $obj2,
         );
@@ -125,7 +128,7 @@ class H7Stage1UpdatingTest extends TestCase {
                 3,
                 0,
                 120,
-                179,
+                178,
             ),
             $obj3,
         );
@@ -142,8 +145,8 @@ class H7Stage1UpdatingTest extends TestCase {
             new ObjectItem(
                 4,
                 0,
-                179,
-                300,
+                604,
+                703,
             ),
             $obj4,
         );
@@ -151,9 +154,9 @@ class H7Stage1UpdatingTest extends TestCase {
             new Dictionary(
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::PAGE),
                 new DictionaryEntry(DictionaryKey::PARENT, new ReferenceValue(3, 0)),
-                new DictionaryEntry(DictionaryKey::MEDIABOX, new Rectangle(0.0, 0.0, 0.0, 612.0)),
+                new DictionaryEntry(DictionaryKey::MEDIABOX, new Rectangle(0.0, 0.0, 612.0, 792.0)),
                 new DictionaryEntry(DictionaryKey::CONTENTS, new ReferenceValueArray(new ReferenceValue(5, 0))),
-                new DictionaryEntry(DictionaryKey::RESOURCES, new ArrayValue([new DictionaryEntry(DictionaryKey::PROCSET, new ReferenceValue(6, 0))])),
+                new DictionaryEntry(DictionaryKey::ANNOTS, new ReferenceValue(7, 0)),
             ),
             $obj4->getDictionary($document->stream)
         );
@@ -163,7 +166,7 @@ class H7Stage1UpdatingTest extends TestCase {
                 5,
                 0,
                 300,
-                384,
+                383,
             ),
             $obj5,
         );
@@ -179,10 +182,101 @@ class H7Stage1UpdatingTest extends TestCase {
                 6,
                 0,
                 384,
-                550,
+                407,
             ),
             $obj6,
         );
         static::assertNull($obj6->getDictionary($document->stream));
+        $obj7 = $document->getObject(7);
+        static::assertEquals(
+            new ObjectItem(
+                7,
+                0,
+                811,
+                855,
+            ),
+            $obj7,
+        );
+        static::assertNull($obj7->getDictionary($document->stream));
+        $obj8 = $document->getObject(8);
+        static::assertEquals(
+            new ObjectItem(
+                8,
+                0,
+                856,
+                957,
+            ),
+            $obj8,
+        );
+        static::assertEquals(
+            new Dictionary(
+                new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::ANNOT),
+                new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TEXT),
+                new DictionaryEntry(DictionaryKey::RECT, new ArrayValue([44, 616, 162, 735])),
+                new DictionaryEntry(DictionaryKey::CONTENTS, new TextStringValue('(Text #1)')),
+                new DictionaryEntry(DictionaryKey::OPEN, new BooleanValue(true)),
+            ),
+            $obj8->getDictionary($document->stream)
+        );
+        $obj9 = $document->getObject(9);
+        static::assertEquals(
+            new ObjectItem(
+                9,
+                0,
+                958,
+                1061,
+            ),
+            $obj9,
+        );
+        static::assertEquals(
+            new Dictionary(
+                new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::ANNOT),
+                new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TEXT),
+                new DictionaryEntry(DictionaryKey::RECT, new ArrayValue([224, 668, 457, 735])),
+                new DictionaryEntry(DictionaryKey::CONTENTS, new TextStringValue('(Text #2)')),
+                new DictionaryEntry(DictionaryKey::OPEN, new BooleanValue(false)),
+            ),
+            $obj9->getDictionary($document->stream)
+        );
+        $obj10 = $document->getObject(10);
+        static::assertEquals(
+            new ObjectItem(
+                10,
+                0,
+                1062,
+                1165,
+            ),
+            $obj10,
+        );
+        static::assertEquals(
+            new Dictionary(
+                new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::ANNOT),
+                new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TEXT),
+                new DictionaryEntry(DictionaryKey::RECT, new ArrayValue([239, 393, 328, 622])),
+                new DictionaryEntry(DictionaryKey::CONTENTS, new TextStringValue('(Text #3)')),
+                new DictionaryEntry(DictionaryKey::OPEN, new BooleanValue(true)),
+            ),
+            $obj10->getDictionary($document->stream)
+        );
+        $obj11 = $document->getObject(11);
+        static::assertEquals(
+            new ObjectItem(
+                11,
+                0,
+                1165,
+                1269,
+            ),
+            $obj11,
+        );
+        static::assertEquals(
+            new Dictionary(
+                new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::ANNOT),
+                new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TEXT),
+                new DictionaryEntry(DictionaryKey::RECT, new ArrayValue([34, 398, 225, 575])),
+                new DictionaryEntry(DictionaryKey::CONTENTS, new TextStringValue('(Text #4)')),
+                new DictionaryEntry(DictionaryKey::OPEN, new BooleanValue(false)),
+            ),
+            $obj11->getDictionary($document->stream)
+        );
     }
 }

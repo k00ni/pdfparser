@@ -60,6 +60,21 @@ class Stream {
     }
 
     /** @param int<1, max> $nrOfBytes */
+    public function slice(int $startByteOffset, int $endByteOffset): string {
+        if ($startByteOffset <= 0) {
+            throw new InvalidArgumentException(sprintf('$nrOfBytes must be greater than 0, %d given', $startByteOffset));
+        }
+
+        if ($endByteOffset <= $startByteOffset) {
+            throw new InvalidArgumentException(sprintf('End byte offset %d should be bigger than start byte offset %d', $endByteOffset, $startByteOffset));
+        }
+
+        fseek($this->handle, $startByteOffset);
+
+        return fread($this->handle, $endByteOffset - $startByteOffset);
+    }
+
+    /** @param int<1, max> $nrOfBytes */
     public function chars(int $from, int $nrOfBytes): iterable {
         if ($nrOfBytes <= 0) {
             throw new InvalidArgumentException(sprintf('$nrOfBytes to read must be greater than 0, %d given', $nrOfBytes));
