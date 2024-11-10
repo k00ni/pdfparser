@@ -90,7 +90,7 @@ class DictionaryValue {
                 DictionaryKey::PROCSET,
                 DictionaryKey::F,
                 DictionaryKey::ROOT => ReferenceValue::fromValue($valueString),
-                DictionaryKey::CONTENTS =>$isLiteralString ? TextStringValue::fromValue($valueString) :  ReferenceValueArray::fromValue($valueString),
+                DictionaryKey::CONTENTS => $isLiteralString ? TextStringValue::fromValue($valueString) : ReferenceValueArray::fromValue($valueString),
                 DictionaryKey::RESOURCES,
                 DictionaryKey::KIDS => ReferenceValueArray::fromValue($valueString),
                 DictionaryKey::CREATOR,

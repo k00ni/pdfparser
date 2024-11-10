@@ -11,7 +11,8 @@ class ObjectStreamItem {
         private readonly Stream $streamContent,
         private readonly int $byteOffsetStart,
         private readonly int $byteOffsetEnd,
-    ) { }
+    ) {
+    }
 
     public function getDictionary(): Dictionary {
         return DictionaryParser::parse(

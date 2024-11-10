@@ -9,7 +9,8 @@ class ObjectStreamData {
     public function __construct(
         public readonly array $objectNumberByteOffsets,
         private readonly Stream $streamContent,
-    ) { }
+    ) {
+    }
 
     private function getRelativeByteOffsetForObject(int $objNumber): ?int {
         return $this->objectNumberByteOffsets[$objNumber] ?? null;

@@ -1,15 +1,14 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Boolean;
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\DictionaryValueType;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 
-class BooleanValue implements DictionaryValueType
-{
+class BooleanValue implements DictionaryValueType {
     public function __construct(
         public readonly bool $value,
-    ){
+    ) {
     }
 
     public static function fromValue(string $valueString): DictionaryValueType {
