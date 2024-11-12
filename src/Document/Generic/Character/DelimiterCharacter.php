@@ -26,7 +26,7 @@ enum DelimiterCharacter: string {
     /**
      * Any occurrence of the PERCENT SIGN outside a string or stream introduces a comment. The comment
      * consists of all characters after the PERCENT SIGN and up to but not including the end of the line, including
-     * regular, delimiter, SPACE (20h), and HORZONTAL TAB characters (09h). A conforming reader shall ignore
+     * regular, delimiter, SPACE (20h), and HORIZONTAL TAB characters (09h). A conforming reader shall ignore
      * comments, and treat them as single white-space characters. That is, a comment separates the token preceding
      * it from the one following it.
      *
