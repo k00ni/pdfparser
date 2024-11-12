@@ -17,10 +17,6 @@ class CrossReferenceSubSection {
         public readonly int $nrOfEntries,
         CrossReferenceEntryInUseObject|CrossReferenceEntryFreeObject|CrossReferenceEntryCompressed... $crossReferenceEntries
     ) {
-        //        if ($this->nrOfEntries !== count($crossReferenceEntries)) {
-        //            throw new InvalidArgumentException(sprintf('Cross reference subsection defines %d entries, got %d', $this->nrOfEntries, count($crossReferenceEntries)));
-        //        }
-
         $this->crossReferenceEntries = $crossReferenceEntries;
     }
 
@@ -34,7 +30,8 @@ class CrossReferenceSubSection {
             return null;
         }
 
-        return $this->crossReferenceEntries[$objNumber - $this->firstObjectNumber] ?? throw new RuntimeException(sprintf('Object with key %d should exist when self::containsObject is true', $objNumber - $this->firstObjectNumber));
+        return $this->crossReferenceEntries[$objNumber - $this->firstObjectNumber]
+            ?? throw new RuntimeException(sprintf('Object with key %d should exist when self::containsObject is true', $objNumber - $this->firstObjectNumber));
     }
 
     /** @return list<int> */

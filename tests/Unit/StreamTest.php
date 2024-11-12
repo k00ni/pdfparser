@@ -10,22 +10,14 @@ use PrinsFrank\PdfParser\Stream;
 #[CoversClass(Stream::class)]
 class StreamTest extends TestCase {
     public function testStrrpos(): void {
-        $stream = Stream::fromString('123abc123');
+        $stream = Stream::fromString('123objxref');
         static::assertSame(
             3,
-            $stream->lastPos('abc', 0)
+            $stream->lastPos(Marker::OBJ, 0)
         );
         static::assertSame(
             6,
-            $stream->lastPos('123', 0)
-        );
-        static::assertSame(
-            7,
-            $stream->lastPos('23', 0)
-        );
-        static::assertSame(
-            8,
-            $stream->lastPos('3', 0)
+            $stream->lastPos(Marker::XREF, 0)
         );
     }
 

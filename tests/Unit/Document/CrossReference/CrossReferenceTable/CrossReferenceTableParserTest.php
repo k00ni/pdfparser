@@ -4,12 +4,12 @@ namespace PrinsFrank\PdfParser\Tests\Unit\Document\CrossReference\CrossReference
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\SubSection\CrossReferenceSubSection;
-use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\SubSection\Entry\CrossReferenceEntryFreeObject;
-use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\SubSection\Entry\CrossReferenceEntryInUseObject;
-use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\Table\CrossReferenceSource;
-use PrinsFrank\PdfParser\Document\CrossReference\CrossReferenceTable\Table\CrossReferenceTableParser;
-use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\CrossReferenceSection;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\CrossReferenceSubSection;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryFreeObject;
+use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryInUseObject;
+use PrinsFrank\PdfParser\Document\CrossReference\Table\CrossReferenceTableParser;
+use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Stream;
 
 #[CoversClass(CrossReferenceTableParser::class)]
@@ -21,13 +21,18 @@ class CrossReferenceTableParserTest extends TestCase {
     public function testParseExample1(): void {
         $stream = Stream::fromString(
             <<<EOD
-            xref
             28 5
+            trailer
+
             EOD
         );
-        static::expectException(InvalidArgumentException::class);
-        static::expectExceptionMessage('Cross reference subsection defines 5 entries, got 0');
-        CrossReferenceTableParser::parse($stream, 0, $stream->getSizeInBytes());
+        static::assertEquals(
+            new CrossReferenceSection(
+                new Dictionary(),
+                new CrossReferenceSubSection(28, 5),
+            ),
+            CrossReferenceTableParser::parse($stream, 0, $stream->getSizeInBytes()),
+        );
     }
 
     /**
@@ -39,7 +44,6 @@ class CrossReferenceTableParserTest extends TestCase {
     public function testParseExample2(): void {
         $stream = Stream::fromString(
             <<<EOD
-            xref
             0 6
             0000000003 65535 f
             0000000017 00000 n
@@ -47,10 +51,13 @@ class CrossReferenceTableParserTest extends TestCase {
             0000000000 00007 f
             0000000331 00000 n
             0000000409 00000 n
+            trailer
+
             EOD
         );
         static::assertEquals(
-            new CrossReferenceSource(
+            new CrossReferenceSection(
+                new Dictionary(),
                 new CrossReferenceSubSection(
                     0,
                     6,
@@ -60,7 +67,7 @@ class CrossReferenceTableParserTest extends TestCase {
                     new CrossReferenceEntryFreeObject(0, 7),
                     new CrossReferenceEntryInUseObject(331, 0),
                     new CrossReferenceEntryInUseObject(409, 0),
-                )
+                ),
             ),
             CrossReferenceTableParser::parse($stream, 0, $stream->getSizeInBytes()),
         );
@@ -78,7 +85,6 @@ class CrossReferenceTableParserTest extends TestCase {
     public function testParseExample3(): void {
         $stream = Stream::fromString(
             <<<EOD
-            xref
             0 1
             0000000000 65535 f
             3 1
@@ -88,10 +94,13 @@ class CrossReferenceTableParserTest extends TestCase {
             0000025635 00000 n
             30 1
             0000025777 00000 n
+            trailer
+
             EOD
         );
         static::assertEquals(
-            new CrossReferenceSource(
+            new CrossReferenceSection(
+                new Dictionary(),
                 (new CrossReferenceSubSection(
                     0,
                     1,
