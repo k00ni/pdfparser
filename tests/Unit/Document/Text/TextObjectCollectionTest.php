@@ -5,12 +5,12 @@ namespace PrinsFrank\PdfParser\Tests\Unit\Document\Text;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use PrinsFrank\PdfParser\Unused\Text\OperatorString\TextPositioningOperator;
-use PrinsFrank\PdfParser\Unused\Text\OperatorString\TextShowingOperator;
-use PrinsFrank\PdfParser\Unused\Text\OperatorString\TextStateOperator;
-use PrinsFrank\PdfParser\Unused\Text\TextObject;
-use PrinsFrank\PdfParser\Unused\Text\TextObjectCollection;
-use PrinsFrank\PdfParser\Unused\Text\TextOperator;
+use PrinsFrank\PdfParser\Document\Text\OperatorString\TextPositioningOperator;
+use PrinsFrank\PdfParser\Document\Text\OperatorString\TextShowingOperator;
+use PrinsFrank\PdfParser\Document\Text\OperatorString\TextStateOperator;
+use PrinsFrank\PdfParser\Document\Text\TextObject;
+use PrinsFrank\PdfParser\Document\Text\TextObjectCollection;
+use PrinsFrank\PdfParser\Document\Text\TextOperator;
 
 #[CoversClass(TextObjectCollection::class)]
 class TextObjectCollectionTest extends TestCase {
