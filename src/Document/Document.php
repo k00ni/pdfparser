@@ -5,6 +5,7 @@ namespace PrinsFrank\PdfParser\Document;
 
 use PrinsFrank\PdfParser\Document\CrossReference\Source\CrossReferenceSource;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryCompressed;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Object\ObjectItem;
 use PrinsFrank\PdfParser\Document\Object\ObjectItemParser;
 use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamItem;
@@ -20,10 +21,21 @@ final class Document {
     ) {
     }
 
-    public function getCatalog(): ObjectItem|ObjectStreamItem|null {
-        return $this->getObject(
-            $this->crossReferenceSource->getRoot()->objectNumber
-        );
+    public function getInformationDictionary(): ObjectItem|ObjectStreamItem|null {
+        $infoReference = $this->crossReferenceSource->getReferenceForKey(DictionaryKey::INFO);
+        if ($infoReference === null) {
+            return null;
+        }
+
+        return $this->getObject($infoReference->objectNumber);
+    }
+
+    public function getCatalog(): ObjectItem|ObjectStreamItem {
+        $rootReference = $this->crossReferenceSource->getReferenceForKey(DictionaryKey::ROOT)
+            ?? throw new ParseFailureException('Unable to locate root for document.');
+
+        return $this->getObject($rootReference->objectNumber)
+            ?? throw new ParseFailureException(sprintf('Document references object %d as root, but object couln\'t be located', $rootReference->objectNumber));
     }
 
     public function getObject(int $objectNumber): ObjectItem|ObjectStreamItem|null {

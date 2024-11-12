@@ -8,7 +8,6 @@ use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryInUseObject;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValue;
-use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 /** Can be both from a crossReferenceTable or a crossReferenceStream */
 class CrossReferenceSource {
@@ -47,13 +46,14 @@ class CrossReferenceSource {
         return null;
     }
 
-    public function getRoot(): ReferenceValue {
+    public function getReferenceForKey(DictionaryKey $dictionaryKey): ?ReferenceValue {
         foreach ($this->crossReferenceSections as $crossReferenceSection) {
-            if (($rootReference = $crossReferenceSection->dictionary->getValueForKey(DictionaryKey::ROOT)) instanceof ReferenceValue) {
-                return $rootReference;
+            $referenceForKey = $crossReferenceSection->dictionary->getValueForKey($dictionaryKey);
+            if ($referenceForKey instanceof ReferenceValue) {
+                return $referenceForKey;
             }
         }
 
-        throw new ParseFailureException('Unable to locate root in any cross reference section');
+        return null;
     }
 }

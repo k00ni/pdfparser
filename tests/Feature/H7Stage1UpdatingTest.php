@@ -278,5 +278,15 @@ class H7Stage1UpdatingTest extends TestCase {
             ),
             $obj11->getDictionary($document->stream)
         );
+        static::assertEquals(
+            new ObjectItem(
+                1,
+                0,
+                9,
+                73,
+            ),
+            $document->getCatalog()
+        );
+        static::assertEquals(null, $document->getInformationDictionary());
     }
 }

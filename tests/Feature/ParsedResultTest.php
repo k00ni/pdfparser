@@ -20,6 +20,7 @@ class ParsedResultTest extends TestCase {
         $document = $parser->parse(Stream::openFile($pdfPath));
         $catalog = $document->getCatalog();
         static::assertNotNull($catalog, 'Every document should have a catalog');
+        $informationDictionary = $document->getInformationDictionary();
         $this->addToAssertionCount(1);
     }
 

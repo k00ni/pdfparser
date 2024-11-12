@@ -32,7 +32,7 @@ class ObjectStreamData {
         return new ObjectStreamItem(
             $this->streamContent,
             $byteOffsetStart = $this->getRelativeByteOffsetForObject($objNumber),
-            $this->getNextByteOffset($byteOffsetStart),
+            $this->getNextByteOffset($byteOffsetStart) ?? $this->streamContent->getSizeInBytes(),
         );
     }
 }

@@ -162,5 +162,15 @@ class H4SimpleGraphicsTest extends TestCase {
             $obj6,
         );
         static::assertNull($obj6->getDictionary($document->stream));
+        static::assertEquals(
+            new ObjectItem(
+                1,
+                0,
+                9,
+                73,
+            ),
+            $document->getCatalog()
+        );
+        static::assertEquals(null, $document->getInformationDictionary());
     }
 }

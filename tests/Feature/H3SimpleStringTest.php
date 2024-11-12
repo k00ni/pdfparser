@@ -186,5 +186,15 @@ class H3SimpleStringTest extends TestCase {
             ),
             $obj7->getDictionary($document->stream),
         );
+        static::assertEquals(
+            new ObjectItem(
+                1,
+                0,
+                9,
+                73,
+            ),
+            $document->getCatalog()
+        );
+        static::assertEquals(null, $document->getInformationDictionary());
     }
 }
