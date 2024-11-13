@@ -23,7 +23,6 @@ class CrossReferenceStreamParser {
     /**
      * @param positive-int $startPos
      * @param positive-int $nrOfBytes
-     * @throws ParseFailureException
      */
     public static function parse(Stream $stream, int $startPos, int $nrOfBytes): CrossReferenceSection {
         $dictionary = DictionaryParser::parse($stream, $startPos, $nrOfBytes);

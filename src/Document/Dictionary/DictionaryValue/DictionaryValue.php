@@ -24,7 +24,6 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use Throwable;
 
 class DictionaryValue {
-    /** @throws ParseFailureException */
     public static function fromValueString(DictionaryKey $dictionaryKey, string $valueString): TrappedNameValue|DictionaryValueType|TypeNameValue|SubtypeNameValue|FilterNameValue {
         $isLiteralString = str_starts_with($valueString, '(') && str_ends_with($valueString, ')');
         try {
@@ -182,7 +181,6 @@ class DictionaryValue {
         }
     }
 
-    /** @throws ParseFailureException */
     public static function fromValueArray(DictionaryKey $dictionaryKey, array $valueArray): TrappedNameValue|DictionaryValueType|TypeNameValue|SubtypeNameValue|FilterNameValue {
         try {
             return match ($dictionaryKey) {

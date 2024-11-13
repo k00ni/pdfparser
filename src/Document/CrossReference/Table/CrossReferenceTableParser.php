@@ -14,7 +14,6 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream;
 
 class CrossReferenceTableParser {
-    /** @throws InvalidCrossReferenceLineException */
     public static function parse(Stream $stream, int $startPos, int $nrOfBytes): CrossReferenceSection {
         $startTrailerPos = $stream->firstPos(Marker::TRAILER, $startPos, $startPos + $nrOfBytes)
             ?? throw new ParseFailureException('Unable to locate trailer for crossReferenceTable');

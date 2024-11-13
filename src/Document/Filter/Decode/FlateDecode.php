@@ -7,7 +7,6 @@ use PrinsFrank\PdfParser\Exception\GzUncompressException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class FlateDecode {
-    /** @throws GzUncompressException */
     public static function decode(string $value, LZWFlatePredictorValue $predictor, ?int $columns): string {
         $decodedValue = @gzuncompress($value);
         if ($decodedValue === false) {

@@ -7,11 +7,9 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Document\Generic\Parsing\RollingCharBuffer;
-use PrinsFrank\PdfParser\Exception\BufferTooSmallException;
 
 #[CoversClass(RollingCharBuffer::class)]
 class RollingCharBufferTest extends TestCase {
-    /** @throws BufferTooSmallException */
     public function testGetPreviousCharacter(): void {
         $charBuffer = new RollingCharBuffer(3);
         $charBuffer->setCharacter('a');

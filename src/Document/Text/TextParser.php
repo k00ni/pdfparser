@@ -9,10 +9,8 @@ use PrinsFrank\PdfParser\Document\Text\OperatorString\TextObjectOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextPositioningOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextShowingOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextStateOperator;
-use PrinsFrank\PdfParser\Exception\BufferTooSmallException;
 
 class TextParser {
-    /** @throws BufferTooSmallException */
     public static function parse(string $text): TextObjectCollection {
         $textObjectCollection = new TextObjectCollection();
         $operatorBuffer = new RollingCharBuffer(2);

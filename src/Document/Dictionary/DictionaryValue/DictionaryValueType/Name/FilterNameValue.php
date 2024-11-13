@@ -25,7 +25,6 @@ enum FilterNameValue: string implements NameValue {
         return self::from(trim(rtrim(ltrim($valueString, '/[')), ']'));
     }
 
-    /** @throws ParseFailureException */
     public function decode(string $content, ?ArrayValue $decodeParams): ?string {
         return match($this) {
             self::DCT_DECODE => $content, // Dont decode JPEG content

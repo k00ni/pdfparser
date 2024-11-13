@@ -5,7 +5,6 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryVal
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 
 class WValue extends ArrayValue {
-    /** @throws InvalidArgumentException */
     public function __construct(array $value) {
         if (count($value) !== 3 || array_is_list($value) === false || is_int($value[0]) === false || is_int($value[1]) === false || is_int($value[2]) === false) {
             throw new InvalidArgumentException('Expect exactly three integer values');

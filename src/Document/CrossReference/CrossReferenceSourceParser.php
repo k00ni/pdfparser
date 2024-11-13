@@ -14,7 +14,6 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream;
 
 class CrossReferenceSourceParser {
-    /** @throws ParseFailureException */
     public static function parse(Stream $stream): CrossReferenceSource {
         $eofMarkerPos = $stream->lastPos(Marker::EOF, 0)
             ?? throw new MarkerNotFoundException(Marker::EOF->value);

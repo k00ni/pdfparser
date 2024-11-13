@@ -7,7 +7,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\DictionaryValueType;
 use PrinsFrank\PdfParser\Exception\InvalidDictionaryValueTypeFormatException;
-use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class ArrayValue implements DictionaryValueType {
     public function __construct(
@@ -15,7 +14,6 @@ class ArrayValue implements DictionaryValueType {
     ) {
     }
 
-    /** @throws ParseFailureException */
     public static function fromValue(string $valueString): DictionaryValueType {
         if (str_starts_with($valueString, '[') === false || str_ends_with($valueString, ']') === false) {
             throw new InvalidDictionaryValueTypeFormatException('Invalid value for array: "' . $valueString . '", should start with "[" and end with "]".');

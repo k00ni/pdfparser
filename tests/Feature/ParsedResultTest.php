@@ -6,13 +6,11 @@ namespace PrinsFrank\PdfParser\Tests\Feature;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Stream;
 use PrinsFrank\PdfParser\PdfParser;
 
 #[CoversNothing]
 class ParsedResultTest extends TestCase {
-    /** @throws PdfParserException */
     #[DataProvider('externalSamples')]
     public function testExternalSourcePDFs(string $pdfPath): void {
         $parser = new PdfParser();

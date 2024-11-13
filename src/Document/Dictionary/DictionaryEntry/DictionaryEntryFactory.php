@@ -8,7 +8,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class DictionaryEntryFactory {
-    /** @throws ParseFailureException */
     public static function fromKeyValuePair(string $keyString, array|string $dictionaryValue): ?DictionaryEntry {
         $dictionaryKey = DictionaryKey::tryFromKeyString(trim($keyString));
         if ($dictionaryKey === null) {

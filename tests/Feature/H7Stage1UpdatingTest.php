@@ -23,17 +23,11 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\TextString\TextStringValue;
 use PrinsFrank\PdfParser\Document\Object\ObjectItem;
 use PrinsFrank\PdfParser\Document\Version\Version;
-use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
-use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\PdfParser;
 use PrinsFrank\PdfParser\Stream;
 
 #[CoversNothing]
 class H7Stage1UpdatingTest extends TestCase {
-    /**
-     * @throws InvalidArgumentException
-     * @throws PdfParserException
-     */
     public function testStructure(): void {
         $document = (new PdfParser())
             ->parse(Stream::openFile(__DIR__ . '/samples/h7-updating-stage-1.pdf'));

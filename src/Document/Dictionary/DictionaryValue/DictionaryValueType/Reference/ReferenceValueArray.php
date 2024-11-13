@@ -14,7 +14,6 @@ class ReferenceValueArray implements DictionaryValueType {
         $this->referenceValues = $referenceValues;
     }
 
-    /** @throws InvalidDictionaryValueTypeFormatException */
     public static function fromValue(string $valueString): DictionaryValueType {
         $referenceParts = explode(' ', trim(rtrim(ltrim($valueString, '['), ']')));
         $nrOfReferenceParts = count($referenceParts);

@@ -10,8 +10,6 @@ use PrinsFrank\PdfParser\Document\Generic\Character\LiteralStringEscapeCharacter
 use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Document\Generic\Parsing\RollingCharBuffer;
-use PrinsFrank\PdfParser\Exception\BufferTooSmallException;
-use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream;
 
 /**
@@ -22,10 +20,6 @@ use PrinsFrank\PdfParser\Stream;
  * / start key
  */
 class DictionaryParser {
-    /**
-     * @throws BufferTooSmallException
-     * @throws ParseFailureException
-     */
     public static function parse(Stream $stream, int $startPos, int $nrOfBytes): Dictionary {
         $dictionaryArray = [];
         $rollingCharBuffer = new RollingCharBuffer(6);

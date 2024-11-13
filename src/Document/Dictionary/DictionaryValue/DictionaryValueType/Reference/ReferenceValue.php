@@ -13,7 +13,6 @@ class ReferenceValue implements DictionaryValueType {
     ) {
     }
 
-    /** @throws InvalidDictionaryValueTypeFormatException */
     public static function fromValue(string $valueString): DictionaryValueType {
         $referenceParts = explode(' ', trim(rtrim(ltrim($valueString, '['), ']')));
         if (count($referenceParts) !== 3) {
