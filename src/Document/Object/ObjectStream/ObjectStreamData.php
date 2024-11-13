@@ -2,6 +2,7 @@
 
 namespace PrinsFrank\PdfParser\Document\Object\ObjectStream;
 
+use PrinsFrank\PdfParser\Exception\RuntimeException;
 use PrinsFrank\PdfParser\Stream;
 
 class ObjectStreamData {
@@ -28,10 +29,10 @@ class ObjectStreamData {
         return null;
     }
 
-    public function getObjectStreamItem(int $objNumber): ?ObjectStreamItem {
+    public function getObjectStreamItem(int $objNumber): ObjectStreamItem {
         return new ObjectStreamItem(
             $this->streamContent,
-            $byteOffsetStart = $this->getRelativeByteOffsetForObject($objNumber),
+            $byteOffsetStart = $this->getRelativeByteOffsetForObject($objNumber) ?? throw new RuntimeException('Start Bute offset should not be null'),
             $this->getNextByteOffset($byteOffsetStart) ?? $this->streamContent->getSizeInBytes(),
         );
     }

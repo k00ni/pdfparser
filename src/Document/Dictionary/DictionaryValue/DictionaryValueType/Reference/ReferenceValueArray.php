@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference;
 
+use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\DictionaryValueType;
 use PrinsFrank\PdfParser\Exception\InvalidDictionaryValueTypeFormatException;
 
@@ -14,6 +15,7 @@ class ReferenceValueArray implements DictionaryValueType {
         $this->referenceValues = $referenceValues;
     }
 
+    #[Override]
     public static function fromValue(string $valueString): DictionaryValueType {
         $referenceParts = explode(' ', trim(rtrim(ltrim($valueString, '['), ']')));
         $nrOfReferenceParts = count($referenceParts);
@@ -27,18 +29,5 @@ class ReferenceValueArray implements DictionaryValueType {
         }
 
         return new self(... $referenceValues);
-    }
-
-    public function count(): int {
-        return count($this->referenceValues);
-    }
-
-    public function objectNumbers(): array {
-        $objectNumbers = [];
-        foreach ($this->referenceValues as $referenceValue) {
-            $objectNumbers[] = $referenceValue->objectNumber;
-        }
-
-        return $objectNumbers;
     }
 }

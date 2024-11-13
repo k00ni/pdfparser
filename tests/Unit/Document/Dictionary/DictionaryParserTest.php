@@ -30,7 +30,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::X_REF),
                 new DictionaryEntry(DictionaryKey::INDEX, new ArrayValue([0, 16])),
                 new DictionaryEntry(DictionaryKey::SIZE, new IntegerValue(16)),
-                new DictionaryEntry(DictionaryKey::W, new WValue([1, 2, 1])),
+                new DictionaryEntry(DictionaryKey::W, new WValue(1, 2, 1)),
                 new DictionaryEntry(DictionaryKey::ROOT, new ReferenceValue(13, 0)),
                 new DictionaryEntry(DictionaryKey::INFO, new ReferenceValue(14, 0)),
                 new DictionaryEntry(DictionaryKey::ID, new ArrayValue(['<F7F55EED423E47B1F3E311DE7CFCE2E5>', '<F7F55EED423E47B1F3E311DE7CFCE2E5>'])),
@@ -94,7 +94,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::ROOT, new ReferenceValue(4320, 0)),
                 new DictionaryEntry(DictionaryKey::SIZE, new IntegerValue(4738)),
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::X_REF),
-                new DictionaryEntry(DictionaryKey::W, new WValue([1, 4, 0])),
+                new DictionaryEntry(DictionaryKey::W, new WValue(1, 4, 0)),
             ),
             DictionaryParser::parse(
                 $stream = Stream::fromString(
@@ -140,7 +140,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::ROOT, new ReferenceValue(4320, 0)),
                 new DictionaryEntry(DictionaryKey::SIZE, new IntegerValue(4738)),
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::X_REF),
-                new DictionaryEntry(DictionaryKey::W, new WValue([1, 4, 0])),
+                new DictionaryEntry(DictionaryKey::W, new WValue(1, 4, 0)),
             ),
             DictionaryParser::parse(
                 $stream = Stream::fromString('<</DecodeParms<</Columns 5/Predictor 12>>/Filter/FlateDecode/ID[<9A27A23F6A2546448EBB340FF38477BD><C5C4714E306446ABAE40FE784477D322>]/Index[2460 1 4311 1 4317 2 4414 1 4717 21]/Info 4318 0 R/Length 106/Prev 46153797/Root 4320 0 R/Size 4738/Type/XRef/W[1 4 0]>>stream'),

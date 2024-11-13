@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name;
 
+use Override;
+
 enum TypeNameValue: string implements NameValue {
     case ANNOT = 'Annot';
     case CATALOG = 'Catalog';
@@ -20,6 +22,7 @@ enum TypeNameValue: string implements NameValue {
     case X_OBJECT = 'XObject';
     case X_REF = 'XRef';
 
+    #[Override]
     public static function fromValue(string $valueString): self {
         return self::from(trim(ltrim($valueString, '/')));
     }

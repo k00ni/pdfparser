@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name;
 
+use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Array\ArrayValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Integer\IntegerValue;
 use PrinsFrank\PdfParser\Document\Filter\Decode\FlateDecode;
 use PrinsFrank\PdfParser\Document\Filter\Decode\LZWFlatePredictorValue;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
@@ -21,17 +23,19 @@ enum FilterNameValue: string implements NameValue {
     case JBX_DECODE = 'JPXDecode';
     case CRYPT = 'Crypt';
 
+
+    #[Override]
     public static function fromValue(string $valueString): self {
         return self::from(trim(rtrim(ltrim($valueString, '/[')), ']'));
     }
 
-    public function decode(string $content, ?ArrayValue $decodeParams): ?string {
+    public function decode(string $content, ?ArrayValue $decodeParams): string {
         return match($this) {
             self::DCT_DECODE => $content, // Dont decode JPEG content
             self::FLATE_DECODE => FlateDecode::decode(
                 $content,
-                $decodeParams !== null ? LZWFlatePredictorValue::from((int) $decodeParams->getEntryWithKey(DictionaryKey::PREDICTOR)?->value->value) : LZWFlatePredictorValue::None,
-                $decodeParams?->getEntryWithKey(DictionaryKey::COLUMNS)?->value->value
+                $decodeParams !== null ? LZWFlatePredictorValue::from((int) $decodeParams->getValueForKey(DictionaryKey::PREDICTOR, IntegerValue::class)?->value) : LZWFlatePredictorValue::None,
+                $decodeParams?->getValueForKey(DictionaryKey::COLUMNS, IntegerValue::class)?->value
             ),
             default => throw new ParseFailureException('Content "' . $content . '" cannot be decoded for filter "' . $this->name . '"')
         };

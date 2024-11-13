@@ -13,8 +13,11 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream;
 
 class ObjectItem {
+    /** @phpstan-ignore property.uninitializedReadonly */
     private readonly ?Dictionary $dictionary;
-    private readonly ?ObjectStreamData $objectStreamData;
+
+    /** @phpstan-ignore property.uninitializedReadonly */
+    private readonly ObjectStreamData $objectStreamData;
 
     public function __construct(
         public readonly int $objectNumber,
@@ -31,6 +34,7 @@ class ObjectItem {
 
         $startDictionaryPos = $stream->firstPos(DelimiterCharacter::LESS_THAN_SIGN, $this->startOffset, $this->endOffset);
         if ($startDictionaryPos === null) {
+            /** @phpstan-ignore property.readOnlyAssignNotInConstructor */
             return $this->dictionary = null;
         }
 
@@ -39,19 +43,21 @@ class ObjectItem {
             throw new ParseFailureException(sprintf('Couldn\'t find the end of the dictionary in "%s"', $stream->read($startDictionaryPos, $stream->getSizeInBytes() - $this->endOffset)));
         }
 
+        /** @phpstan-ignore property.readOnlyAssignNotInConstructor */
         return $this->dictionary = DictionaryParser::parse($stream, $startDictionaryPos, $endDictionaryPos - $startDictionaryPos + strlen(DelimiterCharacter::GREATER_THAN_SIGN->value . DelimiterCharacter::GREATER_THAN_SIGN->value));
     }
 
-    public function getStreamData(Stream $stream): ?ObjectStreamData {
+    public function getStreamData(Stream $stream): ObjectStreamData {
         if (isset($this->objectStreamData)) {
             return $this->objectStreamData;
         }
 
         $dictionary = $this->getDictionary($stream);
-        if ($dictionary->getValueForKey(DictionaryKey::TYPE) !== TypeNameValue::OBJ_STM) {
+        if ($dictionary?->getValueForKey(DictionaryKey::TYPE, TypeNameValue::class) !== TypeNameValue::OBJ_STM) {
             throw new ParseFailureException('Unable to get stream data from item that is not a stream');
         }
 
+        /** @phpstan-ignore property.readOnlyAssignNotInConstructor */
         return $this->objectStreamData = ObjectStreamDataParser::parse(
             $stream,
             $this->startOffset,

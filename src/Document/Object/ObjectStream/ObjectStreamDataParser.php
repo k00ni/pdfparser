@@ -4,30 +4,33 @@ namespace PrinsFrank\PdfParser\Document\Object\ObjectStream;
 
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Integer\IntegerValue;
 use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Document\Generic\Parsing\InfiniteBuffer;
 use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamContent\ObjectStreamContentParser;
 use PrinsFrank\PdfParser\Exception\MarkerNotFoundException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Exception\RuntimeException;
 use PrinsFrank\PdfParser\Stream;
 
 class ObjectStreamDataParser {
     public static function parse(Stream $stream, int $startOffsetObject, int $endOffsetObject, Dictionary $dictionary): ObjectStreamData {
         $startStreamPos = $stream->getStartNextLineAfter(Marker::STREAM, $startOffsetObject, $endOffsetObject)
             ?? throw new MarkerNotFoundException(Marker::STREAM->value);
-
         $endStreamPos = $stream->firstPos(Marker::END_STREAM, $startStreamPos, $endOffsetObject)
             ?? throw new MarkerNotFoundException(Marker::END_STREAM->value);
         $eolPos = $stream->getEndOfCurrentLine($endStreamPos - 1, $endOffsetObject)
             ?? throw new MarkerNotFoundException(WhitespaceCharacter::LINE_FEED->value);
-
-        $content = ObjectStreamContentParser::parse($stream, $startStreamPos, $eolPos - $startStreamPos, $dictionary);
+        $content = ObjectStreamContentParser::parse($stream, $startStreamPos, $eolPos - $startStreamPos, $dictionary)
+            ?? throw new RuntimeException('Unable to parse object stream');
+        $first = $dictionary->getValueForKey(DictionaryKey::FIRST, IntegerValue::class)
+            ?? throw new RuntimeException('Expected a dictionary entry for "First", none found');
         $buffer = new InfiniteBuffer();
         $previousObjectNumber = null;
         $byteOffsets = [];
-        foreach (str_split(substr($content, 0, $dictionary->getValueForKey(DictionaryKey::FIRST)->value * 2), 2) as $char) {
-            $decodedChar = chr(hexdec($char));
+        foreach (str_split(substr($content, 0, $first->value * 2), 2) as $char) {
+            $decodedChar = chr((int) hexdec($char));
             if (WhitespaceCharacter::tryFrom($decodedChar) !== null) {
                 $numberInBuffer = $buffer->__toString();
                 if ($numberInBuffer !== (string)(int) $numberInBuffer) {
@@ -55,8 +58,8 @@ class ObjectStreamDataParser {
                 implode(
                     '',
                     array_map(
-                        fn (string $char) => chr(hexdec($char)),
-                        str_split(substr($content, $dictionary->getValueForKey(DictionaryKey::FIRST)->value * 2), 2)
+                        fn (string $char) => chr((int) hexdec($char)),
+                        str_split(substr($content, $first->value * 2), 2)
                     )
                 )
             )

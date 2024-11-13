@@ -18,7 +18,7 @@ class TextParser {
         $operandBuffer = new InfiniteBuffer();
         foreach (str_split($text) as $char) {
             $operandBuffer->addChar($char);
-            $operatorBuffer->next()->setCharacter($char);
+            $operatorBuffer->next($char);
             if ($operatorBuffer->seenBackedEnumValue(TextObjectOperator::BEGIN)) {
                 $operandBuffer->flush();
                 $textObject = new TextObject();
@@ -37,7 +37,7 @@ class TextParser {
             }
 
             $operator = $operatorBuffer->getBackedEnumValue(TextPositioningOperator::class, TextShowingOperator::class, TextStateOperator::class);
-            if ($operator !== null) {
+            if ($operator instanceof TextPositioningOperator || $operator instanceof TextShowingOperator || $operator instanceof TextStateOperator) {
                 $textObject->addTextOperator(new TextOperator($operator, trim($operandBuffer->removeChar(strlen($operator->value))->__toString())));
                 $operandBuffer->flush();
             }

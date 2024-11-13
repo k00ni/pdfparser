@@ -31,7 +31,7 @@ class CrossReferenceSourceParser {
 
         $byteOffsetLastCrossReferenceSection = (int) $byteOffsetLastCrossReferenceSection;
         if ($byteOffsetLastCrossReferenceSection > $stream->getSizeInBytes()) {
-            throw new ParseFailureException(sprintf('Invalid byte offset: position of last crossReference section %d is greater than total size of stream %d. Should this be %d?', (int) $byteOffsetLastCrossReferenceSection, $stream->getSizeInBytes(), $stream->lastPos(Marker::XREF, $stream->getSizeInBytes() - $startXrefMarkerPos) ?? $stream->lastPos(Marker::OBJ, $stream->getSizeInBytes() - $startXrefMarkerPos)));
+            throw new ParseFailureException(sprintf('Invalid byte offset: position of last crossReference section %d is greater than total size of stream %d. Should this be %d?', $byteOffsetLastCrossReferenceSection, $stream->getSizeInBytes(), $stream->lastPos(Marker::XREF, $stream->getSizeInBytes() - $startXrefMarkerPos) ?? $stream->lastPos(Marker::OBJ, $stream->getSizeInBytes() - $startXrefMarkerPos)));
         }
 
         $eolPosByteOffset = $stream->getEndOfCurrentLine($byteOffsetLastCrossReferenceSection, $stream->getSizeInBytes())
@@ -45,7 +45,7 @@ class CrossReferenceSourceParser {
             ? CrossReferenceTableParser::parse($stream, $eolPosByteOffset, $endCrossReferenceSection - $eolPosByteOffset)
             : CrossReferenceStreamParser::parse($stream, $eolPosByteOffset, $endCrossReferenceSection - $eolPosByteOffset);
         $crossReferenceSections = [$currentCrossReferenceSection];
-        while (($previous = $currentCrossReferenceSection->dictionary->getValueForKey(DictionaryKey::PREVIOUS)) instanceof IntegerValue && $previous->value !== 0) {
+        while (($previous = $currentCrossReferenceSection->dictionary->getValueForKey(DictionaryKey::PREVIOUS, IntegerValue::class)) !== null && $previous->value !== 0) {
             $eolPosByteOffset = $stream->getEndOfCurrentLine($previous->value + 1, $stream->getSizeInBytes())
                 ?? throw new ParseFailureException('Expected a newline after byte offset for cross reference stream');
             $endCrossReferenceSection = $isTable

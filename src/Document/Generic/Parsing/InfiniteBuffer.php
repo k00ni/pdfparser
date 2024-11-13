@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Generic\Parsing;
 
+use Override;
+
 class InfiniteBuffer {
     private string $buffer = '';
 
@@ -16,6 +18,7 @@ class InfiniteBuffer {
         return $this->setValue('');
     }
 
+    #[Override]
     public function __toString(): string {
         return $this->buffer;
     }

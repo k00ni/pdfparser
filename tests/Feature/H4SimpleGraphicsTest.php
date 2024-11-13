@@ -68,7 +68,7 @@ class H4SimpleGraphicsTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::OUTLINES, new ReferenceValue(2, 0)),
                 new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(3, 0)),
             ),
-            $obj1->getDictionary($document->stream)
+            $obj1?->getDictionary($document->stream)
         );
         $obj2 = $document->getObject(2);
         static::assertEquals(
@@ -85,7 +85,7 @@ class H4SimpleGraphicsTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::OUTLINES),
                 new DictionaryEntry(DictionaryKey::COUNT, new IntegerValue(0)),
             ),
-            $obj2->getDictionary($document->stream)
+            $obj2?->getDictionary($document->stream)
         );
         $obj3 = $document->getObject(3);
         static::assertEquals(
@@ -103,7 +103,7 @@ class H4SimpleGraphicsTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::KIDS, new ReferenceValueArray(new ReferenceValue(4, 0))),
                 new DictionaryEntry(DictionaryKey::COUNT, new IntegerValue(1)),
             ),
-            $obj3->getDictionary($document->stream)
+            $obj3?->getDictionary($document->stream)
         );
         $obj4 = $document->getObject(4);
         static::assertEquals(
@@ -127,7 +127,7 @@ class H4SimpleGraphicsTest extends TestCase {
                     ]
                 )),
             ),
-            $obj4->getDictionary($document->stream)
+            $obj4?->getDictionary($document->stream)
         );
         $obj5 = $document->getObject(5);
         static::assertEquals(
@@ -143,7 +143,7 @@ class H4SimpleGraphicsTest extends TestCase {
             new Dictionary(
                 new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(883)),
             ),
-            $obj5->getDictionary($document->stream)
+            $obj5?->getDictionary($document->stream)
         );
         $obj6 = $document->getObject(6);
         static::assertEquals(
@@ -155,7 +155,7 @@ class H4SimpleGraphicsTest extends TestCase {
             ),
             $obj6,
         );
-        static::assertNull($obj6->getDictionary($document->stream));
+        static::assertNull($obj6?->getDictionary($document->stream));
         static::assertEquals(
             new ObjectItem(
                 1,

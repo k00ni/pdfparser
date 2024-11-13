@@ -2,6 +2,7 @@
 
 namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Boolean;
 
+use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\DictionaryValueType;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 
@@ -11,6 +12,7 @@ class BooleanValue implements DictionaryValueType {
     ) {
     }
 
+    #[Override]
     public static function fromValue(string $valueString): DictionaryValueType {
         if ($valueString === 'true') {
             return new self(true);

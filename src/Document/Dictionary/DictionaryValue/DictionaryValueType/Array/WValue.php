@@ -2,30 +2,33 @@
 
 namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Array;
 
+use Override;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\DictionaryValueType;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
+use PrinsFrank\PdfParser\Exception\InvalidDictionaryValueTypeFormatException;
 
-class WValue extends ArrayValue {
-    public function __construct(array $value) {
-        if (count($value) !== 3 || array_is_list($value) === false || is_int($value[0]) === false || is_int($value[1]) === false || is_int($value[2]) === false) {
-            throw new InvalidArgumentException('Expect exactly three integer values');
-        }
-
-        parent::__construct($value);
-    }
-
-    public function getLengthRecord1InBytes(): int {
-        return $this->value[0];
-    }
-
-    public function getLengthRecord2InBytes(): int {
-        return $this->value[1];
-    }
-
-    public function getLengthRecord3InBytes(): int {
-        return $this->value[2];
-    }
+class WValue implements DictionaryValueType {
+    public function __construct(
+        public readonly int $lengthRecord1InBytes,
+        public readonly int $lengthRecord2InBytes,
+        public readonly int $lengthRecord3InBytes,
+    ) {}
 
     public function getTotalLengthInBytes(): int {
-        return $this->value[0] + $this->value[1] + $this->value[2];
+        return $this->lengthRecord1InBytes + $this->lengthRecord2InBytes + $this->lengthRecord3InBytes;
+    }
+
+    #[Override]
+    public static function fromValue(string $valueString): DictionaryValueType {
+        if (str_starts_with($valueString, '[') === false || str_ends_with($valueString, ']') === false) {
+            throw new InvalidDictionaryValueTypeFormatException('Invalid value for array: "' . $valueString . '", should start with "[" and end with "]".');
+        }
+
+        $values = explode(' ', trim(rtrim(ltrim($valueString, '['), ']')));
+        if (count($values) !== 3) {
+            throw new InvalidDictionaryValueTypeFormatException(sprintf('Expected exactly 3 integers, got %d', count($values)));
+        }
+
+        return new self((int) $values[0], (int) $values[1], (int) $values[2]);
     }
 }

@@ -7,6 +7,7 @@ use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\CrossReferenceSe
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryCompressed;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryInUseObject;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\DictionaryValueType;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValue;
 
 /** Can be both from a crossReferenceTable or a crossReferenceStream */
@@ -14,6 +15,7 @@ class CrossReferenceSource {
     /** @var list<CrossReferenceSection> Where the first is the newest incremental update and the last one is the oldest */
     private readonly array $crossReferenceSections;
 
+    /** @no-named-arguments */
     public function __construct(
         CrossReferenceSection... $crossReferenceSections,
     ) {
@@ -22,24 +24,9 @@ class CrossReferenceSource {
 
     public function getCrossReferenceEntry(int $objNumber): CrossReferenceEntryInUseObject|CrossReferenceEntryCompressed|null {
         foreach ($this->crossReferenceSections as $crossReferenceSection) {
-            if (($crossReferenceEntry = $crossReferenceSection->getCrossReferenceEntry($objNumber)) !== null) {
+            $crossReferenceEntry = $crossReferenceSection->getCrossReferenceEntry($objNumber);
+            if ($crossReferenceEntry !== null) {
                 return $crossReferenceEntry;
-            }
-        }
-
-        return null;
-    }
-
-    public function getNextByteOffset(int $currentByteOffset): ?int {
-        $byteOffsets = [];
-        foreach ($this->crossReferenceSections as $crossReferenceSection) {
-            $byteOffsets = [... $byteOffsets, ...$crossReferenceSection->getByteOffsets()];
-        }
-
-        sort($byteOffsets);
-        foreach ($byteOffsets as $byteOffset) {
-            if ($byteOffset > $currentByteOffset) {
-                return $byteOffset;
             }
         }
 
@@ -48,8 +35,8 @@ class CrossReferenceSource {
 
     public function getReferenceForKey(DictionaryKey $dictionaryKey): ?ReferenceValue {
         foreach ($this->crossReferenceSections as $crossReferenceSection) {
-            $referenceForKey = $crossReferenceSection->dictionary->getValueForKey($dictionaryKey);
-            if ($referenceForKey instanceof ReferenceValue) {
+            $referenceForKey = $crossReferenceSection->dictionary->getValueForKey($dictionaryKey, ReferenceValue::class);
+            if ($referenceForKey !== null) {
                 return $referenceForKey;
             }
         }

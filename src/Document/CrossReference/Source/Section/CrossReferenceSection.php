@@ -9,11 +9,12 @@ use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 
 /** There are multiple crossReference sections if there are incremental updates. See 7.5.6 */
 class CrossReferenceSection {
-    /** @param list<CrossReferenceSubSection> $crossReferenceSubSections */
+    /** @var list<CrossReferenceSubSection> */
     public readonly array $crossReferenceSubSections;
 
+    /** @no-named-arguments */
     public function __construct(
-        public readonly ?Dictionary $dictionary,
+        public readonly Dictionary $dictionary,
         CrossReferenceSubSection... $crossReferenceSubSections,
     ) {
         $this->crossReferenceSubSections = $crossReferenceSubSections;
@@ -27,15 +28,5 @@ class CrossReferenceSection {
         }
 
         return null;
-    }
-
-    /** @return list<int> */
-    public function getByteOffsets(): array {
-        $byteOffsets = [];
-        foreach ($this->crossReferenceSubSections as $crossReferenceSubSection) {
-            $byteOffsets = [... $byteOffsets, ...$crossReferenceSubSection->getByteOffsets()];
-        }
-
-        return $byteOffsets;
     }
 }

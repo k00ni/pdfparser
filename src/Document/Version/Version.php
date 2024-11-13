@@ -19,6 +19,8 @@ enum Version: string {
     public static function length(): int {
         $lengths = array_unique(array_map(static function (self $case) {return strlen($case->value);}, self::cases()));
 
-        return count($lengths) === 1 ? $lengths[0] : throw new RuntimeException('Not all version numbers have an equal length');
+        return count($lengths) === 1 && array_key_exists(0, $lengths)
+            ? $lengths[0]
+            : throw new RuntimeException('Not all version numbers have an equal length');
     }
 }

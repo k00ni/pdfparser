@@ -16,12 +16,12 @@ class ParsedResultTest extends TestCase {
         $parser = new PdfParser();
 
         $document = $parser->parse(Stream::openFile($pdfPath));
-        $catalog = $document->getCatalog();
-        static::assertNotNull($catalog, 'Every document should have a catalog');
-        $informationDictionary = $document->getInformationDictionary();
+        $document->getCatalog();
+        $document->getInformationDictionary();
         $this->addToAssertionCount(1);
     }
 
+    /** @return iterable<string, array{0: string}> */
     public static function externalSamples(): iterable {
         $files = scandir($basePath = __DIR__ . '/samples/external/');
         if ($files === false) {

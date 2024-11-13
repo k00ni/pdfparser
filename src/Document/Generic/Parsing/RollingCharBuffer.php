@@ -6,12 +6,10 @@ namespace PrinsFrank\PdfParser\Document\Generic\Parsing;
 use BackedEnum;
 use InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\BufferTooSmallException;
+use Stringable;
 
-/**
- * @template TLength of int<1, max>
- */
 class RollingCharBuffer {
-    /** @var TLength $length */
+    /** @var int<1, max> $length */
     private int $length;
 
     /** @var int<0, max> */
@@ -26,11 +24,11 @@ class RollingCharBuffer {
      * ['d', 'e', 'c']
      * ['d', 'e', 'f']
      *
-     * @var array<int<0, TLength>, string>
+     * @var array<int<0, max>, string>
      */
     private array $buffer = [];
 
-    /** @param TLength $length */
+    /** @phpstan-assert int<1, max> $length */
     public function __construct(int $length) {
         if ($length < 1) {
             throw new InvalidArgumentException('A negative or zero buffer length doesn\'t make sense, "' . $length . '" provided');
@@ -39,14 +37,8 @@ class RollingCharBuffer {
         $this->length = $length;
     }
 
-    public function next(): self {
+    public function next(string $char): self {
         $this->currentIndex++;
-        $this->setCharacter(null);
-
-        return $this;
-    }
-
-    public function setCharacter(?string $char): self {
         $this->buffer[$this->currentIndex % $this->length] = $char;
 
         return $this;
@@ -95,17 +87,17 @@ class RollingCharBuffer {
 
     /** @throws BufferTooSmallException */
     public function seenBackedEnumValue(BackedEnum $backedEnum): bool {
-        return $this->seenString($backedEnum->value);
+        return $this->seenString((string) $backedEnum->value);
     }
 
     /**
      * @template T of \BackedEnum
-     * @param array<class-string<T>> $enumClasses
+     * @param class-string<T> ...$enumClasses
      * @return T|null
+     * @no-named-arguments
      */
     public function getBackedEnumValue(string... $enumClasses): ?BackedEnum {
         foreach ($enumClasses as $enumClass) {
-            /** @var class-string<BackedEnum> */
             foreach ($enumClass::cases() as $case) {
                 if ($this->seenBackedEnumValue($case)) {
                     return $case;

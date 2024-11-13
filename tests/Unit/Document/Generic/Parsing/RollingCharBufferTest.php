@@ -12,41 +12,36 @@ use PrinsFrank\PdfParser\Document\Generic\Parsing\RollingCharBuffer;
 class RollingCharBufferTest extends TestCase {
     public function testGetPreviousCharacter(): void {
         $charBuffer = new RollingCharBuffer(3);
-        $charBuffer->setCharacter('a');
+        $charBuffer->next('a');
         static::assertNull($charBuffer->getPreviousCharacter());
         static::assertNull($charBuffer->getPreviousCharacter(1));
         static::assertNull($charBuffer->getPreviousCharacter(2));
 
-        $charBuffer->next()->setCharacter('b');
+        $charBuffer->next('b');
         static::assertSame('a', $charBuffer->getPreviousCharacter());
         static::assertSame('a', $charBuffer->getPreviousCharacter(1));
         static::assertNull($charBuffer->getPreviousCharacter(2));
 
-        $charBuffer->next()->setCharacter('c');
+        $charBuffer->next('c');
         static::assertSame('b', $charBuffer->getPreviousCharacter());
         static::assertSame('b', $charBuffer->getPreviousCharacter(1));
         static::assertSame('a', $charBuffer->getPreviousCharacter(2));
-
-        $charBuffer->next()->next()->setCharacter('d');
-        static::assertNull($charBuffer->getPreviousCharacter());
-        static::assertNull($charBuffer->getPreviousCharacter(1));
-        static::assertSame('c', $charBuffer->getPreviousCharacter(2));
     }
 
     public function testSeenMarker(): void {
         $charBuffer = new RollingCharBuffer(6);
         static::assertFalse($charBuffer->seenBackedEnumValue(Marker::STREAM));
-        $charBuffer->next()->setCharacter('s');
+        $charBuffer->next('s');
         static::assertFalse($charBuffer->seenBackedEnumValue(Marker::STREAM));
-        $charBuffer->next()->setCharacter('t');
+        $charBuffer->next('t');
         static::assertFalse($charBuffer->seenBackedEnumValue(Marker::STREAM));
-        $charBuffer->next()->setCharacter('r');
+        $charBuffer->next('r');
         static::assertFalse($charBuffer->seenBackedEnumValue(Marker::STREAM));
-        $charBuffer->next()->setCharacter('e');
+        $charBuffer->next('e');
         static::assertFalse($charBuffer->seenBackedEnumValue(Marker::STREAM));
-        $charBuffer->next()->setCharacter('a');
+        $charBuffer->next('a');
         static::assertFalse($charBuffer->seenBackedEnumValue(Marker::STREAM));
-        $charBuffer->next()->setCharacter('m');
+        $charBuffer->next('m');
         static::assertTrue($charBuffer->seenBackedEnumValue(Marker::STREAM));
     }
 }

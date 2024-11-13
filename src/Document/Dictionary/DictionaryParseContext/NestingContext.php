@@ -5,9 +5,6 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryParseContext;
 
 use PrinsFrank\PdfParser\Document\Generic\Parsing\InfiniteBuffer;
 
-/**
- * @template TLevel of int<0, max>
- */
 class NestingContext {
     private ?string $currentLevel;
 
@@ -112,9 +109,5 @@ class NestingContext {
         ($this->keyBuffer[$this->currentLevel] ?? null)?->flush();
 
         return $this;
-    }
-
-    public function getCurrentLevel(): ?string {
-        return $this->currentLevel;
     }
 }

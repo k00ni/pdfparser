@@ -181,6 +181,7 @@ class DictionaryValue {
         }
     }
 
+    /** @param array<mixed> $valueArray */
     public static function fromValueArray(DictionaryKey $dictionaryKey, array $valueArray): TrappedNameValue|DictionaryValueType|TypeNameValue|SubtypeNameValue|FilterNameValue {
         try {
             return match ($dictionaryKey) {
@@ -195,7 +196,6 @@ class DictionaryValue {
                 DictionaryKey::RESOURCES,
                 DictionaryKey::FONT,
                 DictionaryKey::ARTBOX => new ArrayValue($valueArray),
-                DictionaryKey::W => new WValue($valueArray),
                 default => throw new ParseFailureException('Dictionary key "' . $dictionaryKey->name . '" is not supported.'),
             };
         } catch (Throwable $e) {

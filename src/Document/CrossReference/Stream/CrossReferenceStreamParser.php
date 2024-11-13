@@ -9,7 +9,9 @@ use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryInUseObject;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Array\WValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Integer\IntegerValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamContent\ObjectStreamContentParser;
@@ -21,21 +23,17 @@ class CrossReferenceStreamParser {
     private const HEX_CHARS_IN_BYTE = 2;
 
     /**
-     * @param positive-int $startPos
-     * @param positive-int $nrOfBytes
+     * @phpstan-assert int<0, max> $startPos
+     * @phpstan-assert int<1, max> $nrOfBytes
      */
     public static function parse(Stream $stream, int $startPos, int $nrOfBytes): CrossReferenceSection {
         $dictionary = DictionaryParser::parse($stream, $startPos, $nrOfBytes);
-        $dictionaryType = $dictionary->getValueForKey(DictionaryKey::TYPE);
+        $dictionaryType = $dictionary->getValueForKey(DictionaryKey::TYPE, TypeNameValue::class);
         if ($dictionaryType !== TypeNameValue::X_REF) {
-            throw new ParseFailureException('Expected stream of type xref, got "' . ($dictionaryType?->name ?? 'null') . '" Dictionary: ' . json_encode($dictionary));
+            throw new ParseFailureException('Expected stream of type xref');
         }
 
-        $wValue = $dictionary->getValueForKey(DictionaryKey::W);
-        if ($wValue instanceof WValue === false) {
-            throw new ParseFailureException('Missing W value, can\'t decode xref stream.');
-        }
-
+        $wValue = $dictionary->getValueForKey(DictionaryKey::W, WValue::class);
         $startStream = $stream->getStartNextLineAfter(Marker::STREAM, $startPos, $startPos + $nrOfBytes)
             ?? throw new MarkerNotFoundException(Marker::STREAM->value);
 
@@ -47,9 +45,9 @@ class CrossReferenceStreamParser {
         $entries = [];
         $hexContent = ObjectStreamContentParser::parse($stream, $startStream, $endStream - $startStream - 1, $dictionary);
         foreach (str_split($hexContent, $wValue->getTotalLengthInBytes() * self::HEX_CHARS_IN_BYTE) as $referenceRow) {
-            $field1 = CrossReferenceStreamType::tryFrom($typeNr = hexdec(substr($referenceRow, 0, $wValue->getLengthRecord1InBytes() * self::HEX_CHARS_IN_BYTE)));
-            $field2 = hexdec(substr($referenceRow, $wValue->getLengthRecord1InBytes() * self::HEX_CHARS_IN_BYTE, $wValue->getLengthRecord2InBytes() * self::HEX_CHARS_IN_BYTE));
-            $field3 = hexdec(substr($referenceRow, ($wValue->getLengthRecord1InBytes() + $wValue->getLengthRecord2InBytes()) * self::HEX_CHARS_IN_BYTE, $wValue->getLengthRecord3InBytes() * self::HEX_CHARS_IN_BYTE));
+            $field1 = CrossReferenceStreamType::tryFrom($typeNr = hexdec(substr($referenceRow, 0, $wValue->lengthRecord1InBytes * self::HEX_CHARS_IN_BYTE)));
+            $field2 = hexdec(substr($referenceRow, $wValue->lengthRecord1InBytes * self::HEX_CHARS_IN_BYTE, $wValue->lengthRecord2InBytes * self::HEX_CHARS_IN_BYTE));
+            $field3 = hexdec(substr($referenceRow, ($wValue->lengthRecord1InBytes + $wValue->lengthRecord2InBytes) * self::HEX_CHARS_IN_BYTE, $wValue->lengthRecord3InBytes * self::HEX_CHARS_IN_BYTE));
 
             $entries[] = match ($field1) {
                 CrossReferenceStreamType::LINKED_LIST_FREE_OBJECT => new CrossReferenceEntryFreeObject($field2, $field3),
@@ -60,8 +58,8 @@ class CrossReferenceStreamParser {
         }
 
         /** @var list<int> $startObjNrOfItemsArray where all even items are the start object number and all odd items are the number of objects */
-        $startObjNrOfItemsArray = $dictionary->getValueForKey(DictionaryKey::INDEX)?->value
-            ?? [0, $dictionary->getValueForKey(DictionaryKey::SIZE)->value];
+        $startObjNrOfItemsArray = $dictionary->getValueForKey(DictionaryKey::INDEX, ArrayValue::class)?->value
+            ?? [0, $dictionary->getValueForKey(DictionaryKey::SIZE, IntegerValue::class)->value];
 
         $crossReferenceSubSections = [];
         foreach (array_chunk($startObjNrOfItemsArray, 2) as $startNrNrOfObjects) {

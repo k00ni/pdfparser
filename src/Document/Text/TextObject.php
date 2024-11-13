@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Text;
 
+use Override;
 use Stringable;
 
 class TextObject implements Stringable {
@@ -15,6 +16,7 @@ class TextObject implements Stringable {
         return $this;
     }
 
+    #[Override]
     public function __toString(): string {
         return implode('', $this->textOperators);
     }

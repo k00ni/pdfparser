@@ -6,12 +6,13 @@ namespace PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryCompressed;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryFreeObject;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryInUseObject;
-use RuntimeException;
+use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 class CrossReferenceSubSection {
     /** @var array<CrossReferenceEntryInUseObject|CrossReferenceEntryFreeObject|CrossReferenceEntryCompressed> */
     public array $crossReferenceEntries = [];
 
+    /** @no-named-arguments */
     public function __construct(
         public readonly int $firstObjectNumber,
         public readonly int $nrOfEntries,
@@ -30,19 +31,12 @@ class CrossReferenceSubSection {
             return null;
         }
 
-        return $this->crossReferenceEntries[$objNumber - $this->firstObjectNumber]
+        $object = $this->crossReferenceEntries[$objNumber - $this->firstObjectNumber]
             ?? throw new RuntimeException(sprintf('Object with key %d should exist when self::containsObject is true', $objNumber - $this->firstObjectNumber));
-    }
-
-    /** @return list<int> */
-    public function getByteOffsets(): array {
-        $byteOffsets = [];
-        foreach ($this->crossReferenceEntries as $crossReferenceEntry) {
-            if ($crossReferenceEntry instanceof CrossReferenceEntryInUseObject) {
-                $byteOffsets[] = $crossReferenceEntry->byteOffsetInDecodedStream;
-            }
+        if ($object instanceof CrossReferenceEntryFreeObject) {
+            throw new RuntimeException('Cross reference entry for object should point to either a compressed or uncompressed entry, not a free object nr');
         }
 
-        return $byteOffsets;
+        return $object;
     }
 }

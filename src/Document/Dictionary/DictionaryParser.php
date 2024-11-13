@@ -20,12 +20,16 @@ use PrinsFrank\PdfParser\Stream;
  * / start key
  */
 class DictionaryParser {
+    /**
+     * @phpstan-assert int<0, max> $startPos
+     * @phpstan-assert int<1, max> $nrOfBytes
+     */
     public static function parse(Stream $stream, int $startPos, int $nrOfBytes): Dictionary {
         $dictionaryArray = [];
         $rollingCharBuffer = new RollingCharBuffer(6);
         $nestingContext = (new NestingContext())->setContext(DictionaryParseContext::ROOT);
         foreach ($stream->chars($startPos, $nrOfBytes) as $char) {
-            $rollingCharBuffer->next()->setCharacter($char);
+            $rollingCharBuffer->next($char);
             if ($rollingCharBuffer->seenBackedEnumValue(Marker::STREAM)) {
                 break;
             }
@@ -85,6 +89,7 @@ class DictionaryParser {
         return DictionaryFactory::fromArray($dictionaryArray);
     }
 
+    /** @param array<mixed> $dictionaryArray */
     private static function flush(array &$dictionaryArray, NestingContext $nestingContext): void {
         if ($nestingContext->getValueBuffer()->isEmpty() || $nestingContext->getKeyBuffer()->isEmpty()) {
             return;
@@ -96,9 +101,11 @@ class DictionaryParser {
                 break;
             }
 
+            /** @phpstan-ignore offsetAccess.nonOffsetAccessible */
             $dictionaryArrayPointer = &$dictionaryArrayPointer[trim($key)];
         }
 
+        /** @phpstan-ignore offsetAccess.nonOffsetAccessible */
         $dictionaryArrayPointer[(string) $nestingContext->getKeyBuffer()] = trim((string) $nestingContext->getValueBuffer());
         $nestingContext->flush()->setContext(DictionaryParseContext::ROOT);
     }

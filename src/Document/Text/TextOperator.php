@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Text;
 
+use Override;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextPositioningOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextShowingOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextStateOperator;
@@ -15,6 +16,7 @@ class TextOperator implements Stringable {
     ) {
     }
 
+    #[Override]
     public function __toString(): string {
         if ($this->operator instanceof TextShowingOperator === false) {
             return '';

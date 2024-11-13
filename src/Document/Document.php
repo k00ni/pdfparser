@@ -6,11 +6,13 @@ namespace PrinsFrank\PdfParser\Document;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\CrossReferenceSource;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryCompressed;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Object\ObjectItem;
 use PrinsFrank\PdfParser\Document\Object\ObjectItemParser;
 use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamItem;
 use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Exception\RuntimeException;
 use PrinsFrank\PdfParser\Stream;
 
 final class Document {
@@ -41,12 +43,16 @@ final class Document {
     public function getObject(int $objectNumber): ObjectItem|ObjectStreamItem|null {
         $crossReferenceEntry = $this->crossReferenceSource->getCrossReferenceEntry($objectNumber);
         if ($crossReferenceEntry === null) {
-            throw new ParseFailureException(sprintf('No crossReference entry found for object with number %d', $objectNumber));
+            return null;
         }
 
         if ($crossReferenceEntry instanceof CrossReferenceEntryCompressed) {
-            return $this->getObject($crossReferenceEntry->storedInStreamWithObjectNumber)
-                ->getStreamData($this->stream)
+            $parentObject = $this->getObject($crossReferenceEntry->storedInStreamWithObjectNumber) ?? throw new RuntimeException(sprintf('Parent object for %d with number %d doesn\'t exist', $objectNumber, $crossReferenceEntry->storedInStreamWithObjectNumber));
+            if ($parentObject instanceof ObjectStreamItem) {
+                throw new RuntimeException('Parents for stream items shouldn\'t be stream items themselves');
+            }
+
+            return $parentObject->getStreamData($this->stream)
                 ->getObjectStreamItem($objectNumber);
         }
 

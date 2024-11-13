@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Integer;
 
+use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\DictionaryValueType;
 use PrinsFrank\PdfParser\Exception\InvalidDictionaryValueTypeFormatException;
 
@@ -12,6 +13,7 @@ class IntegerValue implements DictionaryValueType {
     ) {
     }
 
+    #[Override]
     public static function fromValue(string $valueString): DictionaryValueType {
         $valueAsInt = (int) $valueString;
         if ((string) $valueAsInt !== $valueString) {

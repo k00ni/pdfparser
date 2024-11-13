@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name;
 
+use Override;
+
 enum SubtypeNameValue: string implements NameValue {
     case CID_FONT_TYPE_0 = 'CIDFontType0';
     case CID_FONT_TYPE_0_C = 'CIDFontType0C';
@@ -18,6 +20,7 @@ enum SubtypeNameValue: string implements NameValue {
     case XML = 'XML';
     case TEXT = 'Text';
 
+    #[Override]
     public static function fromValue(string $valueString): self {
         return self::from(trim(ltrim($valueString, '/')));
     }

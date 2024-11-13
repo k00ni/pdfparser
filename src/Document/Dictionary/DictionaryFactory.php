@@ -6,6 +6,7 @@ namespace PrinsFrank\PdfParser\Document\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntryFactory;
 
 class DictionaryFactory {
+    /** @param array<mixed> $dictionaryArray */
     public static function fromArray(array $dictionaryArray): Dictionary {
         $dictionaryEntries = [];
         foreach ($dictionaryArray as $keyString => $value) {

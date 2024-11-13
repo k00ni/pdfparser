@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Float;
 
+use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\DictionaryValueType;
 use PrinsFrank\PdfParser\Exception\InvalidDictionaryValueTypeFormatException;
 
@@ -12,6 +13,7 @@ class FloatValue implements DictionaryValueType {
     ) {
     }
 
+    #[Override]
     public static function fromValue(string $valueString): DictionaryValueType {
         $valueAsInt = (float) $valueString;
         if ((string) $valueAsInt !== $valueString) {
