@@ -42,5 +42,6 @@ body:
           options:
               - Yes, I give permission to use this file as a test file to prevent future regressions (And am authorized to give this permission)
               - No, please don't use this file
+          default: 0
       validations:
           required: true
