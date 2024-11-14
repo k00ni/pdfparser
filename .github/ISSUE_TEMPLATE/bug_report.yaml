@@ -3,23 +3,44 @@ description: File a bug report.
 title: "[Bug]: "
 labels: ["bug"]
 assignees:
-  - PrinsFrank
+    - PrinsFrank
 body:
-  - type: checkboxes
-    attributes:
-      label: Is there an existing issue for this?
-      options:
-        - label: I have searched the existing issues and found no similar reports
+    - type: checkboxes
+      attributes:
+          label: Is there an existing issue for this?
+          options:
+              - label: I have searched the existing issues and found no similar reports
+                required: true
+    - type: checkboxes
+      attributes:
+          label: Are you using the latest version of this package?
+          options:
+              - label: The issue I'm reporting exists in the latest release
+                required: true
+    - type: checkboxes
+      attributes:
+          label: Can other PDF readers read the file?
+          options:
+              - label: The PDF I'm trying to read opens correctly in at least one other PDF reader
+                required: true
+    - type: textarea
+      attributes:
+          label: When running this snippet (Please attach the pdf)
+          render: PHP
+          value: |
+              $document = PdfParser::parse(Stream::openFile('/path/to/file.pdf'));
+      validations:
           required: true
-  - type: checkboxes
-    attributes:
-      label: Are you using the latest version of this package?
-      options:
-        - label: The issue I'm reporting exists in the latest release
+    - type: textarea
+      attributes:
+          label: I run into the following issue/exception
+      validations:
           required: true
-  - type: checkboxes
-    attributes:
-      label: Can other PDF readers read the file?
-      options:
-        - label: The PDF I'm trying to read opens correctly in at least one other PDF reader
+    - type: dropdown
+      attributes:
+          label: Do you allow attachment files to be used in tests to prevent regressions?
+          options:
+              - Yes, I give permission to use this file as a test file to prevent future regressions (And am authorized to give this permission)
+              - No, please don't use this file
+      validations:
           required: true
