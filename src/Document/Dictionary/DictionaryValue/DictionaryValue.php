@@ -91,6 +91,7 @@ class DictionaryValue {
                 DictionaryKey::ROOT => ReferenceValue::fromValue($valueString),
                 DictionaryKey::CONTENTS => $isLiteralString ? TextStringValue::fromValue($valueString) : ReferenceValueArray::fromValue($valueString),
                 DictionaryKey::RESOURCES,
+                DictionaryKey::NAMES,
                 DictionaryKey::KIDS => ReferenceValueArray::fromValue($valueString),
                 DictionaryKey::CREATOR,
                 DictionaryKey::OPEN_ACTION,
@@ -166,6 +167,7 @@ class DictionaryValue {
                 DictionaryKey::S_M,
                 DictionaryKey::C_O_,
                 DictionaryKey::PAGE,
+                DictionaryKey::NUMS,
                 DictionaryKey::PRODUCER => TextStringValue::fromValue($valueString),
                 DictionaryKey::MOD_DATE,
                 DictionaryKey::CREATION_DATE => DateValue::fromValue($valueString),
@@ -195,6 +197,7 @@ class DictionaryValue {
                 DictionaryKey::DECODE_PARAMS,
                 DictionaryKey::RESOURCES,
                 DictionaryKey::FONT,
+                DictionaryKey::PAGE_LABELS,
                 DictionaryKey::ARTBOX => new ArrayValue($valueArray),
                 default => throw new ParseFailureException('Dictionary key "' . $dictionaryKey->name . '" is not supported.'),
             };

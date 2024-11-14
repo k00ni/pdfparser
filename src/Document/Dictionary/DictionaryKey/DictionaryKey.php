@@ -113,6 +113,7 @@ enum DictionaryKey: string {
     case NAME = 'Name';
     case NAMES = 'Names';
     case NEEDS_RENDERING = 'NeedsRendering';
+    case NUMS = 'Nums';
     case O = 'O';
     case OC_PROPERTIES = 'OCProperties';
     case OPEN_ACTION = 'OpenAction';

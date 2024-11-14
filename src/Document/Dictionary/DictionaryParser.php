@@ -34,13 +34,13 @@ class DictionaryParser {
                 break;
             }
 
-            if ($char === DelimiterCharacter::LESS_THAN_SIGN->value && $rollingCharBuffer->getPreviousCharacter() === DelimiterCharacter::LESS_THAN_SIGN->value && $rollingCharBuffer->getPreviousCharacter(2) !== LiteralStringEscapeCharacter::REVERSE_SOLIDUS->value) {
+            if ($char === DelimiterCharacter::LESS_THAN_SIGN->value && $rollingCharBuffer->getPreviousCharacter() === DelimiterCharacter::LESS_THAN_SIGN->value && $rollingCharBuffer->getPreviousCharacter(2) !== LiteralStringEscapeCharacter::REVERSE_SOLIDUS->value && $nestingContext->getContext() !== DictionaryParseContext::VALUE_IN_SQUARE_BRACKETS) {
                 if ($nestingContext->getContext() === DictionaryParseContext::KEY) {
                     $nestingContext->removeFromKeyBuffer();
                 }
 
                 $nestingContext->setContext(DictionaryParseContext::DICTIONARY)->incrementNesting()->setContext(DictionaryParseContext::DICTIONARY);
-            } elseif ($char === DelimiterCharacter::GREATER_THAN_SIGN->value && $rollingCharBuffer->getPreviousCharacter() === DelimiterCharacter::GREATER_THAN_SIGN->value && $rollingCharBuffer->getPreviousCharacter(2) !== LiteralStringEscapeCharacter::REVERSE_SOLIDUS->value) {
+            } elseif ($char === DelimiterCharacter::GREATER_THAN_SIGN->value && $rollingCharBuffer->getPreviousCharacter() === DelimiterCharacter::GREATER_THAN_SIGN->value && $rollingCharBuffer->getPreviousCharacter(2) !== LiteralStringEscapeCharacter::REVERSE_SOLIDUS->value && $nestingContext->getContext() !== DictionaryParseContext::VALUE_IN_SQUARE_BRACKETS) {
                 $nestingContext->removeFromValueBuffer();
                 self::flush($dictionaryArray, $nestingContext);
                 $nestingContext->decrementNesting()->flush();

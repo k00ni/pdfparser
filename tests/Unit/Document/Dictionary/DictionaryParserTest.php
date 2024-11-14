@@ -15,10 +15,12 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Float\FloatValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Integer\IntegerValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\FilterNameValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\PageModeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TrappedNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Rectangle\Rectangle;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\TextString\TextStringValue;
 use PrinsFrank\PdfParser\Stream;
 
@@ -39,19 +41,21 @@ class DictionaryParserTest extends TestCase {
             ),
             DictionaryParser::parse(
                 $stream = Stream::fromString(
-                    '15 0 obj' . PHP_EOL .
-                    '<<' . PHP_EOL .
-                    '/Type /XRef' . PHP_EOL .
-                    '/Index [0 16]' . PHP_EOL .
-                    '/Size 16' . PHP_EOL .
-                    '/W [1 2 1]' . PHP_EOL .
-                    '/Root 13 0 R' . PHP_EOL .
-                    '/Info 14 0 R' . PHP_EOL .
-                    '/ID [<F7F55EED423E47B1F3E311DE7CFCE2E5> <F7F55EED423E47B1F3E311DE7CFCE2E5>]' . PHP_EOL .
-                    '/Length 57' . PHP_EOL .
-                    '/Filter /FlateDecode' . PHP_EOL .
-                    '>>' . PHP_EOL .
-                    'stream' . PHP_EOL,
+                    <<<EOD
+                    15 0 obj
+                    <<
+                    /Type /XRef
+                    /Index [0 16]
+                    /Size 16
+                    /W [1 2 1]
+                    /Root 13 0 R
+                    /Info 14 0 R
+                    /ID [<F7F55EED423E47B1F3E311DE7CFCE2E5> <F7F55EED423E47B1F3E311DE7CFCE2E5>]
+                    /Length 57
+                    /Filter /FlateDecode
+                    >>
+                    stream
+                    EOD,
                 ),
                 0,
                 $stream->getSizeInBytes(),
@@ -66,9 +70,11 @@ class DictionaryParserTest extends TestCase {
             ),
             DictionaryParser::parse(
                 $stream = Stream::fromString(
-                    '<<' . PHP_EOL .
-                    '/Index [ 0 16 ]' . PHP_EOL .
-                    '>>',
+                    <<<EOD
+                    <<
+                    /Index [ 0 16 ]
+                    >>
+                    EOD,
                 ),
                 0,
                 $stream->getSizeInBytes(),
@@ -168,20 +174,22 @@ class DictionaryParserTest extends TestCase {
             ),
             DictionaryParser::parse(
                 $stream = Stream::fromString(
-                    '<<' . PHP_EOL .
-                    '/Type /FontDescriptor' . PHP_EOL .
-                    '/FontName /TAIPAH+CMR10' . PHP_EOL .
-                    '/Flags 4' . PHP_EOL .
-                    '/FontBBox [-40 -250 1009 750]' . PHP_EOL .
-                    '/Ascent 694' . PHP_EOL .
-                    '/CapHeight 683' . PHP_EOL .
-                    '/Descent -194' . PHP_EOL .
-                    '/ItalicAngle 0' . PHP_EOL .
-                    '/StemV 69' . PHP_EOL .
-                    '/XHeight 431' . PHP_EOL .
-                    '/CharSet (/S/a/c/d/e/fi/g/l/n/o/one/p/r/s/t/two)' . PHP_EOL .
-                    '/FontFile 11 0 R' . PHP_EOL .
-                    '>>',
+                    <<<EOD
+                    <<
+                    /Type /FontDescriptor
+                    /FontName /TAIPAH+CMR10
+                    /Flags 4
+                    /FontBBox [-40 -250 1009 750]
+                    /Ascent 694
+                    /CapHeight 683
+                    /Descent -194
+                    /ItalicAngle 0
+                    /StemV 69
+                    /XHeight 431
+                    /CharSet (/S/a/c/d/e/fi/g/l/n/o/one/p/r/s/t/two)
+                    /FontFile 11 0 R
+                    >>
+                    EOD,
                 ),
                 0,
                 $stream->getSizeInBytes(),
@@ -201,14 +209,16 @@ class DictionaryParserTest extends TestCase {
             ),
             DictionaryParser::parse(
                 $stream = Stream::fromString(
-                    '<<' . PHP_EOL .
-                    '/Producer (pdfTeX-1.40.18)' . PHP_EOL .
-                    '/Creator (TeX)' . PHP_EOL .
-                    '/CreationDate (D:20220506201153+02\'00\')' . PHP_EOL .
-                    '/ModDate (D:20220506201153+02\'00\')' . PHP_EOL .
-                    '/Trapped /False' . PHP_EOL .
-                    '/PTEX.Fullbanner (This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) kpathsea version 6.2.3)' . PHP_EOL .
-                    '>>',
+                    <<<EOD
+                    <<
+                    /Producer (pdfTeX-1.40.18)
+                    /Creator (TeX)
+                    /CreationDate (D:20220506201153+02'00')
+                    /ModDate (D:20220506201153+02'00')
+                    /Trapped /False
+                    /PTEX.Fullbanner (This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) kpathsea version 6.2.3)
+                    >>
+                    EOD,
                 ),
                 0,
                 $stream->getSizeInBytes(),
@@ -223,11 +233,46 @@ class DictionaryParserTest extends TestCase {
             ),
             DictionaryParser::parse(
                 $stream = Stream::fromString(
-                    '<<' . PHP_EOL .
-                    '/Producer (pdfTeX-1.40.18)' . PHP_EOL .
-                    '%/Creator (TeX)' . PHP_EOL .
-                    '%  /Creator (TeX)' . PHP_EOL .
-                    '>>',
+                    <<<EOD
+                    <<
+                    /Producer (pdfTeX-1.40.18)
+                    %/Creator (TeX)
+                    %  /Creator (TeX)
+                    >>
+                    EOD,
+                ),
+                0,
+                $stream->getSizeInBytes(),
+            )
+        );
+    }
+
+    public function testHandlesNumsNumberTree(): void {
+        static::assertEquals(
+            new Dictionary(
+                new DictionaryEntry(DictionaryKey::OPEN_ACTION, new TextStringValue('[3 0 R/Fit]')),
+                new DictionaryEntry(DictionaryKey::PAGE_MODE, PageModeNameValue::USE_OUTLINES),
+                new DictionaryEntry(DictionaryKey::PAGE_LABELS, new ArrayValue([
+                    new DictionaryEntry(DictionaryKey::NUMS, new TextStringValue('[0<</S/r>>12<</S/D>>]'))
+                ])),
+                new DictionaryEntry(DictionaryKey::NAMES, new ReferenceValueArray(new ReferenceValue(13164, 0))),
+                new DictionaryEntry(DictionaryKey::OUTLINES, new ReferenceValue(13165, 0)),
+                new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(13221, 0)),
+                new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::CATALOG),
+            ),
+            DictionaryParser::parse(
+                $stream = Stream::fromString(
+                    <<<EOD
+                    <<
+                    /OpenAction[3 0 R/Fit]
+                    /PageMode/UseOutlines
+                    /PageLabels<</Nums[0<</S/r>>12<</S/D>>]>>
+                    /Names 13164 0 R
+                    /Outlines 13165 0 R
+                    /Pages 13221 0 R
+                    /Type/Catalog
+                    >>
+                    EOD,
                 ),
                 0,
                 $stream->getSizeInBytes(),
