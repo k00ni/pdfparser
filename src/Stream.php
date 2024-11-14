@@ -94,6 +94,7 @@ class Stream {
     /**
      * @phpstan-assert int<0, max> $from
      * @phpstan-assert int<1, max> $nrOfBytes
+     *
      * @return iterable<string>
      */
     public function chars(int $from, int $nrOfBytes): iterable {

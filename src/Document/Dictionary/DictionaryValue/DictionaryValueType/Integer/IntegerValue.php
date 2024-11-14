@@ -14,7 +14,7 @@ class IntegerValue implements DictionaryValueType {
     }
 
     #[Override]
-    public static function fromValue(string $valueString): DictionaryValueType {
+    public static function fromValue(string $valueString): self {
         $valueAsInt = (int) $valueString;
         if ((string) $valueAsInt !== $valueString) {
             throw new InvalidDictionaryValueTypeFormatException('Non numerical value encountered for integerValue: "' . $valueString . '"');

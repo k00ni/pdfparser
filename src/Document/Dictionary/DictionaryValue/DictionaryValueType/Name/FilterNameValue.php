@@ -23,7 +23,6 @@ enum FilterNameValue: string implements NameValue {
     case JBX_DECODE = 'JPXDecode';
     case CRYPT = 'Crypt';
 
-
     #[Override]
     public static function fromValue(string $valueString): self {
         return self::from(trim(rtrim(ltrim($valueString, '/[')), ']'));
@@ -35,7 +34,7 @@ enum FilterNameValue: string implements NameValue {
             self::FLATE_DECODE => FlateDecode::decode(
                 $content,
                 $decodeParams !== null ? LZWFlatePredictorValue::from((int) $decodeParams->getValueForKey(DictionaryKey::PREDICTOR, IntegerValue::class)?->value) : LZWFlatePredictorValue::None,
-                $decodeParams?->getValueForKey(DictionaryKey::COLUMNS, IntegerValue::class)?->value
+                $decodeParams?->getValueForKey(DictionaryKey::COLUMNS, IntegerValue::class)->value ?? 1
             ),
             default => throw new ParseFailureException('Content "' . $content . '" cannot be decoded for filter "' . $this->name . '"')
         };

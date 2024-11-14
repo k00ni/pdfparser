@@ -6,7 +6,6 @@ namespace PrinsFrank\PdfParser\Document\Generic\Parsing;
 use BackedEnum;
 use InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\BufferTooSmallException;
-use Stringable;
 
 class RollingCharBuffer {
     /** @var int<1, max> $length */
@@ -94,6 +93,7 @@ class RollingCharBuffer {
      * @template T of \BackedEnum
      * @param class-string<T> ...$enumClasses
      * @return T|null
+     *
      * @no-named-arguments
      */
     public function getBackedEnumValue(string... $enumClasses): ?BackedEnum {

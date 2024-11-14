@@ -13,7 +13,7 @@ class BooleanValue implements DictionaryValueType {
     }
 
     #[Override]
-    public static function fromValue(string $valueString): DictionaryValueType {
+    public static function fromValue(string $valueString): self {
         if ($valueString === 'true') {
             return new self(true);
         }

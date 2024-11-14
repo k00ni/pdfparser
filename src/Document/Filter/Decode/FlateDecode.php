@@ -4,10 +4,16 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document\Filter\Decode;
 
 use PrinsFrank\PdfParser\Exception\GzUncompressException;
+use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 class FlateDecode {
-    public static function decode(string $value, LZWFlatePredictorValue $predictor, ?int $columns): string {
+    public static function decode(string $value, LZWFlatePredictorValue $predictor, int $columns = 1): string {
+        if ($columns < 1) {
+            throw new InvalidArgumentException(sprintf('Nr of columns should be equal to or bigger than 1, %d given', $columns));
+        }
+
         $decodedValue = @gzuncompress($value);
         if ($decodedValue === false) {
             throw new GzUncompressException('Unable to gzuncompress value "' . substr(trim($value), 0, 30) . '..."');
@@ -18,6 +24,10 @@ class FlateDecode {
             $hexTable = array_map(fn (string $row) => str_split($row, 2), str_split($decodedValue, ($columns + 1) * 2));
             $decodedValue = '';
             foreach ($hexTable as $rowIndex => $row) {
+                if (!is_array($row) || !array_is_list($row) || count($row) < 2) {
+                    throw new RuntimeException(sprintf('Expected at least 2 items per row, got %d', count($row)));
+                }
+
                 $rowAlgorithm = PNGFilterAlgorithm::from((int) $row[0]);
                 if ($rowAlgorithm !== PNGFilterAlgorithm::Up) {
                     throw new ParseFailureException(sprintf('PNG filters other than "Up" are currently not supported, "%s" given', $rowAlgorithm->name));
@@ -30,6 +40,7 @@ class FlateDecode {
                 }
 
                 foreach ($row as $columnIndex => $columnValue) {
+                    /** @phpstan-ignore offsetAccess.notFound, offsetAccess.notFound */
                     $hexTable[$rowIndex][$columnIndex] = str_pad(dechex((hexdec($columnValue) + hexdec($hexTable[$rowIndex - 1][$columnIndex])) % 256), 2, '0', STR_PAD_LEFT);
                 }
 

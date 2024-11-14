@@ -13,7 +13,7 @@ class TextStringValue implements DictionaryValueType {
     }
 
     #[Override]
-    public static function fromValue(string $valueString): DictionaryValueType {
+    public static function fromValue(string $valueString): self {
         return new self($valueString);
     }
 }

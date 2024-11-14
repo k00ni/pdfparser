@@ -33,7 +33,8 @@ class CrossReferenceStreamParser {
             throw new ParseFailureException('Expected stream of type xref');
         }
 
-        $wValue = $dictionary->getValueForKey(DictionaryKey::W, WValue::class);
+        $wValue = $dictionary->getValueForKey(DictionaryKey::W, WValue::class)
+            ?? throw new ParseFailureException('Cross reference streams should have a dictionary entry for "W"');
         $startStream = $stream->getStartNextLineAfter(Marker::STREAM, $startPos, $startPos + $nrOfBytes)
             ?? throw new MarkerNotFoundException(Marker::STREAM->value);
 
@@ -43,27 +44,33 @@ class CrossReferenceStreamParser {
         }
 
         $entries = [];
-        $hexContent = ObjectStreamContentParser::parse($stream, $startStream, $endStream - $startStream - 1, $dictionary);
+        $hexContent = ObjectStreamContentParser::parse($stream, $startStream, $endStream - $startStream - 1, $dictionary)
+            ?? throw new ParseFailureException('Unable to parse object stram content');
         foreach (str_split($hexContent, $wValue->getTotalLengthInBytes() * self::HEX_CHARS_IN_BYTE) as $referenceRow) {
-            $field1 = CrossReferenceStreamType::tryFrom($typeNr = hexdec(substr($referenceRow, 0, $wValue->lengthRecord1InBytes * self::HEX_CHARS_IN_BYTE)));
+            $field1 = hexdec(substr($referenceRow, 0, $wValue->lengthRecord1InBytes * self::HEX_CHARS_IN_BYTE));
             $field2 = hexdec(substr($referenceRow, $wValue->lengthRecord1InBytes * self::HEX_CHARS_IN_BYTE, $wValue->lengthRecord2InBytes * self::HEX_CHARS_IN_BYTE));
             $field3 = hexdec(substr($referenceRow, ($wValue->lengthRecord1InBytes + $wValue->lengthRecord2InBytes) * self::HEX_CHARS_IN_BYTE, $wValue->lengthRecord3InBytes * self::HEX_CHARS_IN_BYTE));
+            if (!is_int($field1) || !is_int($field2) || !is_int($field3)) {
+                throw new ParseFailureException(sprintf('Field 1, 2 and 3 in cross reference entries should be int, got %s, %s and %s', gettype($field1), gettype($field2), gettype($field3)));
+            }
 
-            $entries[] = match ($field1) {
+            $entries[] = match (CrossReferenceStreamType::tryFrom($field1)) {
                 CrossReferenceStreamType::LINKED_LIST_FREE_OBJECT => new CrossReferenceEntryFreeObject($field2, $field3),
                 CrossReferenceStreamType::UNCOMPRESSED_OBJECT => new CrossReferenceEntryInUseObject($field2, $field3),
                 CrossReferenceStreamType::COMPRESSED_OBJECT => new CrossReferenceEntryCompressed($field2, $field3),
-                null => throw new ParseFailureException(sprintf('Unrecognized CrossReferenceStream type "%s"', $typeNr)),
+                null => throw new ParseFailureException(sprintf('Unrecognized CrossReferenceStream type "%s"', $field1)),
             };
         }
 
         /** @var list<int> $startObjNrOfItemsArray where all even items are the start object number and all odd items are the number of objects */
-        $startObjNrOfItemsArray = $dictionary->getValueForKey(DictionaryKey::INDEX, ArrayValue::class)?->value
-            ?? [0, $dictionary->getValueForKey(DictionaryKey::SIZE, IntegerValue::class)->value];
+        $startObjNrOfItemsArray = $dictionary->getValueForKey(DictionaryKey::INDEX, ArrayValue::class)->value
+            ?? [0, $dictionary->getValueForKey(DictionaryKey::SIZE, IntegerValue::class)->value ?? throw new ParseFailureException('Cross reference streams should have either an index or a size, neither was found')];
 
         $crossReferenceSubSections = [];
         foreach (array_chunk($startObjNrOfItemsArray, 2) as $startNrNrOfObjects) {
+            /** @phpstan-ignore offsetAccess.notFound, offsetAccess.notFound */
             $crossReferenceSubSections[] = new CrossReferenceSubSection($startNrNrOfObjects[0], $startNrNrOfObjects[1], ... array_slice($entries, 0, $startNrNrOfObjects[1]));
+            /** @phpstan-ignore offsetAccess.notFound */
             $entries = array_slice($entries, $startNrNrOfObjects[1]);
         }
 

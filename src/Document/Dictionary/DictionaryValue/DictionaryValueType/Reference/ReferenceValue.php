@@ -15,7 +15,7 @@ class ReferenceValue implements DictionaryValueType {
     }
 
     #[Override]
-    public static function fromValue(string $valueString): DictionaryValueType {
+    public static function fromValue(string $valueString): self {
         $referenceParts = explode(' ', trim(rtrim(ltrim($valueString, '['), ']')));
         if (count($referenceParts) !== 3) {
             throw new InvalidDictionaryValueTypeFormatException('Invalid valueString, expected 3 parts: "' . $valueString . '"');

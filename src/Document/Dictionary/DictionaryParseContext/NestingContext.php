@@ -6,7 +6,7 @@ namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryParseContext;
 use PrinsFrank\PdfParser\Document\Generic\Parsing\InfiniteBuffer;
 
 class NestingContext {
-    private ?string $currentLevel;
+    private string $currentLevel;
 
     /** @var array<string, DictionaryParseContext> */
     private array $nestingContext = [];
@@ -18,7 +18,7 @@ class NestingContext {
     private array $valueBuffer = [];
 
     public function __construct() {
-        $this->currentLevel = null;
+        $this->currentLevel = '';
     }
 
     public function incrementNesting(): self {
@@ -50,11 +50,7 @@ class NestingContext {
     }
 
     public function getKeyBuffer(): InfiniteBuffer {
-        if (array_key_exists($this->currentLevel, $this->keyBuffer) === false) {
-            $this->keyBuffer[$this->currentLevel] = new InfiniteBuffer();
-        }
-
-        return $this->keyBuffer[$this->currentLevel];
+        return $this->keyBuffer[$this->currentLevel] ??= new InfiniteBuffer();
     }
 
     public function addToKeyBuffer(string $char): self {
@@ -70,11 +66,7 @@ class NestingContext {
     }
 
     public function getValueBuffer(): InfiniteBuffer {
-        if (array_key_exists($this->currentLevel, $this->valueBuffer) === false) {
-            $this->valueBuffer[$this->currentLevel] = new InfiniteBuffer();
-        }
-
-        return $this->valueBuffer[$this->currentLevel];
+        return $this->valueBuffer[$this->currentLevel] ??= new InfiniteBuffer();
     }
 
     public function addToValueBuffer(string $char): self {
@@ -89,7 +81,7 @@ class NestingContext {
         return $this;
     }
 
-    /** @return array<positive-int, string> */
+    /** @return list<string> */
     public function getKeysFromRoot(): array {
         $keysFromRoot = [];
         foreach ($this->keyBuffer as $keyBuffer) {

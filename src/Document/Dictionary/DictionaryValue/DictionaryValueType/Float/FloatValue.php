@@ -14,7 +14,7 @@ class FloatValue implements DictionaryValueType {
     }
 
     #[Override]
-    public static function fromValue(string $valueString): DictionaryValueType {
+    public static function fromValue(string $valueString): self {
         $valueAsInt = (float) $valueString;
         if ((string) $valueAsInt !== $valueString) {
             throw new InvalidDictionaryValueTypeFormatException('Non numerical value encountered for floatValue: "' . $valueString . '"');

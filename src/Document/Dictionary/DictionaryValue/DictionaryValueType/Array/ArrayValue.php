@@ -19,14 +19,14 @@ class ArrayValue implements DictionaryValueType {
     }
 
     #[Override]
-    public static function fromValue(string $valueString): DictionaryValueType {
+    public static function fromValue(string $valueString): self {
         if (str_starts_with($valueString, '[') === false || str_ends_with($valueString, ']') === false) {
             throw new InvalidDictionaryValueTypeFormatException('Invalid value for array: "' . $valueString . '", should start with "[" and end with "]".');
         }
 
         $array = [];
         $valueString = preg_replace('/(<[^>]*>)(?=<[^>]*>)/', '$1 $2', $valueString)
-            ?? throw new RuntimeException('An error occured while sanitizing array value');
+            ?? throw new RuntimeException('An error occurred while sanitizing array value');
         $values = explode(' ', rtrim(ltrim($valueString, '[ '), ' ]'));
         foreach ($values as $value) {
             if (str_starts_with($value, '[') && str_ends_with($value, ']')) {

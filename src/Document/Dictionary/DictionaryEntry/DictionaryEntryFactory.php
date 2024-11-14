@@ -18,6 +18,7 @@ class DictionaryEntryFactory {
         if (is_array($dictionaryValue)) {
             $arrayValues = [];
             foreach ($dictionaryValue as $dictionaryItemKey => $dictionaryItemValue) {
+                /** @var array<string, mixed>|string $dictionaryItemValue */
                 $arrayValues[] = self::fromKeyValuePair($dictionaryItemKey, $dictionaryItemValue);
             }
             $value = DictionaryValue::fromValueArray($dictionaryKey, $arrayValues);
