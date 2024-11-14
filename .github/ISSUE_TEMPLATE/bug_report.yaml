@@ -25,7 +25,7 @@ body:
                 required: true
     - type: textarea
       attributes:
-          label: When running this snippet (Please attach the pdf)
+          label: When running this snippet
           render: PHP
           value: |
               $document = PdfParser::parse(Stream::openFile('/path/to/file.pdf'));
@@ -33,15 +33,11 @@ body:
           required: true
     - type: textarea
       attributes:
-          label: I run into the following issue/exception
+          label: I run into the following issue/exception (Please attach the pdf)
       validations:
           required: true
-    - type: dropdown
+    - type: checkboxes
       attributes:
           label: Do you allow attachment files to be used in tests to prevent regressions?
           options:
-              - Yes, I give permission to use this file as a test file to prevent future regressions (And am authorized to give this permission)
-              - No, please don't use this file
-          default: 0
-      validations:
-          required: true
+              - label: Yes, I give permission to use this file as a test file to prevent future regressions (And am authorized to give this permission)
