@@ -6,10 +6,14 @@ namespace PrinsFrank\PdfParser\Document;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\CrossReferenceSource;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryCompressed;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TypeNameValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Object\ObjectItem;
 use PrinsFrank\PdfParser\Document\Object\ObjectItemParser;
 use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamItem;
 use PrinsFrank\PdfParser\Document\Version\Version;
+use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 use PrinsFrank\PdfParser\Stream;
@@ -60,5 +64,54 @@ final class Document {
             $objectNumber,
             $this->stream,
         );
+    }
+
+    public function getPage(int $pageNumber): ObjectItem|ObjectStreamItem|null {
+        return $this->getPages()[$pageNumber - 1] ?? null;
+    }
+
+    public function getNumberOfPages(): int {
+        return count($this->getPages());
+    }
+
+    /** @return list<ObjectItem|ObjectStreamItem> */
+    public function getPages(): array {
+        return $this->getKidsForPages(
+            $this->getPagesRoot()
+        );
+    }
+
+    /** @return list<ObjectItem|ObjectStreamItem> */
+    public function getKidsForPages(ObjectStreamItem|ObjectItem $object): array {
+        $dictionary = $object->getDictionary($this->stream);
+        if (($type = $dictionary?->getValueForKey(DictionaryKey::TYPE, TypeNameValue::class)) !== TypeNameValue::PAGES) {
+            throw new InvalidArgumentException(sprintf('Kids for pages can only be retrieved for pages object, got %s', $type->name ?? 'Unknown'));
+        }
+
+        $kids = [];
+        foreach ($dictionary->getValueForKey(DictionaryKey::KIDS, ReferenceValueArray::class)->referenceValues ?? [] as $referenceValue) {
+            $kidObject = $this->getObject($referenceValue->objectNumber)
+                ?? throw new ParseFailureException(sprintf('Child with number %d could not be found', $referenceValue->objectNumber));
+            $objectDictionary = $kidObject->getDictionary($this->stream);
+            if (($type = $objectDictionary?->getValueForKey(DictionaryKey::TYPE, TypeNameValue::class)) === TypeNameValue::PAGES) {
+                $kids = [...$kids, ...$this->getKidsForPages($kidObject)];
+            } elseif ($type === TypeNameValue::PAGE) {
+                $kids[] = $kidObject;
+            } else {
+                throw new RuntimeException(sprintf('Expected only nodes of PAGE or PAGES, got %s', $type?->name));
+            }
+        }
+
+        return $kids;
+    }
+
+    public function getPagesRoot(): ObjectItem|ObjectStreamItem {
+        $catalogDictionary = $this->getCatalog()->getDictionary($this->stream)
+            ?? throw new RuntimeException('Unable to retrieve catalog dictionary');
+        $pagesReference = $catalogDictionary->getValueForKey(DictionaryKey::PAGES, ReferenceValue::class)
+            ?? throw new ParseFailureException('Every catalog dictionary should contain a pages reference, none found');
+
+        return $this->getObject($pagesReference->objectNumber)
+            ?? throw new ParseFailureException(sprintf('Unable to retrieve pages root object with number %d', $pagesReference->objectNumber));
     }
 }
