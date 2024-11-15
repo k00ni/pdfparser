@@ -14,16 +14,15 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 use PrinsFrank\PdfParser\Stream;
 
-class CompressedObjectParser {
-    public static function parse(Stream $stream, int $startOffsetObject, int $endOffsetObject, Dictionary $dictionary): CompressedObjectData {
+class CompressedObjectByteOffsetParser {
+    public static function parse(Stream $stream, int $startOffsetObject, int $endOffsetObject, Dictionary $dictionary): CompressedObjectByteOffsets {
         $startStreamPos = $stream->getStartNextLineAfter(Marker::STREAM, $startOffsetObject, $endOffsetObject)
             ?? throw new MarkerNotFoundException(Marker::STREAM->value);
         $endStreamPos = $stream->firstPos(Marker::END_STREAM, $startStreamPos, $endOffsetObject)
             ?? throw new MarkerNotFoundException(Marker::END_STREAM->value);
         $eolPos = $stream->getEndOfCurrentLine($endStreamPos - 1, $endOffsetObject)
             ?? throw new MarkerNotFoundException(WhitespaceCharacter::LINE_FEED->value);
-        $content = CompressedObjectContentParser::parse($stream, $startStreamPos, $eolPos - $startStreamPos, $dictionary)
-            ?? throw new RuntimeException('Unable to parse object stream');
+        $content = CompressedObjectContentParser::parse($stream, $startStreamPos, $eolPos - $startStreamPos, $dictionary);
         $first = $dictionary->getValueForKey(DictionaryKey::FIRST, IntegerValue::class)
             ?? throw new RuntimeException('Expected a dictionary entry for "First", none found');
         $buffer = new InfiniteBuffer();
@@ -52,17 +51,6 @@ class CompressedObjectParser {
             $buffer->addChar($decodedChar);
         }
 
-        return new CompressedObjectData(
-            $byteOffsets,
-            Stream::fromString(
-                implode(
-                    '',
-                    array_map(
-                        fn (string $char) => chr((int) hexdec($char)),
-                        str_split(substr($content, $first->value * 2), 2)
-                    )
-                )
-            )
-        );
+        return new CompressedObjectByteOffsets($byteOffsets, $eolPos);
     }
 }

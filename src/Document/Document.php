@@ -9,9 +9,9 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValueArray;
-use PrinsFrank\PdfParser\Document\Object\UncompressedObject;
-use PrinsFrank\PdfParser\Document\Object\UncompressedObjectParser;
 use PrinsFrank\PdfParser\Document\Object\CompressedObject\CompressedObject;
+use PrinsFrank\PdfParser\Document\Object\UncompressedObject\UncompressedObject;
+use PrinsFrank\PdfParser\Document\Object\UncompressedObject\UncompressedObjectParser;
 use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
@@ -55,8 +55,7 @@ final class Document {
                 throw new RuntimeException('Parents for stream items shouldn\'t be stream items themselves');
             }
 
-            return $parentObject->getStreamData($this->stream)
-                ->getObjectStreamItem($objectNumber);
+            return $parentObject->getCompressedObject($objectNumber, $this->stream);
         }
 
         return UncompressedObjectParser::parseObject(
