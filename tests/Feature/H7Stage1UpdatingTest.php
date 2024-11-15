@@ -21,7 +21,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\TextString\TextStringValue;
-use PrinsFrank\PdfParser\Document\Object\ObjectItem;
+use PrinsFrank\PdfParser\Document\Object\UncompressedObject;
 use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\PdfParser;
 use PrinsFrank\PdfParser\Stream;
@@ -83,7 +83,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj1 = $document->getObject(1);
         static::assertEquals(
-            new ObjectItem(
+            new UncompressedObject(
                 1,
                 0,
                 9,
@@ -101,7 +101,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj2 = $document->getObject(2);
         static::assertEquals(
-            new ObjectItem(
+            new UncompressedObject(
                 2,
                 0,
                 74,
@@ -118,7 +118,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj3 = $document->getObject(3);
         static::assertEquals(
-            new ObjectItem(
+            new UncompressedObject(
                 3,
                 0,
                 120,
@@ -136,7 +136,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj4 = $document->getObject(4);
         static::assertEquals(
-            new ObjectItem(
+            new UncompressedObject(
                 4,
                 0,
                 604,
@@ -156,7 +156,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj5 = $document->getObject(5);
         static::assertEquals(
-            new ObjectItem(
+            new UncompressedObject(
                 5,
                 0,
                 300,
@@ -172,7 +172,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj6 = $document->getObject(6);
         static::assertEquals(
-            new ObjectItem(
+            new UncompressedObject(
                 6,
                 0,
                 384,
@@ -183,7 +183,7 @@ class H7Stage1UpdatingTest extends TestCase {
         static::assertNull($obj6?->getDictionary($document->stream));
         $obj7 = $document->getObject(7);
         static::assertEquals(
-            new ObjectItem(
+            new UncompressedObject(
                 7,
                 0,
                 811,
@@ -194,7 +194,7 @@ class H7Stage1UpdatingTest extends TestCase {
         static::assertNull($obj7?->getDictionary($document->stream));
         $obj8 = $document->getObject(8);
         static::assertEquals(
-            new ObjectItem(
+            new UncompressedObject(
                 8,
                 0,
                 856,
@@ -214,7 +214,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj9 = $document->getObject(9);
         static::assertEquals(
-            new ObjectItem(
+            new UncompressedObject(
                 9,
                 0,
                 958,
@@ -234,7 +234,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj10 = $document->getObject(10);
         static::assertEquals(
-            new ObjectItem(
+            new UncompressedObject(
                 10,
                 0,
                 1062,
@@ -254,7 +254,7 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj11 = $document->getObject(11);
         static::assertEquals(
-            new ObjectItem(
+            new UncompressedObject(
                 11,
                 0,
                 1165,
@@ -273,7 +273,7 @@ class H7Stage1UpdatingTest extends TestCase {
             $obj11?->getDictionary($document->stream)
         );
         static::assertEquals(
-            new ObjectItem(
+            new UncompressedObject(
                 1,
                 0,
                 9,

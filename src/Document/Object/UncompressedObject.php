@@ -7,17 +7,17 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Generic\Character\DelimiterCharacter;
-use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamData;
-use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamDataParser;
+use PrinsFrank\PdfParser\Document\Object\CompressedObject\CompressedObjectData;
+use PrinsFrank\PdfParser\Document\Object\CompressedObject\CompressedObjectParser;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream;
 
-class ObjectItem {
+class UncompressedObject {
     /** @phpstan-ignore property.uninitializedReadonly */
     private readonly ?Dictionary $dictionary;
 
     /** @phpstan-ignore property.uninitializedReadonly */
-    private readonly ObjectStreamData $objectStreamData;
+    private readonly CompressedObjectData $objectStreamData;
 
     public function __construct(
         public readonly int $objectNumber,
@@ -47,7 +47,7 @@ class ObjectItem {
         return $this->dictionary = DictionaryParser::parse($stream, $startDictionaryPos, $endDictionaryPos - $startDictionaryPos + strlen(DelimiterCharacter::GREATER_THAN_SIGN->value . DelimiterCharacter::GREATER_THAN_SIGN->value));
     }
 
-    public function getStreamData(Stream $stream): ObjectStreamData {
+    public function getStreamData(Stream $stream): CompressedObjectData {
         if (isset($this->objectStreamData)) {
             return $this->objectStreamData;
         }
@@ -58,7 +58,7 @@ class ObjectItem {
         }
 
         /** @phpstan-ignore property.readOnlyAssignNotInConstructor */
-        return $this->objectStreamData = ObjectStreamDataParser::parse(
+        return $this->objectStreamData = CompressedObjectParser::parse(
             $stream,
             $this->startOffset,
             $this->endOffset,

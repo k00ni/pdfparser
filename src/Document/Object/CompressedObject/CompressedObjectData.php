@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Object\ObjectStream;
+namespace PrinsFrank\PdfParser\Document\Object\CompressedObject;
 
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 use PrinsFrank\PdfParser\Stream;
 
-class ObjectStreamData {
+class CompressedObjectData {
     /** @param array<int, int> $objectNumberByteOffsets */
     public function __construct(
         public readonly array $objectNumberByteOffsets,
@@ -29,8 +29,8 @@ class ObjectStreamData {
         return null;
     }
 
-    public function getObjectStreamItem(int $objNumber): ObjectStreamItem {
-        return new ObjectStreamItem(
+    public function getObjectStreamItem(int $objNumber): CompressedObject {
+        return new CompressedObject(
             $this->streamContent,
             $byteOffsetStart = $this->getRelativeByteOffsetForObject($objNumber) ?? throw new RuntimeException('Start Bute offset should not be null'),
             $this->getNextByteOffset($byteOffsetStart) ?? $this->streamContent->getSizeInBytes(),

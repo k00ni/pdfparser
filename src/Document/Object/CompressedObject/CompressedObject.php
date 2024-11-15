@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Object\ObjectStream;
+namespace PrinsFrank\PdfParser\Document\Object\CompressedObject;
 
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Stream;
 
-class ObjectStreamItem {
+class CompressedObject {
     public function __construct(
         private readonly Stream $streamContent,
         private readonly int $byteOffsetStart,

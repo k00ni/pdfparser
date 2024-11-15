@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamContent;
+namespace PrinsFrank\PdfParser\Document\Object\CompressedObject\CompressedObjectContent;
 
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
@@ -9,7 +9,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\FilterNameValue;
 use PrinsFrank\PdfParser\Stream;
 
-class ObjectStreamContentParser {
+class CompressedObjectContentParser {
     public static function parse(Stream $stream, int $startPos, int $nrOfBytes, Dictionary $dictionary): ?string {
         $streamContent = $stream->read($startPos, $nrOfBytes);
         if (($streamFilter = $dictionary->getValueForKey(DictionaryKey::FILTER, FilterNameValue::class)) !== null) {

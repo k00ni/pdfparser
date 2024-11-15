@@ -18,7 +18,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Rectangle\Rectangle;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValueArray;
-use PrinsFrank\PdfParser\Document\Object\ObjectItem;
+use PrinsFrank\PdfParser\Document\Object\UncompressedObject;
 use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\PdfParser;
 use PrinsFrank\PdfParser\Stream;
@@ -54,7 +54,7 @@ class H4SimpleGraphicsTest extends TestCase {
         );
         $obj1 = $document->getObject(1);
         static::assertEquals(
-            new ObjectItem(
+            new UncompressedObject(
                 1,
                 0,
                 9,
@@ -72,7 +72,7 @@ class H4SimpleGraphicsTest extends TestCase {
         );
         $obj2 = $document->getObject(2);
         static::assertEquals(
-            new ObjectItem(
+            new UncompressedObject(
                 2,
                 0,
                 74,
@@ -89,7 +89,7 @@ class H4SimpleGraphicsTest extends TestCase {
         );
         $obj3 = $document->getObject(3);
         static::assertEquals(
-            new ObjectItem(
+            new UncompressedObject(
                 3,
                 0,
                 120,
@@ -107,7 +107,7 @@ class H4SimpleGraphicsTest extends TestCase {
         );
         $obj4 = $document->getObject(4);
         static::assertEquals(
-            new ObjectItem(
+            new UncompressedObject(
                 4,
                 0,
                 179,
@@ -131,7 +131,7 @@ class H4SimpleGraphicsTest extends TestCase {
         );
         $obj5 = $document->getObject(5);
         static::assertEquals(
-            new ObjectItem(
+            new UncompressedObject(
                 5,
                 0,
                 300,
@@ -147,7 +147,7 @@ class H4SimpleGraphicsTest extends TestCase {
         );
         $obj6 = $document->getObject(6);
         static::assertEquals(
-            new ObjectItem(
+            new UncompressedObject(
                 6,
                 0,
                 952,
@@ -157,7 +157,7 @@ class H4SimpleGraphicsTest extends TestCase {
         );
         static::assertNull($obj6?->getDictionary($document->stream));
         static::assertEquals(
-            new ObjectItem(
+            new UncompressedObject(
                 1,
                 0,
                 9,

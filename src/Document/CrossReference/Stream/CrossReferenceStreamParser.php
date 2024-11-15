@@ -14,7 +14,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Integer\IntegerValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
-use PrinsFrank\PdfParser\Document\Object\ObjectStream\ObjectStreamContent\ObjectStreamContentParser;
+use PrinsFrank\PdfParser\Document\Object\CompressedObject\CompressedObjectContent\CompressedObjectContentParser;
 use PrinsFrank\PdfParser\Exception\MarkerNotFoundException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream;
@@ -44,7 +44,7 @@ class CrossReferenceStreamParser {
         }
 
         $entries = [];
-        $hexContent = ObjectStreamContentParser::parse($stream, $startStream, $endStream - $startStream - 1, $dictionary)
+        $hexContent = CompressedObjectContentParser::parse($stream, $startStream, $endStream - $startStream - 1, $dictionary)
             ?? throw new ParseFailureException('Unable to parse object stream content');
         foreach (str_split($hexContent, $wValue->getTotalLengthInBytes() * self::HEX_CHARS_IN_BYTE) as $referenceRow) {
             $field1 = hexdec(substr($referenceRow, 0, $wValue->lengthRecord1InBytes * self::HEX_CHARS_IN_BYTE));

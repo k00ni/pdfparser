@@ -8,12 +8,12 @@ use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream;
 
-class ObjectItemParser {
+class UncompressedObjectParser {
     public static function parseObject(
         CrossReferenceEntryInUseObject $crossReferenceEntry,
         int $objectNumber,
         Stream $stream,
-    ): ObjectItem {
+    ): UncompressedObject {
         $endObj = $stream->firstPos(Marker::END_OBJ, $crossReferenceEntry->byteOffsetInDecodedStream, $stream->getSizeInBytes()) ?? throw new ParseFailureException('Unable to locate end of object');
         $startObj = $stream->firstPos(Marker::OBJ, $crossReferenceEntry->byteOffsetInDecodedStream, $endObj) ?? throw new ParseFailureException('Unable to locate start of object');
         $objHeader = $stream->read($crossReferenceEntry->byteOffsetInDecodedStream, $startObj + Marker::OBJ->length() - $crossReferenceEntry->byteOffsetInDecodedStream);
@@ -22,7 +22,7 @@ class ObjectItemParser {
             throw new ParseFailureException(sprintf('Expected "%d %d %s" on first line, got "%s"', $objectNumber, $crossReferenceEntry->generationNumber, Marker::OBJ->value, $objHeader));
         }
 
-        return new ObjectItem(
+        return new UncompressedObject(
             $objectNumber,
             $crossReferenceEntry->generationNumber,
             $crossReferenceEntry->byteOffsetInDecodedStream,
