@@ -9,7 +9,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValueArray;
-use PrinsFrank\PdfParser\Document\Object\CompressedObject\CompressedObject;
+use PrinsFrank\PdfParser\Document\Object\ObjectItem;
 use PrinsFrank\PdfParser\Document\Object\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Document\Object\UncompressedObject\UncompressedObjectParser;
 use PrinsFrank\PdfParser\Document\Version\Version;
@@ -26,7 +26,7 @@ final class Document {
     ) {
     }
 
-    public function getInformationDictionary(): UncompressedObject|CompressedObject|null {
+    public function getInformationDictionary(): ?ObjectItem {
         $infoReference = $this->crossReferenceSource->getReferenceForKey(DictionaryKey::INFO);
         if ($infoReference === null) {
             return null;
@@ -35,7 +35,7 @@ final class Document {
         return $this->getObject($infoReference->objectNumber);
     }
 
-    public function getCatalog(): UncompressedObject|CompressedObject {
+    public function getCatalog(): ObjectItem {
         $rootReference = $this->crossReferenceSource->getReferenceForKey(DictionaryKey::ROOT)
             ?? throw new ParseFailureException('Unable to locate root for document.');
 
@@ -43,7 +43,7 @@ final class Document {
             ?? throw new ParseFailureException(sprintf('Document references object %d as root, but object couln\'t be located', $rootReference->objectNumber));
     }
 
-    public function getObject(int $objectNumber): UncompressedObject|CompressedObject|null {
+    public function getObject(int $objectNumber): ?ObjectItem {
         $crossReferenceEntry = $this->crossReferenceSource->getCrossReferenceEntry($objectNumber);
         if ($crossReferenceEntry === null) {
             return null;
@@ -51,7 +51,7 @@ final class Document {
 
         if ($crossReferenceEntry instanceof CrossReferenceEntryCompressed) {
             $parentObject = $this->getObject($crossReferenceEntry->storedInStreamWithObjectNumber) ?? throw new RuntimeException(sprintf('Parent object for %d with number %d doesn\'t exist', $objectNumber, $crossReferenceEntry->storedInStreamWithObjectNumber));
-            if ($parentObject instanceof CompressedObject) {
+            if (!$parentObject instanceof UncompressedObject) {
                 throw new RuntimeException('Parents for stream items shouldn\'t be stream items themselves');
             }
 
@@ -65,7 +65,7 @@ final class Document {
         );
     }
 
-    public function getPage(int $pageNumber): UncompressedObject|CompressedObject|null {
+    public function getPage(int $pageNumber): ?ObjectItem {
         return $this->getPages()[$pageNumber - 1] ?? null;
     }
 
@@ -73,15 +73,15 @@ final class Document {
         return count($this->getPages());
     }
 
-    /** @return list<UncompressedObject|CompressedObject> */
+    /** @return list<ObjectItem> */
     public function getPages(): array {
         return $this->getKidsForPages(
             $this->getPagesRoot()
         );
     }
 
-    /** @return list<UncompressedObject|CompressedObject> */
-    public function getKidsForPages(CompressedObject|UncompressedObject $object): array {
+    /** @return list<ObjectItem> */
+    public function getKidsForPages(ObjectItem $object): array {
         $dictionary = $object->getDictionary($this->stream);
         if (($type = $dictionary?->getValueForKey(DictionaryKey::TYPE, TypeNameValue::class)) !== TypeNameValue::PAGES) {
             throw new InvalidArgumentException(sprintf('Kids for pages can only be retrieved for pages object, got %s', $type->name ?? 'Unknown'));
@@ -104,7 +104,7 @@ final class Document {
         return $kids;
     }
 
-    public function getPagesRoot(): UncompressedObject|CompressedObject {
+    public function getPagesRoot(): ObjectItem {
         $catalogDictionary = $this->getCatalog()->getDictionary($this->stream)
             ?? throw new RuntimeException('Unable to retrieve catalog dictionary');
         $pagesReference = $catalogDictionary->getValueForKey(DictionaryKey::PAGES, ReferenceValue::class)
