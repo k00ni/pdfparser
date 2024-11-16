@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Object\UncompressedObject;
+namespace PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject;
 
 use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
@@ -10,11 +10,11 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType
 use PrinsFrank\PdfParser\Document\Generic\Character\DelimiterCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
-use PrinsFrank\PdfParser\Document\Object\CompressedObject\CompressedObject;
-use PrinsFrank\PdfParser\Document\Object\CompressedObject\CompressedObjectByteOffsetParser;
-use PrinsFrank\PdfParser\Document\Object\CompressedObject\CompressedObjectByteOffsets;
-use PrinsFrank\PdfParser\Document\Object\CompressedObject\CompressedObjectContent\CompressedObjectContentParser;
-use PrinsFrank\PdfParser\Document\Object\ObjectItem;
+use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObject;
+use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObjectByteOffsetParser;
+use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObjectByteOffsets;
+use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObjectContent\CompressedObjectContentParser;
+use PrinsFrank\PdfParser\Document\Object\Item\ObjectItem;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\MarkerNotFoundException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;

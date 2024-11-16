@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Object\UncompressedObject;
+namespace PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject;
 
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryInUseObject;
 use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Object\CompressedObject;
+namespace PrinsFrank\PdfParser\Document\Object\Item\CompressedObject;
 
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
@@ -8,7 +8,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType
 use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Document\Generic\Parsing\InfiniteBuffer;
-use PrinsFrank\PdfParser\Document\Object\CompressedObject\CompressedObjectContent\CompressedObjectContentParser;
+use PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedObjectContent\CompressedObjectContentParser;
 use PrinsFrank\PdfParser\Exception\MarkerNotFoundException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;

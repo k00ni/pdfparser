@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Document\Object;
+namespace PrinsFrank\PdfParser\Document\Object\Item;
 
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Stream;
