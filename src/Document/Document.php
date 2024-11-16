@@ -19,6 +19,9 @@ use PrinsFrank\PdfParser\Exception\RuntimeException;
 use PrinsFrank\PdfParser\Stream;
 
 final class Document {
+    /** @var list<ObjectItem> */
+    private readonly array $pages;
+
     public function __construct(
         public readonly Stream               $stream,
         public readonly Version              $version,
@@ -75,7 +78,11 @@ final class Document {
 
     /** @return list<ObjectItem> */
     public function getPages(): array {
-        return $this->getKidsForPages(
+        if (isset($this->pages)) {
+            return $this->pages;
+        }
+
+        return $this->pages = $this->getKidsForPages(
             $this->getPagesRoot()
         );
     }
