@@ -21,10 +21,7 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream;
 
 class UncompressedObject implements ObjectItem {
-    /** @phpstan-ignore property.uninitializedReadonly */
     private readonly ?Dictionary $dictionary;
-
-    /** @phpstan-ignore property.uninitializedReadonly */
     private readonly CompressedObjectByteOffsets $byteOffsets;
 
     public function __construct(
@@ -43,7 +40,6 @@ class UncompressedObject implements ObjectItem {
 
         $startDictionaryPos = $stream->firstPos(DelimiterCharacter::LESS_THAN_SIGN, $this->startOffset, $this->endOffset);
         if ($startDictionaryPos === null) {
-            /** @phpstan-ignore property.readOnlyAssignNotInConstructor */
             return $this->dictionary = null;
         }
 
@@ -52,7 +48,6 @@ class UncompressedObject implements ObjectItem {
             throw new ParseFailureException(sprintf('Couldn\'t find the end of the dictionary in "%s"', $stream->read($startDictionaryPos, $stream->getSizeInBytes() - $this->endOffset)));
         }
 
-        /** @phpstan-ignore property.readOnlyAssignNotInConstructor */
         return $this->dictionary = DictionaryParser::parse($stream, $startDictionaryPos, $endDictionaryPos - $startDictionaryPos + strlen(DelimiterCharacter::GREATER_THAN_SIGN->value . DelimiterCharacter::GREATER_THAN_SIGN->value));
     }
 
@@ -79,7 +74,6 @@ class UncompressedObject implements ObjectItem {
             throw new ParseFailureException('Unable to get stream data from item that is not a stream');
         }
 
-        /** @phpstan-ignore property.readOnlyAssignNotInConstructor */
         return $this->byteOffsets = CompressedObjectByteOffsetParser::parse(
             $stream,
             $this->startOffset,

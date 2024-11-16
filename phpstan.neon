@@ -12,6 +12,9 @@ parameters:
     reportWrongPhpDocTypeInVarTag: true
     reportAnyTypeWideningInVarTag: true
     checkMissingOverrideMethodAttribute: true
+    ignoreErrors:
+        - identifier: property.uninitializedReadonly          # Used in several objects to cache parsed/decoded data
+        - identifier: property.readOnlyAssignNotInConstructor # Used in several objects to cache parsed/decoded data
 includes:
     - phar://phpstan.phar/conf/bleedingEdge.neon
     - vendor/phpstan/phpstan-strict-rules/rules.neon

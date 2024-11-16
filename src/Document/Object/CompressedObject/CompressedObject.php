@@ -13,7 +13,6 @@ use PrinsFrank\PdfParser\Exception\RuntimeException;
 use PrinsFrank\PdfParser\Stream;
 
 class CompressedObject implements ObjectItem {
-    /** @phpstan-ignore property.uninitializedReadonly */
     private readonly Dictionary $dictionary;
 
     public function __construct(
@@ -49,7 +48,6 @@ class CompressedObject implements ObjectItem {
             )
         );
 
-        /** @phpstan-ignore property.readOnlyAssignNotInConstructor */
         return $this->dictionary = DictionaryParser::parse($objectContent, 0, $objectContent->getSizeInBytes());
     }
 }
