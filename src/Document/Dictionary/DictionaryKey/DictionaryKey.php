@@ -133,9 +133,11 @@ enum DictionaryKey: string {
     case COLORANTS = 'Colorants';
     case COLORS = 'Colors';
     case COLUMNS = 'Columns';
+    case COMPANY = 'Company';
     case COMPONENTS = 'Components';
     case CONFIGS = 'Configs';
     case CONTACT_INFO = 'ContactInfo';
+    case CONTENT_TYPE_ID = 'ContentTypeId';
     case CONTENTS = 'Contents';
     case COORDS = 'Coords';
     case COUNT = 'Count';
@@ -423,6 +425,7 @@ enum DictionaryKey: string {
     case PATTERN_TYPE = 'PatternType';
     case PC = 'PC';
     case PDF = 'PDF';
+    case PDFDOC_ENCODING = 'PDFDocEncoding';
     case PERMS = 'Perms';
     case PI = 'PI';
     case PICK_TRAY_BY_PDFSIZE = 'PickTrayByPDFSize';
@@ -479,6 +482,7 @@ enum DictionaryKey: string {
     case RF = 'RF';
     case RH = 'RH';
     case RI = 'RI';
+    case RIGHTS_WATCHMARK = 'RightsWATCHMark';
     case RM = 'RM';
     case RO = 'RO';
     case ROOT = 'Root';
@@ -507,6 +511,7 @@ enum DictionaryKey: string {
     case SORT = 'Sort';
     case SOUND = 'Sound';
     case SOUND_ACTIONS = 'SoundActions';
+    case SOURCE_MODIFIED = 'SourceModified';
     case SP = 'SP';
     case SPIDER_INFO = 'SpiderInfo';
     case SPOT_FUNCTION = 'SpotFunction';
@@ -595,6 +600,7 @@ enum DictionaryKey: string {
     case V = 'V';
     case VA = 'VA';
     case VE = 'VE';
+    case VERIKET_CLASSIFICATION = 'VeriketClassification';
     case VERSION = 'Version';
     case VERTICES = 'Vertices';
     case VERTICES_PER_ROW = 'VerticesPerRow';
@@ -629,6 +635,7 @@ enum DictionaryKey: string {
     case YSQUARE = 'YSquare';
     case YSTEP = 'YStep';
     case Z = 'Z';
+    case ZA_DB = 'ZaDb';
     case ZOOM = 'Zoom';
 
     public static function tryFromKeyString(string $keyString): ?self {
@@ -729,14 +736,16 @@ enum DictionaryKey: string {
             self::COLORANTS => [Dictionary::class],
             self::COLORS => [IntegerValue::class],
             self::COLUMNS => [IntegerValue::class],
+            self::COMPANY => [TextStringValue::class],
             self::COMPONENTS => [ArrayValue::class],
             self::CONFIGS => [ArrayValue::class],
             self::CONTACT_INFO => [TextStringValue::class],
+            self::CONTENT_TYPE_ID => [TextStringValue::class],
             self::CONTENTS => [ReferenceValue::class, ArrayValue::class, TextStringValue::class],
             self::COORDS => [ArrayValue::class],
             self::COUNT => [IntegerValue::class],
             self::CP => [TextStringValue::class],
-            self::CREATION_DATE => [DateValue::class],
+            self::CREATION_DATE => [DateValue::class, ReferenceValue::class, TextStringValue::class],
             self::CREATOR => [IntegerValue::class, TextStringValue::class],
             self::CREATOR_INFO => [Dictionary::class],
             self::CROP_BOX => [Rectangle::class],
@@ -956,7 +965,7 @@ enum DictionaryKey: string {
             self::MIXING_HINTS => [Dictionary::class],
             self::MK => [Dictionary::class],
             self::ML => [IntegerValue::class, FloatValue::class],
-            self::MOD_DATE => [DateValue::class],
+            self::MOD_DATE => [DateValue::class, ReferenceValue::class],
             self::MODE => [TextStringValue::class],
             self::MOVIE => [Dictionary::class],
             self::MOVIE_ACTIONS => [IntegerValue::class],
@@ -1019,6 +1028,7 @@ enum DictionaryKey: string {
             self::PATTERN_TYPE => [IntegerValue::class],
             self::PC => [Dictionary::class, IntegerValue::class, ArrayValue::class],
             self::PDF => [TextStringValue::class],
+            self::PDFDOC_ENCODING => [TextStringValue::class],
             self::PERMS => [Dictionary::class],
             self::PI => [Dictionary::class],
             self::PICK_TRAY_BY_PDFSIZE => [BooleanValue::class],
@@ -1075,6 +1085,7 @@ enum DictionaryKey: string {
             self::RF => [Dictionary::class],
             self::RH => [ArrayValue::class],
             self::RI => [RenderingIntentNameValue::class, TextStringValue::class],
+            self::RIGHTS_WATCHMARK => [TextStringValue::class],
             self::RM => [Dictionary::class],
             self::RO => [TextStringValue::class],
             self::ROOT => [Dictionary::class],
@@ -1103,6 +1114,7 @@ enum DictionaryKey: string {
             self::SORT => [Dictionary::class],
             self::SOUND => [TextStringValue::class],
             self::SOUND_ACTIONS => [IntegerValue::class],
+            self::SOURCE_MODIFIED => [DateValue::class],
             self::SP => [Dictionary::class],
             self::SPIDER_INFO => [Dictionary::class],
             self::SPOT_FUNCTION => [TextStringValue::class],
@@ -1191,6 +1203,7 @@ enum DictionaryKey: string {
             self::V => [IntegerValue::class, FloatValue::class, BooleanValue::class, Dictionary::class, TextStringValue::class, ArrayValue::class],
             self::VA => [ArrayValue::class],
             self::VE => [ArrayValue::class],
+            self::VERIKET_CLASSIFICATION => [TextStringValue::class],
             self::VERSION => [Version::class],
             self::VERTICES => [ArrayValue::class],
             self::VERTICES_PER_ROW => [IntegerValue::class],
@@ -1225,6 +1238,7 @@ enum DictionaryKey: string {
             self::YSQUARE => [IntegerValue::class],
             self::YSTEP => [IntegerValue::class, FloatValue::class],
             self::Z => [Dictionary::class],
+            self::ZA_DB => [ReferenceValue::class, TextStringValue::class],
             self::ZOOM => [Dictionary::class],
         };
     }
