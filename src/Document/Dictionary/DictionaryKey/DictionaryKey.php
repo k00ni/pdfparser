@@ -338,7 +338,7 @@ enum DictionaryKey: string {
     case NEXT = 'Next';
     case NM = 'NM';
     case NON_EMBEDDED_FONTS = 'NonEmbeddedFonts';
-    case NON_FULL_SCREEN_PAGE_MODE  = 'NonFullScreenPageMode';
+    case NON_FULL_SCREEN_PAGE_MODE = 'NonFullScreenPageMode';
     case NP = 'NP';
     case NR = 'NR';
     case NU = 'NU';
