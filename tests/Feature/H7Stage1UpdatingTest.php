@@ -39,7 +39,7 @@ class H7Stage1UpdatingTest extends TestCase {
                     new Dictionary(
                         new DictionaryEntry(DictionaryKey::SIZE, new IntegerValue(12)),
                         new DictionaryEntry(DictionaryKey::ROOT, new ReferenceValue(1, 0)),
-                        new DictionaryEntry(DictionaryKey::PREVIOUS, new IntegerValue(408)),
+                        new DictionaryEntry(DictionaryKey::PREV, new IntegerValue(408)),
                     ),
                     new CrossReferenceSubSection(
                         0,
@@ -148,7 +148,7 @@ class H7Stage1UpdatingTest extends TestCase {
             new Dictionary(
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::PAGE),
                 new DictionaryEntry(DictionaryKey::PARENT, new ReferenceValue(3, 0)),
-                new DictionaryEntry(DictionaryKey::MEDIABOX, new Rectangle(0.0, 0.0, 612.0, 792.0)),
+                new DictionaryEntry(DictionaryKey::MEDIA_BOX, new Rectangle(0.0, 0.0, 612.0, 792.0)),
                 new DictionaryEntry(DictionaryKey::CONTENTS, new ReferenceValueArray(new ReferenceValue(5, 0))),
                 new DictionaryEntry(DictionaryKey::ANNOTS, new ReferenceValue(7, 0)),
             ),

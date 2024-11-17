@@ -85,7 +85,7 @@ class DictionaryParserTest extends TestCase {
     public function testObjectStream(): void {
         static::assertEquals(
             new Dictionary(
-                new DictionaryEntry(DictionaryKey::DECODE_PARAMS, new ArrayValue(
+                new DictionaryEntry(DictionaryKey::DECODE_PARMS, new ArrayValue(
                     [
                         new DictionaryEntry(DictionaryKey::COLUMNS, new IntegerValue(5)),
                         new DictionaryEntry(DictionaryKey::PREDICTOR, new IntegerValue(12))
@@ -96,7 +96,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::INDEX, new ArrayValue([2460, 1, 4311, 1, 4317, 2, 4414, 1, 4717, 21])),
                 new DictionaryEntry(DictionaryKey::INFO, new ReferenceValue(4318, 0)),
                 new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(106)),
-                new DictionaryEntry(DictionaryKey::PREVIOUS, new IntegerValue(46153797)),
+                new DictionaryEntry(DictionaryKey::PREV, new IntegerValue(46153797)),
                 new DictionaryEntry(DictionaryKey::ROOT, new ReferenceValue(4320, 0)),
                 new DictionaryEntry(DictionaryKey::SIZE, new IntegerValue(4738)),
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::X_REF),
@@ -131,7 +131,7 @@ class DictionaryParserTest extends TestCase {
     public function testParseSingleLine(): void {
         static::assertEquals(
             new Dictionary(
-                new DictionaryEntry(DictionaryKey::DECODE_PARAMS, new ArrayValue(
+                new DictionaryEntry(DictionaryKey::DECODE_PARMS, new ArrayValue(
                     [
                         new DictionaryEntry(DictionaryKey::COLUMNS, new IntegerValue(5)),
                         new DictionaryEntry(DictionaryKey::PREDICTOR, new IntegerValue(12))
@@ -142,7 +142,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::INDEX, new ArrayValue([2460, 1, 4311, 1, 4317, 2, 4414, 1, 4717, 21])),
                 new DictionaryEntry(DictionaryKey::INFO, new ReferenceValue(4318, 0)),
                 new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(106)),
-                new DictionaryEntry(DictionaryKey::PREVIOUS, new IntegerValue(46153797)),
+                new DictionaryEntry(DictionaryKey::PREV, new IntegerValue(46153797)),
                 new DictionaryEntry(DictionaryKey::ROOT, new ReferenceValue(4320, 0)),
                 new DictionaryEntry(DictionaryKey::SIZE, new IntegerValue(4738)),
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::X_REF),
@@ -162,13 +162,13 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::FONT_DESCRIPTOR),
                 new DictionaryEntry(DictionaryKey::FONT_NAME, new TextStringValue('/TAIPAH+CMR10')),
                 new DictionaryEntry(DictionaryKey::FLAGS, new IntegerValue(4)),
-                new DictionaryEntry(DictionaryKey::FONT_B_BOX, new Rectangle(-40, -250, 1009, 750)),
+                new DictionaryEntry(DictionaryKey::FONT_BBOX, new Rectangle(-40, -250, 1009, 750)),
                 new DictionaryEntry(DictionaryKey::ASCENT, new FloatValue(694)),
                 new DictionaryEntry(DictionaryKey::CAP_HEIGHT, new IntegerValue(683)),
                 new DictionaryEntry(DictionaryKey::DESCENT, new IntegerValue(-194)),
                 new DictionaryEntry(DictionaryKey::ITALIC_ANGLE, new IntegerValue(0)),
                 new DictionaryEntry(DictionaryKey::STEM_V, new IntegerValue(69)),
-                new DictionaryEntry(DictionaryKey::X_HEIGHT, new IntegerValue(431)),
+                new DictionaryEntry(DictionaryKey::XHEIGHT, new IntegerValue(431)),
                 new DictionaryEntry(DictionaryKey::CHAR_SET, new TextStringValue('(/S/a/c/d/e/fi/g/l/n/o/one/p/r/s/t/two)')),
                 new DictionaryEntry(DictionaryKey::FONT_FILE, new TextStringValue('11 0 R')),
             ),
@@ -205,7 +205,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::CREATION_DATE, new DateValue('(D:20220506201153+02\'00\')')),
                 new DictionaryEntry(DictionaryKey::MOD_DATE, new DateValue('(D:20220506201153+02\'00\')')),
                 new DictionaryEntry(DictionaryKey::TRAPPED, TrappedNameValue::FALSE),
-                new DictionaryEntry(DictionaryKey::PTEX_FULL_BANNER, new TextStringValue('(This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) kpathsea version 6.2.3)')),
+                new DictionaryEntry(DictionaryKey::PTEX_FULLBANNER, new TextStringValue('(This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) kpathsea version 6.2.3)')),
             ),
             DictionaryParser::parse(
                 $stream = Stream::fromString(
