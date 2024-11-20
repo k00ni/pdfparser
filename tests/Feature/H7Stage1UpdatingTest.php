@@ -20,6 +20,12 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
+use PrinsFrank\PdfParser\Document\Object\Decorator\Annot;
+use PrinsFrank\PdfParser\Document\Object\Decorator\Catalog;
+use PrinsFrank\PdfParser\Document\Object\Decorator\GenericObject;
+use PrinsFrank\PdfParser\Document\Object\Decorator\Outlines;
+use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
+use PrinsFrank\PdfParser\Document\Object\Decorator\Pages;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\PdfParser;
@@ -82,11 +88,14 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj1 = $document->getObject(1);
         static::assertEquals(
-            new UncompressedObject(
-                1,
-                0,
-                9,
-                73,
+            new Catalog(
+                new UncompressedObject(
+                    1,
+                    0,
+                    9,
+                    73,
+                ),
+                $document->stream
             ),
             $obj1,
         );
@@ -100,11 +109,14 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj2 = $document->getObject(2);
         static::assertEquals(
-            new UncompressedObject(
-                2,
-                0,
-                74,
-                119,
+            new Outlines(
+                new UncompressedObject(
+                    2,
+                    0,
+                    74,
+                    119,
+                ),
+                $document->stream
             ),
             $obj2,
         );
@@ -117,11 +129,14 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj3 = $document->getObject(3);
         static::assertEquals(
-            new UncompressedObject(
-                3,
-                0,
-                120,
-                178,
+            new Pages(
+                new UncompressedObject(
+                    3,
+                    0,
+                    120,
+                    178,
+                ),
+                $document->stream
             ),
             $obj3,
         );
@@ -135,11 +150,14 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj4 = $document->getObject(4);
         static::assertEquals(
-            new UncompressedObject(
-                4,
-                0,
-                604,
-                703,
+            new Page(
+                new UncompressedObject(
+                    4,
+                    0,
+                    604,
+                    703,
+                ),
+                $document->stream,
             ),
             $obj4,
         );
@@ -155,11 +173,14 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj5 = $document->getObject(5);
         static::assertEquals(
-            new UncompressedObject(
-                5,
-                0,
-                300,
-                383,
+            new GenericObject(
+                new UncompressedObject(
+                    5,
+                    0,
+                    300,
+                    383,
+                ),
+                $document->stream,
             ),
             $obj5,
         );
@@ -171,33 +192,48 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj6 = $document->getObject(6);
         static::assertEquals(
-            new UncompressedObject(
-                6,
-                0,
-                384,
-                407,
+            new GenericObject(
+                new UncompressedObject(
+                    6,
+                    0,
+                    384,
+                    407,
+                ),
+                $document->stream,
             ),
             $obj6,
         );
-        static::assertNull($obj6?->getDictionary($document->stream));
+        static::assertEquals(
+            new Dictionary(),
+            $obj6?->getDictionary($document->stream),
+        );
         $obj7 = $document->getObject(7);
         static::assertEquals(
-            new UncompressedObject(
-                7,
-                0,
-                811,
-                855,
+            new GenericObject(
+                new UncompressedObject(
+                    7,
+                    0,
+                    811,
+                    855,
+                ),
+                $document->stream,
             ),
             $obj7,
         );
-        static::assertNull($obj7?->getDictionary($document->stream));
+        static::assertEquals(
+            new Dictionary(),
+            $obj7?->getDictionary($document->stream),
+        );
         $obj8 = $document->getObject(8);
         static::assertEquals(
-            new UncompressedObject(
-                8,
-                0,
-                856,
-                957,
+            new Annot(
+                new UncompressedObject(
+                    8,
+                    0,
+                    856,
+                    957,
+                ),
+                $document->stream,
             ),
             $obj8,
         );
@@ -213,11 +249,14 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj9 = $document->getObject(9);
         static::assertEquals(
-            new UncompressedObject(
-                9,
-                0,
-                958,
-                1061,
+            new Annot(
+                new UncompressedObject(
+                    9,
+                    0,
+                    958,
+                    1061,
+                ),
+                $document->stream,
             ),
             $obj9,
         );
@@ -233,11 +272,14 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj10 = $document->getObject(10);
         static::assertEquals(
-            new UncompressedObject(
-                10,
-                0,
-                1062,
-                1165,
+            new Annot(
+                new UncompressedObject(
+                    10,
+                    0,
+                    1062,
+                    1165,
+                ),
+                $document->stream,
             ),
             $obj10,
         );
@@ -253,11 +295,14 @@ class H7Stage1UpdatingTest extends TestCase {
         );
         $obj11 = $document->getObject(11);
         static::assertEquals(
-            new UncompressedObject(
-                11,
-                0,
-                1165,
-                1269,
+            new Annot(
+                new UncompressedObject(
+                    11,
+                    0,
+                    1165,
+                    1269,
+                ),
+                $document->stream,
             ),
             $obj11,
         );
@@ -272,11 +317,14 @@ class H7Stage1UpdatingTest extends TestCase {
             $obj11?->getDictionary($document->stream)
         );
         static::assertEquals(
-            new UncompressedObject(
-                1,
-                0,
-                9,
-                73,
+            new Catalog(
+                new UncompressedObject(
+                    1,
+                    0,
+                    9,
+                    73,
+                ),
+                $document->stream,
             ),
             $document->getCatalog()
         );

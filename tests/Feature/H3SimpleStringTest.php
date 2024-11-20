@@ -19,6 +19,12 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
+use PrinsFrank\PdfParser\Document\Object\Decorator\Catalog;
+use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
+use PrinsFrank\PdfParser\Document\Object\Decorator\GenericObject;
+use PrinsFrank\PdfParser\Document\Object\Decorator\Outlines;
+use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
+use PrinsFrank\PdfParser\Document\Object\Decorator\Pages;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\PdfParser;
@@ -56,11 +62,14 @@ class H3SimpleStringTest extends TestCase {
         );
         $obj1 = $document->getObject(1);
         static::assertEquals(
-            new UncompressedObject(
-                1,
-                0,
-                9,
-                73,
+            new Catalog(
+                new UncompressedObject(
+                    1,
+                    0,
+                    9,
+                    73,
+                ),
+                $document->stream
             ),
             $obj1,
         );
@@ -74,11 +83,14 @@ class H3SimpleStringTest extends TestCase {
         );
         $obj2 = $document->getObject(2);
         static::assertEquals(
-            new UncompressedObject(
-                2,
-                0,
-                74,
-                119,
+            new Outlines(
+                new UncompressedObject(
+                    2,
+                    0,
+                    74,
+                    119,
+                ),
+                $document->stream,
             ),
             $obj2,
         );
@@ -91,11 +103,14 @@ class H3SimpleStringTest extends TestCase {
         );
         $obj3 = $document->getObject(3);
         static::assertEquals(
-            new UncompressedObject(
-                3,
-                0,
-                120,
-                178,
+            new Pages(
+                new UncompressedObject(
+                    3,
+                    0,
+                    120,
+                    178,
+                ),
+                $document->stream,
             ),
             $obj3,
         );
@@ -109,11 +124,14 @@ class H3SimpleStringTest extends TestCase {
         );
         $obj4 = $document->getObject(4);
         static::assertEquals(
-            new UncompressedObject(
-                4,
-                0,
-                179,
-                321,
+            new Page(
+                new UncompressedObject(
+                    4,
+                    0,
+                    179,
+                    321,
+                ),
+                $document->stream,
             ),
             $obj4,
         );
@@ -132,11 +150,14 @@ class H3SimpleStringTest extends TestCase {
         );
         $obj5 = $document->getObject(5);
         static::assertEquals(
-            new UncompressedObject(
-                5,
-                0,
-                322,
-                416,
+            new GenericObject(
+                new UncompressedObject(
+                    5,
+                    0,
+                    322,
+                    416,
+                ),
+                $document->stream,
             ),
             $obj5,
         );
@@ -148,22 +169,31 @@ class H3SimpleStringTest extends TestCase {
         );
         $obj6 = $document->getObject(6);
         static::assertEquals(
-            new UncompressedObject(
-                6,
-                0,
-                417,
-                446,
+            new GenericObject(
+                new UncompressedObject(
+                    6,
+                    0,
+                    417,
+                    446,
+                ),
+                $document->stream,
             ),
             $obj6,
         );
-        static::assertNull($obj6?->getDictionary($document->stream));
+        static::assertEquals(
+            new Dictionary(),
+            $obj6?->getDictionary($document->stream)
+        );
         $obj7 = $document->getObject(7);
         static::assertEquals(
-            new UncompressedObject(
-                7,
-                0,
-                447,
-                554,
+            new Font(
+                new UncompressedObject(
+                    7,
+                    0,
+                    447,
+                    554,
+                ),
+                $document->stream,
             ),
             $obj7,
         );
@@ -178,11 +208,14 @@ class H3SimpleStringTest extends TestCase {
             $obj7?->getDictionary($document->stream),
         );
         static::assertEquals(
-            new UncompressedObject(
-                1,
-                0,
-                9,
-                73,
+            new Catalog(
+                new UncompressedObject(
+                    1,
+                    0,
+                    9,
+                    73,
+                ),
+                $document->stream,
             ),
             $document->getCatalog()
         );
