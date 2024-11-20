@@ -11,5 +11,6 @@ enum DictionaryParseContext {
     case VALUE;
     case VALUE_IN_PARENTHESES;
     case VALUE_IN_SQUARE_BRACKETS;
+    case VALUE_IN_ANGLE_BRACKETS;
     case COMMENT;
 }

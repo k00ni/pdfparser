@@ -40,6 +40,8 @@ class DictionaryParser {
                 }
 
                 $nestingContext->setContext(DictionaryParseContext::DICTIONARY)->incrementNesting()->setContext(DictionaryParseContext::DICTIONARY);
+            } elseif ($char === DelimiterCharacter::LESS_THAN_SIGN->value && $nestingContext->getContext() === DictionaryParseContext::KEY) {
+                $nestingContext->setContext(DictionaryParseContext::VALUE);
             } elseif ($char === DelimiterCharacter::GREATER_THAN_SIGN->value && $rollingCharBuffer->getPreviousCharacter() === DelimiterCharacter::GREATER_THAN_SIGN->value && $rollingCharBuffer->getPreviousCharacter(2) !== LiteralStringEscapeCharacter::REVERSE_SOLIDUS->value && $nestingContext->getContext() !== DictionaryParseContext::VALUE_IN_SQUARE_BRACKETS) {
                 $nestingContext->removeFromValueBuffer();
                 self::flush($dictionaryArray, $nestingContext);
