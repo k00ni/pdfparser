@@ -14,7 +14,7 @@ class DateValue implements DictionaryValue {
 
     #[Override]
     public static function acceptsValue(string $value): bool {
-        return preg_match('/^\(?D:[0-9]{4,14}[+-][0-9]{2}\'[0-9]{2}\'?\)?$/', $value) === 1;
+        return str_starts_with($value, '(D:') || str_starts_with($value, 'D:');
     }
 
     #[Override]
