@@ -12,15 +12,14 @@ use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Array\ArrayValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Boolean\BooleanValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Integer\IntegerValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\SubtypeNameValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TypeNameValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Rectangle\Rectangle;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValueArray;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\TextString\TextStringValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Boolean\BooleanValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SubtypeNameValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\PdfParser;
@@ -149,7 +148,7 @@ class H7Stage1UpdatingTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::PAGE),
                 new DictionaryEntry(DictionaryKey::PARENT, new ReferenceValue(3, 0)),
                 new DictionaryEntry(DictionaryKey::MEDIA_BOX, new Rectangle(0.0, 0.0, 612.0, 792.0)),
-                new DictionaryEntry(DictionaryKey::CONTENTS, new ReferenceValueArray(new ReferenceValue(5, 0))),
+                new DictionaryEntry(DictionaryKey::CONTENTS, new ReferenceValue(5, 0)),
                 new DictionaryEntry(DictionaryKey::ANNOTS, new ReferenceValue(7, 0)),
             ),
             $obj4?->getDictionary($document->stream)
@@ -206,7 +205,7 @@ class H7Stage1UpdatingTest extends TestCase {
             new Dictionary(
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::ANNOT),
                 new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TEXT),
-                new DictionaryEntry(DictionaryKey::RECT, new ArrayValue([44, 616, 162, 735])),
+                new DictionaryEntry(DictionaryKey::RECT, new Rectangle(44, 616, 162, 735)),
                 new DictionaryEntry(DictionaryKey::CONTENTS, new TextStringValue('(Text #1)')),
                 new DictionaryEntry(DictionaryKey::OPEN, new BooleanValue(true)),
             ),
@@ -226,7 +225,7 @@ class H7Stage1UpdatingTest extends TestCase {
             new Dictionary(
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::ANNOT),
                 new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TEXT),
-                new DictionaryEntry(DictionaryKey::RECT, new ArrayValue([224, 668, 457, 735])),
+                new DictionaryEntry(DictionaryKey::RECT, new Rectangle(224, 668, 457, 735)),
                 new DictionaryEntry(DictionaryKey::CONTENTS, new TextStringValue('(Text #2)')),
                 new DictionaryEntry(DictionaryKey::OPEN, new BooleanValue(false)),
             ),
@@ -246,7 +245,7 @@ class H7Stage1UpdatingTest extends TestCase {
             new Dictionary(
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::ANNOT),
                 new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TEXT),
-                new DictionaryEntry(DictionaryKey::RECT, new ArrayValue([239, 393, 328, 622])),
+                new DictionaryEntry(DictionaryKey::RECT, new Rectangle(239, 393, 328, 622)),
                 new DictionaryEntry(DictionaryKey::CONTENTS, new TextStringValue('(Text #3)')),
                 new DictionaryEntry(DictionaryKey::OPEN, new BooleanValue(true)),
             ),
@@ -266,7 +265,7 @@ class H7Stage1UpdatingTest extends TestCase {
             new Dictionary(
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::ANNOT),
                 new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TEXT),
-                new DictionaryEntry(DictionaryKey::RECT, new ArrayValue([34, 398, 225, 575])),
+                new DictionaryEntry(DictionaryKey::RECT, new Rectangle(34, 398, 225, 575)),
                 new DictionaryEntry(DictionaryKey::CONTENTS, new TextStringValue('(Text #4)')),
                 new DictionaryEntry(DictionaryKey::OPEN, new BooleanValue(false)),
             ),

@@ -3,13 +3,15 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry;
 
+use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\DictionaryValueType;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\NameValue;
 
 class DictionaryEntry {
     public function __construct(
         public readonly DictionaryKey $key,
-        public readonly DictionaryValueType $value,
+        public readonly DictionaryValue|Dictionary|NameValue $value,
     ) {
     }
 }

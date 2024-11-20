@@ -9,19 +9,17 @@ use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Array\ArrayValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Array\WValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Date\DateValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Float\FloatValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Integer\IntegerValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\FilterNameValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\PageModeNameValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TrappedNameValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TypeNameValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Rectangle\Rectangle;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValueArray;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\TextString\TextStringValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\WValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Date\DateValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\FilterNameValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\PageModeNameValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TrappedNameValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
 use PrinsFrank\PdfParser\Stream;
 
 #[CoversClass(DictionaryParser::class)]
@@ -85,11 +83,9 @@ class DictionaryParserTest extends TestCase {
     public function testObjectStream(): void {
         static::assertEquals(
             new Dictionary(
-                new DictionaryEntry(DictionaryKey::DECODE_PARMS, new ArrayValue(
-                    [
-                        new DictionaryEntry(DictionaryKey::COLUMNS, new IntegerValue(5)),
-                        new DictionaryEntry(DictionaryKey::PREDICTOR, new IntegerValue(12))
-                    ]
+                new DictionaryEntry(DictionaryKey::DECODE_PARMS, new Dictionary(
+                    new DictionaryEntry(DictionaryKey::COLUMNS, new IntegerValue(5)),
+                    new DictionaryEntry(DictionaryKey::PREDICTOR, new IntegerValue(12)),
                 )),
                 new DictionaryEntry(DictionaryKey::FILTER, FilterNameValue::FLATE_DECODE),
                 new DictionaryEntry(DictionaryKey::ID, new ArrayValue(['<9A27A23F6A2546448EBB340FF38477BD>', '<C5C4714E306446ABAE40FE784477D322>'])),
@@ -131,11 +127,9 @@ class DictionaryParserTest extends TestCase {
     public function testParseSingleLine(): void {
         static::assertEquals(
             new Dictionary(
-                new DictionaryEntry(DictionaryKey::DECODE_PARMS, new ArrayValue(
-                    [
-                        new DictionaryEntry(DictionaryKey::COLUMNS, new IntegerValue(5)),
-                        new DictionaryEntry(DictionaryKey::PREDICTOR, new IntegerValue(12))
-                    ]
+                new DictionaryEntry(DictionaryKey::DECODE_PARMS, new Dictionary(
+                    new DictionaryEntry(DictionaryKey::COLUMNS, new IntegerValue(5)),
+                    new DictionaryEntry(DictionaryKey::PREDICTOR, new IntegerValue(12)),
                 )),
                 new DictionaryEntry(DictionaryKey::FILTER, FilterNameValue::FLATE_DECODE),
                 new DictionaryEntry(DictionaryKey::ID, new ArrayValue(['<9A27A23F6A2546448EBB340FF38477BD>', '<C5C4714E306446ABAE40FE784477D322>'])),
@@ -163,7 +157,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::FONT_NAME, new TextStringValue('/TAIPAH+CMR10')),
                 new DictionaryEntry(DictionaryKey::FLAGS, new IntegerValue(4)),
                 new DictionaryEntry(DictionaryKey::FONT_BBOX, new Rectangle(-40, -250, 1009, 750)),
-                new DictionaryEntry(DictionaryKey::ASCENT, new FloatValue(694)),
+                new DictionaryEntry(DictionaryKey::ASCENT, new IntegerValue(694)),
                 new DictionaryEntry(DictionaryKey::CAP_HEIGHT, new IntegerValue(683)),
                 new DictionaryEntry(DictionaryKey::DESCENT, new IntegerValue(-194)),
                 new DictionaryEntry(DictionaryKey::ITALIC_ANGLE, new IntegerValue(0)),
@@ -250,12 +244,12 @@ class DictionaryParserTest extends TestCase {
     public function testHandlesNumsNumberTree(): void {
         static::assertEquals(
             new Dictionary(
-                new DictionaryEntry(DictionaryKey::OPEN_ACTION, new TextStringValue('[3 0 R/Fit]')),
+                new DictionaryEntry(DictionaryKey::OPEN_ACTION, new ArrayValue([3, 0, 'R/Fit'])),
                 new DictionaryEntry(DictionaryKey::PAGE_MODE, PageModeNameValue::USE_OUTLINES),
-                new DictionaryEntry(DictionaryKey::PAGE_LABELS, new ArrayValue([
-                    new DictionaryEntry(DictionaryKey::NUMS, new TextStringValue('[0<</S/r>>12<</S/D>>]'))
-                ])),
-                new DictionaryEntry(DictionaryKey::NAMES, new ReferenceValueArray(new ReferenceValue(13164, 0))),
+                new DictionaryEntry(DictionaryKey::PAGE_LABELS, new Dictionary(
+                    new DictionaryEntry(DictionaryKey::NUMS, new ArrayValue(['0<</S/r>>12<</S/D>>'])),
+                )),
+                new DictionaryEntry(DictionaryKey::NAMES, new ReferenceValue(13164, 0)),
                 new DictionaryEntry(DictionaryKey::OUTLINES, new ReferenceValue(13165, 0)),
                 new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(13221, 0)),
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::CATALOG),

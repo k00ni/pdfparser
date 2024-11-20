@@ -12,14 +12,13 @@ use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Array\ArrayValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Integer\IntegerValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\SubtypeNameValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Name\TypeNameValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Rectangle\Rectangle;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\Reference\ReferenceValueArray;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValueType\TextString\TextStringValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SubtypeNameValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\PdfParser;
@@ -123,12 +122,10 @@ class H3SimpleStringTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::PAGE),
                 new DictionaryEntry(DictionaryKey::PARENT, new ReferenceValue(3, 0)),
                 new DictionaryEntry(DictionaryKey::MEDIA_BOX, new Rectangle(0.0, 0.0, 612.0, 792.0)),
-                new DictionaryEntry(DictionaryKey::CONTENTS, new ReferenceValueArray(new ReferenceValue(5, 0))),
-                new DictionaryEntry(DictionaryKey::RESOURCES, new ArrayValue(
-                    [
-                        new DictionaryEntry(DictionaryKey::PROC_SET, new ReferenceValue(6, 0)),
-                        new DictionaryEntry(DictionaryKey::FONT, new ArrayValue([new DictionaryEntry(DictionaryKey::F, new ReferenceValue(7, 0))])),
-                    ]
+                new DictionaryEntry(DictionaryKey::CONTENTS, new ReferenceValue(5, 0)),
+                new DictionaryEntry(DictionaryKey::RESOURCES, new Dictionary(
+                    new DictionaryEntry(DictionaryKey::PROC_SET, new ReferenceValue(6, 0)),
+                    new DictionaryEntry(DictionaryKey::FONT, new Dictionary(new DictionaryEntry(DictionaryKey::F, new ReferenceValue(7, 0)))),
                 )),
             ),
             $obj4?->getDictionary($document->stream),
