@@ -21,7 +21,7 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream;
 
 class UncompressedObject implements ObjectItem {
-    private readonly ?Dictionary $dictionary;
+    private readonly Dictionary $dictionary;
     private readonly CompressedObjectByteOffsets $byteOffsets;
 
     public function __construct(
@@ -33,14 +33,14 @@ class UncompressedObject implements ObjectItem {
     }
 
     #[Override]
-    public function getDictionary(Stream $stream): ?Dictionary {
+    public function getDictionary(Stream $stream): Dictionary {
         if (isset($this->dictionary) === true) {
             return $this->dictionary;
         }
 
         $startDictionaryPos = $stream->firstPos(DelimiterCharacter::LESS_THAN_SIGN, $this->startOffset, $this->endOffset);
         if ($startDictionaryPos === null) {
-            return $this->dictionary = null;
+            return $this->dictionary = new Dictionary();
         }
 
         $endDictionaryPos = $stream->lastPos(DelimiterCharacter::GREATER_THAN_SIGN, $stream->getSizeInBytes() - $this->endOffset);
@@ -70,7 +70,7 @@ class UncompressedObject implements ObjectItem {
         }
 
         $dictionary = $this->getDictionary($stream);
-        if ($dictionary?->getValueForKey(DictionaryKey::TYPE, TypeNameValue::class) !== TypeNameValue::OBJ_STM) {
+        if ($dictionary->getValueForKey(DictionaryKey::TYPE, TypeNameValue::class) !== TypeNameValue::OBJ_STM) {
             throw new ParseFailureException('Unable to get stream data from item that is not a stream');
         }
 
@@ -94,7 +94,7 @@ class UncompressedObject implements ObjectItem {
             $stream,
             $startStreamPos,
             $eolPos - $startStreamPos,
-            $this->getDictionary($stream) ?? throw new ParseFailureException('Unable to get dictionary for uncompressed object'),
+            $this->getDictionary($stream),
         );
     }
 }

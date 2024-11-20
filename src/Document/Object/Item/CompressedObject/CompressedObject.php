@@ -24,12 +24,12 @@ class CompressedObject implements ObjectItem {
     }
 
     #[Override]
-    public function getDictionary(Stream $stream): ?Dictionary {
+    public function getDictionary(Stream $stream): Dictionary {
         if (isset($this->dictionary)) {
             return $this->dictionary;
         }
 
-        $first = $this->storedInObject->getDictionary($stream)?->getValueForKey(DictionaryKey::FIRST, IntegerValue::class)
+        $first = $this->storedInObject->getDictionary($stream)->getValueForKey(DictionaryKey::FIRST, IntegerValue::class)
             ?? throw new RuntimeException('Expected a dictionary entry for "First", none found');
         $objectContent = Stream::fromString(
             implode(

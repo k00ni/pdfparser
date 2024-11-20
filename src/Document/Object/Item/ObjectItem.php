@@ -6,5 +6,5 @@ use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Stream;
 
 interface ObjectItem {
-    public function getDictionary(Stream $stream): ?Dictionary;
+    public function getDictionary(Stream $stream): Dictionary;
 }
