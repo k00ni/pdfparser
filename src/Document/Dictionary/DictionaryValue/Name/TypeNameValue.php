@@ -19,4 +19,5 @@ enum TypeNameValue: string implements NameValue {
     case STREAM = 'Stream';
     case X_OBJECT = 'XObject';
     case X_REF = 'XRef';
+    case MARK_INFO = 'MarkInfo';
 }
