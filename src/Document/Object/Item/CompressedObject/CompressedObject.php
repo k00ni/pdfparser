@@ -31,20 +31,12 @@ class CompressedObject implements ObjectItem {
 
         $first = $this->storedInObject->getDictionary($stream)->getValueForKey(DictionaryKey::FIRST, IntegerValue::class)
             ?? throw new RuntimeException('Expected a dictionary entry for "First", none found');
+
         $objectContent = Stream::fromString(
-            implode(
-                '',
-                array_map(
-                    fn (string $char) => chr((int) hexdec($char)),
-                    str_split(
-                        substr(
-                            $this->storedInObject->getStreamContent($stream),
-                            ($first->value + $this->startByteOffsetInDecodedStream) * 2,
-                            ($this->endByteOffsetInDecodedStream - $this->startByteOffsetInDecodedStream) * 2
-                        ),
-                        2
-                    )
-                )
+            substr(
+                $this->storedInObject->getStreamContent($stream),
+                $first->value + $this->startByteOffsetInDecodedStream,
+                $this->endByteOffsetInDecodedStream - $this->startByteOffsetInDecodedStream
             )
         );
 

@@ -89,12 +89,22 @@ class UncompressedObject implements ObjectItem {
             ?? throw new MarkerNotFoundException(Marker::END_STREAM->value);
         $eolPos = $stream->getEndOfCurrentLine($endStreamPos - 1, $this->endOffset)
             ?? throw new MarkerNotFoundException(WhitespaceCharacter::LINE_FEED->value);
-
-        return CompressedObjectContentParser::parse(
+        $decodedBytes = CompressedObjectContentParser::parse(
             $stream,
             $startStreamPos,
             $eolPos - $startStreamPos,
             $this->getDictionary($stream),
+        );
+
+        return implode(
+            '',
+            array_map(
+                fn (string $char) => chr((int) hexdec($char)),
+                str_split(
+                    $decodedBytes,
+                    2
+                )
+            )
         );
     }
 }
