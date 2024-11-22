@@ -14,18 +14,27 @@ use PrinsFrank\PdfParser\Document\Text\TextOperator;
 
 #[CoversClass(TextObjectCollection::class)]
 class TextObjectCollectionTest extends TestCase {
-    public function testParseText(): void {
+    public function testToString(): void {
         static::assertEquals(
-            '[(Sen)28(tence)-334(on)-333(rst)-333(page)][(1)]',
-            (string) (new TextObjectCollection())
-                ->addTextObject(
-                    (new TextObject())
-                        ->addTextOperator(new TextOperator(TextStateOperator::FONT_SIZE, '/F20 9.9626'))
-                        ->addTextOperator(new TextOperator(TextPositioningOperator::MOVE_OFFSET, '148.712 707.125'))
-                        ->addTextOperator(new TextOperator(TextShowingOperator::SHOW_ARRAY, '[(Sen)28(tence)-334(on)-333(rst)-333(page)]'))
-                        ->addTextOperator(new TextOperator(TextPositioningOperator::MOVE_OFFSET, '154.421 -567.87'))
-                        ->addTextOperator(new TextOperator(TextShowingOperator::SHOW_ARRAY, '[(1)]'))
-                ),
+            'Hello World',
+            (string) (new TextObjectCollection(
+                (new TextObject())
+                    ->addTextOperator(new TextOperator(TextStateOperator::FONT_SIZE, '/F1 24'))
+                    ->addTextOperator(new TextOperator(TextPositioningOperator::MOVE_OFFSET, '100 100'))
+                    ->addTextOperator(new TextOperator(TextShowingOperator::SHOW, '( Hello World )'))
+            ))
+        );
+    }
+
+    public function testToStringWithShowArray(): void {
+        static::assertEquals(
+            'Hello World',
+            (string) (new TextObjectCollection(
+                (new TextObject())
+                    ->addTextOperator(new TextOperator(TextStateOperator::FONT_SIZE, '/F1 24'))
+                    ->addTextOperator(new TextOperator(TextPositioningOperator::MOVE_OFFSET, '100 100'))
+                    ->addTextOperator(new TextOperator(TextShowingOperator::SHOW_ARRAY, '[(Hello)30( World)]'))
+            ))
         );
     }
 }
