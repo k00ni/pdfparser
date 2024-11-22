@@ -12,17 +12,17 @@ use PrinsFrank\PdfParser\Document\Text\OperatorString\TextStateOperator;
 
 class TextParser {
     public static function parse(string $text): TextObjectCollection {
-        $textObjectCollection = new TextObjectCollection();
         $operatorBuffer = new RollingCharBuffer(2);
         $textObject = null;
         $operandBuffer = new InfiniteBuffer();
+        $textObjects = [];
         foreach (str_split($text) as $char) {
             $operandBuffer->addChar($char);
             $operatorBuffer->next($char);
             if ($operatorBuffer->seenBackedEnumValue(TextObjectOperator::BEGIN)) {
                 $operandBuffer->flush();
                 $textObject = new TextObject();
-                $textObjectCollection->addTextObject($textObject);
+                $textObjects[] = $textObject;
                 continue;
             }
 
@@ -43,6 +43,6 @@ class TextParser {
             }
         }
 
-        return $textObjectCollection;
+        return new TextObjectCollection(...$textObjects);
     }
 }

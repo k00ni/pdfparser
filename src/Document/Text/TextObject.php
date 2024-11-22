@@ -18,6 +18,6 @@ class TextObject implements Stringable {
 
     #[Override]
     public function __toString(): string {
-        return implode('', $this->textOperators);
+        return implode(' ', $this->textOperators);
     }
 }

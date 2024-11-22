@@ -7,6 +7,7 @@ use Override;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextPositioningOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextShowingOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextStateOperator;
+use PrinsFrank\PdfParser\Exception\RuntimeException;
 use Stringable;
 
 class TextOperator implements Stringable {
@@ -22,11 +23,19 @@ class TextOperator implements Stringable {
             return '';
         }
 
-        return match ($this->operator) {
-            TextShowingOperator::SHOW,
-            TextShowingOperator::MOVE_SHOW_SPACING,
-            TextShowingOperator::MOVE_SHOW,
-            TextShowingOperator::SHOW_ARRAY => $this->operands
-        };
+        if ($this->operator === TextShowingOperator::SHOW_ARRAY) {
+            return preg_replace('/\(([^)]+)\)(-?[0-9]+(.[0-9]+)?)?/', '$1', rtrim(ltrim($this->operands, '['), ']'));
+        }
+
+        if ($this->operator === TextShowingOperator::SHOW) {
+            return rtrim(ltrim($this->operands, '('), ')');
+        }
+
+        if ($this->operator === TextShowingOperator::MOVE_SHOW_SPACING
+            || $this->operator === TextShowingOperator::MOVE_SHOW) {
+            return PHP_EOL . $this->operands;
+        }
+
+        throw new RuntimeException();
     }
 }

@@ -8,16 +8,17 @@ use Stringable;
 
 class TextObjectCollection implements Stringable {
     /** @var list<TextObject> */
-    public array $textObjects = [];
+    public readonly array $textObjects;
 
-    public function addTextObject(TextObject $textObject): self {
-        $this->textObjects[] = $textObject;
-
-        return $this;
+    /** @no-named-arguments */
+    public function __construct(
+        TextObject... $textObjects
+    ) {
+        $this->textObjects = $textObjects;
     }
 
     #[Override]
     public function __toString(): string {
-        return implode('', $this->textObjects);
+        return preg_replace('/\h+/', ' ', trim(implode(' ', $this->textObjects)));
     }
 }
