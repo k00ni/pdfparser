@@ -14,8 +14,10 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class Page extends DecoratedObject {
     public function getText(Document $document): TextObjectCollection {
-        $contentRef = $this->getDictionary($document->stream)->getValueForKey(DictionaryKey::CONTENTS, ReferenceValue::class);
-        $contentObject = $document->getObject($contentRef->objectNumber) ?? throw new ParseFailureException(sprintf('Unable to locate content object with object number %d', $contentRef->objectNumber));
+        $contentRef = $this->getDictionary($document->stream)->getValueForKey(DictionaryKey::CONTENTS, ReferenceValue::class)
+            ?? throw new ParseFailureException(sprintf('No Contents found for page'));
+        $contentObject = $document->getObject($contentRef->objectNumber)
+            ?? throw new ParseFailureException(sprintf('Unable to locate content object with object number %d', $contentRef->objectNumber));
         if (!$contentObject->objectItem instanceof UncompressedObject) {
             throw new ParseFailureException('Compressed objects containing text are currently not supported');
         }

@@ -24,18 +24,14 @@ class TextOperator implements Stringable {
         }
 
         if ($this->operator === TextShowingOperator::SHOW_ARRAY) {
-            return preg_replace('/\(([^)]+)\)(-?[0-9]+(.[0-9]+)?)?/', '$1', rtrim(ltrim($this->operands, '['), ']'));
+            return preg_replace('/\(([^)]+)\)(-?[0-9]+(.[0-9]+)?)?/', '$1', rtrim(ltrim($this->operands, '['), ']'))
+                ?? throw new RuntimeException();
         }
 
         if ($this->operator === TextShowingOperator::SHOW) {
             return rtrim(ltrim($this->operands, '('), ')');
         }
 
-        if ($this->operator === TextShowingOperator::MOVE_SHOW_SPACING
-            || $this->operator === TextShowingOperator::MOVE_SHOW) {
-            return PHP_EOL . $this->operands;
-        }
-
-        throw new RuntimeException();
+        return PHP_EOL . $this->operands;
     }
 }

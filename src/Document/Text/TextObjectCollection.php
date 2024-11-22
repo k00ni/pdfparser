@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document\Text;
 
 use Override;
+use PrinsFrank\PdfParser\Exception\RuntimeException;
 use Stringable;
 
 class TextObjectCollection implements Stringable {
@@ -19,6 +20,7 @@ class TextObjectCollection implements Stringable {
 
     #[Override]
     public function __toString(): string {
-        return preg_replace('/\h+/', ' ', trim(implode(' ', $this->textObjects)));
+        return preg_replace('/\h+/', ' ', trim(implode(' ', $this->textObjects)))
+            ?? throw new RuntimeException();
     }
 }
