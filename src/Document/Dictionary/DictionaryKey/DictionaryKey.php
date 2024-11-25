@@ -48,6 +48,7 @@ enum DictionaryKey: string {
     case ACRO_FORM = 'AcroForm';
     case ACTION = 'Action';
     case ADD_REV_INFO = 'AddRevInfo';
+    case ADDITIONAL_STREAMS = 'AdditionalStreams';
     case AFTER = 'After';
     case AFTER_PERMS_READY = 'AfterPermsReady';
     case AIS = 'AIS';
@@ -652,6 +653,7 @@ enum DictionaryKey: string {
             self::ACRO_FORM => [Dictionary::class],
             self::ACTION => [TextStringValue::class],
             self::ADD_REV_INFO => [BooleanValue::class],
+            self::ADDITIONAL_STREAMS => [ArrayValue::class],
             self::AFTER => [TextStringValue::class],
             self::AFTER_PERMS_READY => [TextStringValue::class],
             self::AIS => [BooleanValue::class, TextStringValue::class],
@@ -927,7 +929,7 @@ enum DictionaryKey: string {
             self::LEADING => [IntegerValue::class, FloatValue::class],
             self::LEGAL => [Dictionary::class],
             self::LEGAL_ATTESTATION => [Dictionary::class],
-            self::LENGTH => [IntegerValue::class],
+            self::LENGTH => [IntegerValue::class, ReferenceValue::class],
             self::LENGTH1 => [IntegerValue::class],
             self::LENGTH2 => [IntegerValue::class],
             self::LENGTH3 => [IntegerValue::class],
