@@ -40,7 +40,6 @@ class DictionaryParserTest extends TestCase {
             DictionaryParser::parse(
                 $stream = Stream::fromString(
                     <<<EOD
-                    15 0 obj
                     <<
                     /Type /XRef
                     /Index [0 16]
@@ -52,7 +51,6 @@ class DictionaryParserTest extends TestCase {
                     /Length 57
                     /Filter /FlateDecode
                     >>
-                    stream
                     EOD,
                 ),
                 0,
@@ -116,7 +114,7 @@ class DictionaryParserTest extends TestCase {
                         /Size 4738
                         /Type/XRef
                         /W[1 4 0]
-                    >>stream',
+                    >>',
                 ),
                 0,
                 $stream->getSizeInBytes(),
@@ -143,7 +141,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::W, new WValue(1, 4, 0)),
             ),
             DictionaryParser::parse(
-                $stream = Stream::fromString('<</DecodeParms<</Columns 5/Predictor 12>>/Filter/FlateDecode/ID[<9A27A23F6A2546448EBB340FF38477BD><C5C4714E306446ABAE40FE784477D322>]/Index[2460 1 4311 1 4317 2 4414 1 4717 21]/Info 4318 0 R/Length 106/Prev 46153797/Root 4320 0 R/Size 4738/Type/XRef/W[1 4 0]>>stream'),
+                $stream = Stream::fromString('<</DecodeParms<</Columns 5/Predictor 12>>/Filter/FlateDecode/ID[<9A27A23F6A2546448EBB340FF38477BD><C5C4714E306446ABAE40FE784477D322>]/Index[2460 1 4311 1 4317 2 4414 1 4717 21]/Info 4318 0 R/Length 106/Prev 46153797/Root 4320 0 R/Size 4738/Type/XRef/W[1 4 0]>>'),
                 0,
                 $stream->getSizeInBytes(),
             )
@@ -265,6 +263,46 @@ class DictionaryParserTest extends TestCase {
                     /Outlines 13165 0 R
                     /Pages 13221 0 R
                     /Type/Catalog
+                    >>
+                    EOD,
+                ),
+                0,
+                $stream->getSizeInBytes(),
+            )
+        );
+    }
+
+    public function testHandlesDeeplyNestedObject(): void {
+        static::assertEquals(
+            new Dictionary(
+                new DictionaryEntry(DictionaryKey::CONTENTS, new ReferenceValue(23, 0)),
+                new DictionaryEntry(DictionaryKey::MEDIA_BOX, new Rectangle(0, 0, 595.276, 841.89)),
+                new DictionaryEntry(DictionaryKey::PARENT, new ReferenceValue(1, 0)),
+                new DictionaryEntry(DictionaryKey::RESOURCES, new Dictionary(
+                    new DictionaryEntry(DictionaryKey::FONT, new Dictionary(
+                        new DictionaryEntry(DictionaryKey::F, new ReferenceValue(5, 0)),
+                        new DictionaryEntry(DictionaryKey::F, new ReferenceValue(8, 0)),
+                        new DictionaryEntry(DictionaryKey::F, new ReferenceValue(11, 0)),
+                        new DictionaryEntry(DictionaryKey::F, new ReferenceValue(14, 0)),
+                        new DictionaryEntry(DictionaryKey::F, new ReferenceValue(17, 0)),
+                        new DictionaryEntry(DictionaryKey::F, new ReferenceValue(20, 0)),
+                        new DictionaryEntry(DictionaryKey::SHADING, new Dictionary()),
+                        new DictionaryEntry(DictionaryKey::XOBJECT, new Dictionary()),
+                        new DictionaryEntry(DictionaryKey::COLOR_SPACE, new Dictionary()),
+                        new DictionaryEntry(DictionaryKey::EXT_GSTATE, new Dictionary()),
+                    )),
+                )),
+                new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::PAGE),
+            ),
+            DictionaryParser::parse(
+                $stream = Stream::fromString(
+                    <<<EOD
+                    <<
+                    /Contents 23 0 R
+                    /MediaBox [0 0 595.276 841.89]
+                    /Parent 1 0 R
+                    /Resources <</Font <</F5 5 0 R /F8 8 0 R /F11 11 0 R /F14 14 0 R /F17 17 0 R /F20 20 0 R >> /Shading <<>> /XObject <<>> /ColorSpace <</CS1 2 0 R >> /ExtGState <</GS0 4 0 R>> >>
+                    /Type /Page
                     >>
                     EOD,
                 ),

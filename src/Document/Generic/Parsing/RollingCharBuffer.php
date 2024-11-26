@@ -43,6 +43,10 @@ class RollingCharBuffer {
         return $this;
     }
 
+    public function getCurrentCharacter(): ?string {
+        return $this->buffer[$this->currentIndex % $this->length] ?? null;
+    }
+
     /** @throws BufferTooSmallException */
     public function getPreviousCharacter(int $nAgo = 1): ?string {
         if ($nAgo >= $this->length) {
