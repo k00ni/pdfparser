@@ -28,13 +28,8 @@ class NestingContext {
     }
 
     public function decrementNesting(): self {
-        foreach (array_reverse(array_keys($this->nestingContext)) as $previousLevel) {
-            if ($previousLevel !== $this->currentLevel) {
-                $this->currentLevel = (string) $previousLevel;
-
-                break;
-            }
-        }
+        array_pop($this->nestingContext);
+        $this->currentLevel = (string) array_key_last($this->nestingContext);
 
         return $this;
     }
