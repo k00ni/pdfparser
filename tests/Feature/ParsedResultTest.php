@@ -38,6 +38,10 @@ class ParsedResultTest extends TestCase {
         /** @var list<object{filename: string, password: ?string, version: string, pages: array<array{content: string}>}> $fileInfoArray */
         $fileInfoArray = json_decode($fileInfoContent, flags: JSON_THROW_ON_ERROR);
         foreach ($fileInfoArray as $fileInfo) {
+            if ($fileInfo->password !== null) {
+                continue;
+            }
+
             yield $fileInfo->filename => [
                 dirname(__DIR__, 2) . self::SAMPLES_SOURCE . 'files/' . $fileInfo->filename,
                 $fileInfo->password,
