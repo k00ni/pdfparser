@@ -28,14 +28,14 @@ class ParsedResultTest extends TestCase {
         }
     }
 
-    /** @return iterable<string, array{0: string, 1: ?string, 2: Version, 3: array<array{content: string}>}> */
+    /** @return iterable<string, array{0: string, 1: ?string, 2: Version, 3: list<array{content: string}>}> */
     public static function externalSamples(): iterable {
         $fileInfoContent = file_get_contents(dirname(__DIR__, 2) . self::SAMPLES_SOURCE . 'files.json');
         if ($fileInfoContent === false) {
             throw new RuntimeException('Unable to load file information from samples source. Should a \'composer install\' be run?');
         }
 
-        /** @var list<object{filename: string, password: ?string, version: string, pages: array<array{content: string}>}> $fileInfoArray */
+        /** @var list<object{filename: string, password: ?string, version: string, pages: list<array{content: string}>}> $fileInfoArray */
         $fileInfoArray = json_decode($fileInfoContent, flags: JSON_THROW_ON_ERROR);
         foreach ($fileInfoArray as $fileInfo) {
             if ($fileInfo->password !== null) {
