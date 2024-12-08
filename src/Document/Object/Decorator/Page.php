@@ -13,7 +13,12 @@ use PrinsFrank\PdfParser\Document\Text\TextParser;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class Page extends DecoratedObject {
-    public function getText(Document $document): TextObjectCollection {
+    public function getText(Document $document): string {
+        return $this->getTextObjectCollection($document)
+            ->__toString();
+    }
+
+    public function getTextObjectCollection(Document $document): TextObjectCollection {
         $contentRef = $this->getDictionary($document->stream)->getValueForKey(DictionaryKey::CONTENTS, ReferenceValue::class)
             ?? throw new ParseFailureException(sprintf('No Contents found for page'));
         $contentObject = $document->getObject($contentRef->objectNumber)
