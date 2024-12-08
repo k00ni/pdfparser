@@ -22,12 +22,12 @@ class TextParser {
         foreach (str_split($text) as $char) {
             $operandBuffer->addChar($char);
             $operatorBuffer->next($char);
-            if (in_array($char, ['[', '<'], true)) {
+            if (in_array($char, ['[', '<', '('], true)) {
                 $inValue = true;
                 continue;
             }
 
-            if ($inValue && in_array($char, [']', '>'], true)) {
+            if ($inValue && in_array($char, [']', '>', ')'], true)) {
                 $inValue = false;
                 continue;
             }
