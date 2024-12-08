@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\WValue;
@@ -15,6 +16,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Date\DateValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\FilterNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\PageModeNameValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TabsNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TrappedNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle;
@@ -266,6 +268,47 @@ class DictionaryParserTest extends TestCase {
                     /Pages 13221 0 R
                     /Type/Catalog
                     >>
+                    EOD,
+                ),
+                0,
+                $stream->getSizeInBytes(),
+            )
+        );
+    }
+
+    public function testHandlesGraphicStateSubDictionaries(): void {
+        static::assertEquals(
+            new Dictionary(
+                new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::PAGE),
+                new DictionaryEntry(DictionaryKey::RESOURCES, new Dictionary(
+                    new DictionaryEntry(DictionaryKey::PROC_SET, new ArrayValue(['/PDF', '/Text', '/ImageB', '/ImageC', '/ImageI'])),
+                    new DictionaryEntry(DictionaryKey::EXT_GSTATE, new Dictionary(
+                        new DictionaryEntry(new ExtendedDictionaryKey('G3'), new ReferenceValue(3, 0))
+                    )),
+                    new DictionaryEntry(DictionaryKey::FONT, new Dictionary(
+                        new DictionaryEntry(new ExtendedDictionaryKey('F4'), new ReferenceValue(4, 0))
+                    )),
+                )),
+                new DictionaryEntry(DictionaryKey::MEDIA_BOX, new Rectangle(0.0, 0.0, 596.0, 842.0)),
+                new DictionaryEntry(DictionaryKey::CONTENTS, new ReferenceValue(5, 0)),
+                new DictionaryEntry(DictionaryKey::STRUCT_PARENTS, new IntegerValue(0)),
+                new DictionaryEntry(DictionaryKey::TABS, TabsNameValue::StructureOrder),
+                new DictionaryEntry(DictionaryKey::PARENT, new ReferenceValue(6, 0)),
+            ),
+            DictionaryParser::parse(
+                $stream = Stream::fromString(
+                    <<<EOD
+                    <</Type /Page
+                    /Resources <<
+                        /ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
+                        /ExtGState <</G3 3 0 R>>
+                        /Font <</F4 4 0 R>>
+                    >>
+                    /MediaBox [0 0 596 842]
+                    /Contents 5 0 R
+                    /StructParents 0
+                    /Tabs /S
+                    /Parent 6 0 R>>
                     EOD,
                 ),
                 0,

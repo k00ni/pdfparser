@@ -98,6 +98,6 @@ class DictionaryParser {
 
         /** @phpstan-ignore offsetAccess.nonOffsetAccessible */
         $dictionaryArrayPointer[(string) $nestingContext->getKeyBuffer()] = trim((string) $nestingContext->getValueBuffer());
-        $nestingContext->flush()->setContext(DictionaryParseContext::ROOT);
+        $nestingContext->flush();
     }
 }
