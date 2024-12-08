@@ -12,7 +12,7 @@ class ExtendedDictionaryKey implements DictionaryKeyInterface {
     ) {
     }
 
-    public static function fromKeyString(string $keyString): ?self {
+    public static function fromKeyString(string $keyString): self {
         return new self(rtrim(ltrim($keyString, '/'), "\n\t "));
     }
 
