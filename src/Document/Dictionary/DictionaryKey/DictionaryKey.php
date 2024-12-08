@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey;
 
+use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\WValue;
@@ -21,7 +22,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\EventNameValue
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\FilterNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\IntentNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\ListModeNameValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\NameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\NonFullScreenPageModeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\NumberingStyleNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\PageLayoutNameValue;
@@ -40,7 +40,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\Reference
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
 use PrinsFrank\PdfParser\Document\Version\Version;
 
-enum DictionaryKey: string {
+enum DictionaryKey: string implements DictionaryKeyInterface {
     case A = 'A';
     case AA = 'AA';
     case AC = 'AC';
@@ -640,10 +640,10 @@ enum DictionaryKey: string {
     case ZOOM = 'Zoom';
 
     public static function tryFromKeyString(string $keyString): ?self {
-        return self::tryFrom(rtrim(ltrim($keyString, '/'), "1234567890\n\t "));
+        return self::tryFrom(rtrim(ltrim(trim($keyString), '/'), "\n\t "));
     }
 
-    /** @return list<class-string<DictionaryValue|Dictionary|NameValue>> */
+    #[Override]
     public function getValueTypes(): array {
         return match ($this) {
             self::A => [Dictionary::class, BooleanValue::class, ArrayValue::class, IntegerValue::class, TextStringValue::class],
@@ -864,7 +864,7 @@ enum DictionaryKey: string {
             self::FUNCTIONS => [ArrayValue::class],
             self::FWPOSITION => [ArrayValue::class],
             self::FWSCALE => [ArrayValue::class],
-            self::G => [TextStringValue::class],
+            self::G => [ReferenceValue::class, TextStringValue::class],
             self::GAMMA => [IntegerValue::class, FloatValue::class, ArrayValue::class],
             self::GO_TO_REMOTE_ACTIONS => [IntegerValue::class],
             self::GROUP => [Dictionary::class],

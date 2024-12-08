@@ -7,6 +7,7 @@ use BackedEnum;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryFactory;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\NameValue;
@@ -17,16 +18,14 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 class DictionaryEntryFactory {
     /** @param string|array<string, mixed> $dictionaryValue */
     public static function fromKeyValuePair(string $keyString, string|array $dictionaryValue): ?DictionaryEntry {
-        $dictionaryKey = DictionaryKey::tryFromKeyString(trim($keyString));
-        if ($dictionaryKey === null) {
-            throw new ParseFailureException(sprintf('Dictionary key %s is not supported', $keyString));
-        }
+        $dictionaryKey = DictionaryKey::tryFromKeyString($keyString)
+            ?? ExtendedDictionaryKey::fromKeyString($keyString);
 
         return new DictionaryEntry($dictionaryKey, self::getValue($dictionaryKey, $dictionaryValue));
     }
 
     /** @param string|array<string, mixed> $value */
-    protected static function getValue(DictionaryKey $dictionaryKey, string|array $value): Dictionary|DictionaryValue|NameValue {
+    protected static function getValue(DictionaryKey|ExtendedDictionaryKey $dictionaryKey, string|array $value): Dictionary|DictionaryValue|NameValue {
         $allowedValueTypes = $dictionaryKey->getValueTypes();
         if ((in_array(Dictionary::class, $allowedValueTypes, true) || in_array(ArrayValue::class, $allowedValueTypes, true))
             && is_array($value)) {
@@ -64,6 +63,6 @@ class DictionaryEntryFactory {
             return TextStringValue::fromValue($value);
         }
 
-        throw new ParseFailureException(sprintf('Value >%s< for dictionary key %s could not be parsed to a valid value type', is_array($value) ? json_encode($value) : $value, $dictionaryKey->name));
+        throw new ParseFailureException(sprintf('Value >%s< for dictionary key %s could not be parsed to a valid value type', is_array($value) ? json_encode($value) : $value, $dictionaryKey->value));
     }
 }

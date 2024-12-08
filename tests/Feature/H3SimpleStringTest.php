@@ -12,6 +12,7 @@ use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SubtypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
@@ -143,7 +144,9 @@ class H3SimpleStringTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::CONTENTS, new ReferenceValue(5, 0)),
                 new DictionaryEntry(DictionaryKey::RESOURCES, new Dictionary(
                     new DictionaryEntry(DictionaryKey::PROC_SET, new ReferenceValue(6, 0)),
-                    new DictionaryEntry(DictionaryKey::FONT, new Dictionary(new DictionaryEntry(DictionaryKey::F, new ReferenceValue(7, 0)))),
+                    new DictionaryEntry(DictionaryKey::FONT, new Dictionary(
+                        new DictionaryEntry(new ExtendedDictionaryKey('F1'), new ReferenceValue(7, 0)))
+                    ),
                 )),
             ),
             $obj4?->getDictionary($document->stream),
