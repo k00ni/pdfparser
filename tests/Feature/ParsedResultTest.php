@@ -15,9 +15,9 @@ use PrinsFrank\PdfParser\PdfParser;
 class ParsedResultTest extends TestCase {
     private const SAMPLES_SOURCE = '/vendor/prinsfrank/pdf-samples/';
 
-    /** @param list<array{content: string}> $expectedPages */
+    /** @param list<object{content: string}> $expectedPages */
     #[DataProvider('externalSamples')]
-    public function testExternalSourcePDFs(string $pdfPath, ?string $password, Version $version, array $expectedPages): void {
+    public function testExternalSourcePDFs(string $pdfPath, Version $version, array $expectedPages): void {
         $parser = new PdfParser();
 
         $document = $parser->parse(Stream::openFile($pdfPath));
@@ -28,14 +28,14 @@ class ParsedResultTest extends TestCase {
         }
     }
 
-    /** @return iterable<string, array{0: string, 1: ?string, 2: Version, 3: list<array{content: string}>}> */
+    /** @return iterable<string, array{0: string, 1: Version, 2: list<object{content: string}>}> */
     public static function externalSamples(): iterable {
         $fileInfoContent = file_get_contents(dirname(__DIR__, 2) . self::SAMPLES_SOURCE . 'files.json');
         if ($fileInfoContent === false) {
             throw new RuntimeException('Unable to load file information from samples source. Should a \'composer install\' be run?');
         }
 
-        /** @var list<object{filename: string, password: ?string, version: string, pages: list<array{content: string}>}> $fileInfoArray */
+        /** @var list<object{filename: string, password: ?string, version: string, pages: list<object{content: string}>}> $fileInfoArray */
         $fileInfoArray = json_decode($fileInfoContent, flags: JSON_THROW_ON_ERROR);
         foreach ($fileInfoArray as $fileInfo) {
             if ($fileInfo->password !== null) {
@@ -44,7 +44,6 @@ class ParsedResultTest extends TestCase {
 
             yield $fileInfo->filename => [
                 dirname(__DIR__, 2) . self::SAMPLES_SOURCE . 'files/' . $fileInfo->filename,
-                $fileInfo->password,
                 Version::from($fileInfo->version),
                 $fileInfo->pages,
             ];
