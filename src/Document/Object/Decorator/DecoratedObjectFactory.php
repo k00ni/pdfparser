@@ -34,6 +34,7 @@ class DecoratedObjectFactory {
             TypeNameValue::PAGE => new Page($objectItem, $stream),
             TypeNameValue::PAGES => new Pages($objectItem, $stream),
             TypeNameValue::STREAM => new StreamObject($objectItem, $stream),
+            TypeNameValue::VIEWER_PREFERENCES => new ViewerPreferences($objectItem, $stream),
             TypeNameValue::X_OBJECT => new XObject($objectItem, $stream),
             TypeNameValue::X_REF => new XRef($objectItem, $stream),
             null => new GenericObject($objectItem, $stream),
