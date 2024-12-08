@@ -15,13 +15,12 @@ use PrinsFrank\PdfParser\PdfParser;
 class ParsedResultTest extends TestCase {
     private const SAMPLES_SOURCE = '/vendor/prinsfrank/pdf-samples/';
 
-    /** @param array<array{content: string}> $expectedPages */
+    /** @param list<array{content: string}> $expectedPages */
     #[DataProvider('externalSamples')]
     public function testExternalSourcePDFs(string $pdfPath, ?string $password, Version $version, array $expectedPages): void {
         $parser = new PdfParser();
 
         $document = $parser->parse(Stream::openFile($pdfPath));
-        static::assertNotNull($document);
         static::assertSame($version, $document->version);
         static::assertSame(count($expectedPages), $document->getNumberOfPages());
         foreach ($expectedPages as $index => $expectedPage) {
