@@ -8,17 +8,9 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParseContext\NestingConte
 use PrinsFrank\PdfParser\Document\Generic\Character\DelimiterCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Character\LiteralStringEscapeCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
-use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Document\Generic\Parsing\RollingCharBuffer;
 use PrinsFrank\PdfParser\Stream;
 
-/**
- * << start object
- * >> end object
- * [ start array
- * ] end array
- * / start key
- */
 class DictionaryParser {
     /**
      * @phpstan-assert int<0, max> $startPos
@@ -30,10 +22,6 @@ class DictionaryParser {
         $nestingContext = (new NestingContext())->setContext(DictionaryParseContext::ROOT);
         foreach ($stream->chars($startPos, $nrOfBytes) as $char) {
             $rollingCharBuffer->next($char);
-            if ($rollingCharBuffer->seenBackedEnumValue(Marker::STREAM)) {
-                break;
-            }
-
             if ($char === DelimiterCharacter::LESS_THAN_SIGN->value && $rollingCharBuffer->getPreviousCharacter() === DelimiterCharacter::LESS_THAN_SIGN->value && $rollingCharBuffer->getPreviousCharacter(2) !== LiteralStringEscapeCharacter::REVERSE_SOLIDUS->value && $nestingContext->getContext() !== DictionaryParseContext::VALUE_IN_SQUARE_BRACKETS) {
                 if ($nestingContext->getContext() === DictionaryParseContext::KEY) {
                     $nestingContext->removeFromKeyBuffer();
@@ -98,8 +86,9 @@ class DictionaryParser {
         }
 
         $dictionaryArrayPointer = &$dictionaryArray;
-        foreach ($nestingContext->getKeysFromRoot() as $key) {
-            if ($key === (string) $nestingContext->getKeyBuffer()) {
+        $keys = $nestingContext->getKeysFromRoot();
+        foreach ($keys as $index => $key) {
+            if ($key === (string) $nestingContext->getKeyBuffer() && $index === array_key_last($keys)) {
                 break;
             }
 
