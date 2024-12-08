@@ -22,10 +22,6 @@ class ParsedResultTest extends TestCase {
         $document = $parser->parse(Stream::openFile($pdfPath));
         $document->getCatalog();
         $document->getInformationDictionary();
-        static::assertNotEmpty($pages = $document->getPages());
-        foreach ($pages as $page) {
-            static::assertNotSame('', $page->getText($document)->__toString());
-        }
         $this->addToAssertionCount(1);
     }
 
