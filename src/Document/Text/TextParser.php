@@ -18,9 +18,24 @@ class TextParser {
         $textObject = null;
         $operandBuffer = new InfiniteBuffer();
         $textObjects = [];
+        $inValue = false;
         foreach (str_split($text) as $char) {
             $operandBuffer->addChar($char);
             $operatorBuffer->next($char);
+            if (in_array($char, ['[', '<'], true)) {
+                $inValue = true;
+                continue;
+            }
+
+            if ($inValue && in_array($char, [']', '>'], true)) {
+                $inValue = false;
+                continue;
+            }
+
+            if ($inValue) {
+                continue;
+            }
+
             if ($operatorBuffer->seenBackedEnumValue(TextObjectOperator::BEGIN)) {
                 $operandBuffer->flush();
                 $textObject = new TextObject();
