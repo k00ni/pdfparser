@@ -805,7 +805,7 @@ enum DictionaryKey: string {
             self::EF => [Dictionary::class, ArrayValue::class],
             self::EFF => [TextStringValue::class],
             self::EMBEDDED_FDFS => [TextStringValue::class],
-            self::EMBEDDED_FILES => [TextStringValue::class],
+            self::EMBEDDED_FILES => [Dictionary::class],
             self::ENCODE => [ArrayValue::class],
             self::ENCODED_BYTE_ALIGN => [BooleanValue::class],
             self::ENCODING => [TextStringValue::class, Dictionary::class],
