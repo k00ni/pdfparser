@@ -21,9 +21,12 @@ class ParsedResultTest extends TestCase {
         $parser = new PdfParser();
 
         $document = $parser->parse(Stream::openFile($pdfPath));
-        $document->getCatalog();
-        $document->getInformationDictionary();
-        $this->addToAssertionCount(1);
+        static::assertNotNull($document);
+        static::assertSame($version, $document->version);
+        static::assertSame(count($expectedPages), $document->getNumberOfPages());
+        foreach ($expectedPages as $index => $expectedPage) {
+            static::assertNotNull($page = $document->getPage($index + 1));
+        }
     }
 
     /** @return iterable<string, array{0: string, 1: ?string, 2: Version, 3: array<array{content: string}>}> */
