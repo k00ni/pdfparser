@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document\Text;
 
 use Override;
+use PrinsFrank\PdfParser\Document\Text\OperatorString\ColorOperator;
+use PrinsFrank\PdfParser\Document\Text\OperatorString\GraphicsStateOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextPositioningOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextShowingOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextStateOperator;
@@ -12,7 +14,7 @@ use Stringable;
 
 class TextOperator implements Stringable {
     public function __construct(
-        public readonly TextPositioningOperator|TextShowingOperator|TextStateOperator $operator,
+        public readonly TextPositioningOperator|TextShowingOperator|TextStateOperator|GraphicsStateOperator|ColorOperator $operator,
         public readonly string $operands
     ) {
     }
