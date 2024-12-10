@@ -79,7 +79,7 @@ class DictionaryParser {
         return DictionaryFactory::fromArray($dictionaryArray);
     }
 
-    /** @param array<mixed> $dictionaryArray */
+    /** @param array<string, mixed> $dictionaryArray */
     private static function flush(array &$dictionaryArray, NestingContext $nestingContext): void {
         if ($nestingContext->getValueBuffer()->isEmpty() || $nestingContext->getKeyBuffer()->isEmpty()) {
             return;
