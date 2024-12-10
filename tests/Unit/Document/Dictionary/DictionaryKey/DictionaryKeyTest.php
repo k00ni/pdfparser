@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PrinsFrank\PdfParser\Tests\Unit\Document\Dictionary;
+namespace PrinsFrank\PdfParser\Tests\Unit\Document\Dictionary\DictionaryKey;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -26,6 +26,33 @@ class DictionaryKeyTest extends TestCase {
             $dictionaryKey->name,
             sprintf('Name of DictionaryKey case %s should be UPPER_CASE version %s of value', $dictionaryKey->name, $expectedName),
         );
+    }
+
+    public function testTryFromKeyString(): void {
+        self::assertNull(DictionaryKey::tryFromKeyString(''));
+        self::assertNull(DictionaryKey::tryFromKeyString('Foo'));
+        self::assertSame(
+            DictionaryKey::ZOOM,
+            DictionaryKey::tryFromKeyString('Zoom')
+        );
+        self::assertSame(
+            DictionaryKey::ZOOM,
+            DictionaryKey::tryFromKeyString('/Zoom')
+        );
+        self::assertSame(
+            DictionaryKey::ZOOM,
+            DictionaryKey::tryFromKeyString('/Zoom  ')
+        );
+        self::assertSame(
+            DictionaryKey::ZOOM,
+            DictionaryKey::tryFromKeyString('/Zoom
+            ')
+        );
+    }
+
+    #[DataProvider('cases')]
+    public function testGetValueTypes(DictionaryKey $dictionaryKey): void {
+        static::assertNotEmpty($dictionaryKey->getValueTypes());
     }
 
     /** @return iterable<array<DictionaryKey>> */
