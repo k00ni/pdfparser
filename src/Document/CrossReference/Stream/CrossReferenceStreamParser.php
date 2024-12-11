@@ -69,7 +69,6 @@ class CrossReferenceStreamParser {
         foreach (array_chunk($startObjNrOfItemsArray, 2) as $startNrNrOfObjects) {
             /** @phpstan-ignore offsetAccess.notFound, offsetAccess.notFound */
             $crossReferenceSubSections[] = new CrossReferenceSubSection($startNrNrOfObjects[0], $startNrNrOfObjects[1], ... array_slice($entries, 0, $startNrNrOfObjects[1]));
-            /** @phpstan-ignore offsetAccess.notFound */
             $entries = array_slice($entries, $startNrNrOfObjects[1]);
         }
 
