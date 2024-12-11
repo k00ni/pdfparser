@@ -6,18 +6,27 @@ namespace PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryCompressed;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryFreeObject;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryInUseObject;
+use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 class CrossReferenceSubSection {
     /** @var array<CrossReferenceEntryInUseObject|CrossReferenceEntryFreeObject|CrossReferenceEntryCompressed> */
     public array $crossReferenceEntries = [];
 
-    /** @no-named-arguments */
+    /**
+     * @phpstan-assert int<0, max> $nrOfEntries
+     *
+     * @no-named-arguments
+     */
     public function __construct(
         public readonly int $firstObjectNumber,
         public readonly int $nrOfEntries,
         CrossReferenceEntryInUseObject|CrossReferenceEntryFreeObject|CrossReferenceEntryCompressed... $crossReferenceEntries
     ) {
+        if ($this->nrOfEntries < 0) {
+            throw new InvalidArgumentException('$nrOfEntries should be a positive number');
+        }
+
         $this->crossReferenceEntries = $crossReferenceEntries;
     }
 
