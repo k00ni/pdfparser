@@ -39,4 +39,15 @@ class Dictionary {
 
         return null;
     }
+
+    /** @return class-string<DictionaryValue|NameValue|Dictionary> */
+    public function getTypeForKey(DictionaryKey $dictionaryKey): ?string {
+        foreach ($this->dictionaryEntries as $dictionaryEntry) {
+            if ($dictionaryEntry->key === $dictionaryKey) {
+                return $dictionaryEntry->value::class;
+            }
+        }
+
+        return null;
+    }
 }

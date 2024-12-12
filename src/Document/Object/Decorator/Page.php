@@ -3,6 +3,7 @@
 namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 
 use Override;
+use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
@@ -11,6 +12,7 @@ use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObj
 use PrinsFrank\PdfParser\Document\Text\TextObjectCollection;
 use PrinsFrank\PdfParser\Document\Text\TextParser;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 class Page extends DecoratedObject {
     public function getText(Document $document): string {
@@ -28,6 +30,23 @@ class Page extends DecoratedObject {
         }
 
         return TextParser::parse($contentObject->objectItem->getStreamContent($document->stream));
+    }
+
+    public function getResourceDictionary(Document $document): Dictionary {
+        $dictionary = $this->getDictionary($document->stream);
+        $resourceDictionaryType = $dictionary->getTypeForKey(DictionaryKey::RESOURCES);
+        if ($resourceDictionaryType === Dictionary::class) {
+            return $dictionary->getValueForKey(DictionaryKey::RESOURCES, Dictionary::class) ?? throw new RuntimeException();
+        }
+
+        if ($resourceDictionaryType === ReferenceValue::class) {
+            $reference = $dictionary->getValueForKey(DictionaryKey::RESOURCES, ReferenceValue::class)  ?? throw new RuntimeException();
+
+            return ($document->getObject($reference->objectNumber) ?? throw new ParseFailureException())
+                ->getDictionary($document->stream);
+        }
+
+        throw new ParseFailureException(sprintf('Invalid type %s for resource dictionary', $resourceDictionaryType));
     }
 
     #[Override]
