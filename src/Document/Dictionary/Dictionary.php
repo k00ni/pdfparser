@@ -30,9 +30,10 @@ class Dictionary {
      * @param class-string<T> $valueType
      * @return T
      */
-    public function getValueForKey(DictionaryKey $dictionaryKey, string $valueType): DictionaryValue|Dictionary|NameValue|null {
+    public function getValueForKey(DictionaryKey|ExtendedDictionaryKey $dictionaryKey, string $valueType): DictionaryValue|Dictionary|NameValue|null {
         foreach ($this->dictionaryEntries as $dictionaryEntry) {
-            if ($dictionaryEntry->key === $dictionaryKey) {
+            if (($dictionaryKey instanceof DictionaryKey && $dictionaryEntry->key === $dictionaryKey)
+                || ($dictionaryKey instanceof ExtendedDictionaryKey && $dictionaryEntry->key instanceof ExtendedDictionaryKey && $dictionaryEntry->key->value === $dictionaryKey->value)) {
                 $value = $dictionaryEntry->value;
                 if (is_a($value, $valueType) === false) {
                     throw new InvalidArgumentException(sprintf('Expected value with key %s to be of type %s, got %s', $dictionaryKey->name, $valueType, get_class($value)));
