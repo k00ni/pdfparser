@@ -36,6 +36,11 @@ class Page extends DecoratedObject {
             ->getSubDictionary($document, DictionaryKey::RESOURCES);
     }
 
+    public function getFontDictionary(Document $document): Dictionary {
+        return $this->getResourceDictionary($document)
+            ->getSubDictionary($document, DictionaryKey::FONT);
+    }
+
     #[Override]
     protected function getTypeName(): ?TypeNameValue {
         return TypeNameValue::PAGE;
