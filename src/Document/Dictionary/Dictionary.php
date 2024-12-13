@@ -10,6 +10,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\NameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Document;
+use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
@@ -64,12 +65,20 @@ class Dictionary {
         }
 
         if ($subDictionaryType === ReferenceValue::class) {
-            $reference = $this->getValueForKey($dictionaryKey, ReferenceValue::class) ?? throw new RuntimeException();
-
-            return ($document->getObject($reference->objectNumber) ?? throw new ParseFailureException())
+            return ($this->getObjectForReference($document, $dictionaryKey) ?? throw new ParseFailureException())
                 ->getDictionary($document->stream);
         }
 
         throw new ParseFailureException(sprintf('Invalid type %s for subDictionary', $subDictionaryType));
+    }
+
+    public function getObjectForReference(Document $document, DictionaryKey $dictionaryKey): ?DecoratedObject {
+        $reference = $this->getValueForKey($dictionaryKey, ReferenceValue::class);
+        if ($reference === null) {
+            return null;
+        }
+
+        return $document->getObject($reference->objectNumber)
+            ?? throw new ParseFailureException();
     }
 }
