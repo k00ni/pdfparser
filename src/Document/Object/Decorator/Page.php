@@ -16,7 +16,7 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 class Page extends DecoratedObject {
     public function getText(Document $document): string {
         return $this->getTextObjectCollection($document)
-            ->__toString();
+            ->getText($document, $this);
     }
 
     public function getTextObjectCollection(Document $document): TextObjectCollection {

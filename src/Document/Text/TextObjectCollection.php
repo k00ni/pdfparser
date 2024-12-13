@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Text;
 
-use Override;
+use PrinsFrank\PdfParser\Document\Document;
+use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
-use Stringable;
 
-class TextObjectCollection implements Stringable {
+class TextObjectCollection {
     /** @var list<TextObject> */
     public readonly array $textObjects;
 
@@ -18,9 +18,13 @@ class TextObjectCollection implements Stringable {
         $this->textObjects = $textObjects;
     }
 
-    #[Override]
-    public function __toString(): string {
-        return preg_replace('/\h+/', ' ', trim(implode(' ', $this->textObjects)))
+    public function getText(Document $document, Page $page): string {
+        $text = '';
+        foreach ($this->textObjects as $textObject) {
+            $text .= $textObject->getText($document, $page);
+        }
+
+        return preg_replace('/\h+/', ' ', $text)
             ?? throw new RuntimeException();
     }
 }

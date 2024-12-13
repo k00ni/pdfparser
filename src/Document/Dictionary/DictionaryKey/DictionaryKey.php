@@ -1168,7 +1168,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::TITLE => [TextStringValue::class],
             self::TK => [BooleanValue::class],
             self::TM => [TextStringValue::class, IntegerValue::class, FloatValue::class],
-            self::TO_UNICODE => [TextStringValue::class],
+            self::TO_UNICODE => [ReferenceValue::class],
             self::TP => [IntegerValue::class],
             self::TPL => [TextStringValue::class],
             self::TR => [TextStringValue::class, ArrayValue::class],
