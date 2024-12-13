@@ -5,7 +5,6 @@ namespace PrinsFrank\PdfParser\Document\Text;
 
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
-use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 class TextObjectCollection {
     /** @var list<TextObject> */
