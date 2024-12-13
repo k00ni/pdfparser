@@ -24,7 +24,6 @@ class TextObjectCollection {
             $text .= $textObject->getText($document, $page);
         }
 
-        return preg_replace('/\h+/', ' ', $text)
-            ?? throw new RuntimeException();
+        return $text;
     }
 }
