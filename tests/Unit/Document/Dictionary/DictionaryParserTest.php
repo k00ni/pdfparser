@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Tests\Unit\Document\Dictionary;
 
+use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
@@ -198,8 +199,8 @@ class DictionaryParserTest extends TestCase {
             new Dictionary(
                 new DictionaryEntry(DictionaryKey::PRODUCER, new TextStringValue('(pdfTeX-1.40.18)')),
                 new DictionaryEntry(DictionaryKey::CREATOR, new TextStringValue('(TeX)')),
-                new DictionaryEntry(DictionaryKey::CREATION_DATE, new DateValue('(D:20220506201153+02\'00\')')),
-                new DictionaryEntry(DictionaryKey::MOD_DATE, new DateValue('(D:20220506201153+02\'00\')')),
+                new DictionaryEntry(DictionaryKey::CREATION_DATE, new DateValue(DateTimeImmutable::createFromFormat('Y-m-d H:i:s P', '2022-05-06 20:11:53 +02:00'))),
+                new DictionaryEntry(DictionaryKey::MOD_DATE, new DateValue(DateTimeImmutable::createFromFormat('Y-m-d H:i:s P', '2022-05-06 20:11:53 +02:00'))),
                 new DictionaryEntry(DictionaryKey::TRAPPED, TrappedNameValue::FALSE),
                 new DictionaryEntry(DictionaryKey::PTEX_FULLBANNER, new TextStringValue('(This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) kpathsea version 6.2.3)')),
             ),

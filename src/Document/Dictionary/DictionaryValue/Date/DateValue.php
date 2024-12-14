@@ -3,12 +3,13 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Date;
 
+use DateTimeImmutable;
 use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 
 class DateValue implements DictionaryValue {
     public function __construct(
-        public readonly string $value
+        public readonly ?DateTimeImmutable $value
     ) {
     }
 
@@ -19,6 +20,11 @@ class DateValue implements DictionaryValue {
 
     #[Override]
     public static function fromValue(string $valueString): self {
-        return new self($valueString);
+        $parsedDate = DateTimeImmutable::createFromFormat('\(\D\:YmdHisP', str_replace("'", '', $valueString));
+        if ($parsedDate === false) {
+            return new self(null);
+        }
+
+        return new self($parsedDate);
     }
 }
