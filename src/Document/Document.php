@@ -6,10 +6,10 @@ namespace PrinsFrank\PdfParser\Document;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\CrossReferenceSource;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryCompressed;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Catalog;
 use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObjectFactory;
 use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
+use PrinsFrank\PdfParser\Document\Object\Decorator\InformationDictionary;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObjectParser;
@@ -29,19 +29,19 @@ final class Document {
     ) {
     }
 
-    public function getInformationDictionary(): ?DecoratedObject {
+    public function getInformationDictionary(): ?InformationDictionary {
         $infoReference = $this->crossReferenceSource->getReferenceForKey(DictionaryKey::INFO);
         if ($infoReference === null) {
             return null;
         }
 
-        return $this->getObject($infoReference->objectNumber);
+        return $this->getObject($infoReference->objectNumber, InformationDictionary::class);
     }
 
     public function getCatalog(): Catalog {
         $rootReference = $this->crossReferenceSource->getReferenceForKey(DictionaryKey::ROOT)
             ?? throw new ParseFailureException('Unable to locate root for document.');
-        $catalog = $this->getObject($rootReference->objectNumber, TypeNameValue::CATALOG)
+        $catalog = $this->getObject($rootReference->objectNumber, Catalog::class)
             ?? throw new ParseFailureException(sprintf('Document references object %d as root, but object couln\'t be located', $rootReference->objectNumber));
         if (!$catalog instanceof Catalog) {
             throw new RuntimeException('Catalog should be a catalog item');
@@ -50,15 +50,21 @@ final class Document {
         return $catalog;
     }
 
-    public function getObject(int $objectNumber, ?TypeNameValue $expectedType = null): ?DecoratedObject {
+    /**
+     * @template T of DecoratedObject
+     * @param class-string<T>|null $expectedDecoratorFQN
+     * @return ($expectedDecoratorFQN is null ? DecoratedObject : T)
+     */
+    public function getObject(int $objectNumber, ?string $expectedDecoratorFQN = null): ?DecoratedObject {
         $crossReferenceEntry = $this->crossReferenceSource->getCrossReferenceEntry($objectNumber);
         if ($crossReferenceEntry === null) {
             return null;
         }
 
         if ($crossReferenceEntry instanceof CrossReferenceEntryCompressed) {
-            $parentObject = $this->getObject($crossReferenceEntry->storedInStreamWithObjectNumber, null)
+            $parentObject = $this->getObject($crossReferenceEntry->storedInStreamWithObjectNumber)
                 ?? throw new RuntimeException(sprintf('Parent object for %d with number %d doesn\'t exist', $objectNumber, $crossReferenceEntry->storedInStreamWithObjectNumber));
+
             if (!$parentObject->objectItem instanceof UncompressedObject) {
                 throw new RuntimeException('Parents for stream items shouldn\'t be stream items themselves');
             }
@@ -66,14 +72,14 @@ final class Document {
             return DecoratedObjectFactory::forItem(
                 $parentObject->objectItem->getCompressedObject($objectNumber, $this->stream),
                 $this->stream,
-                $expectedType,
+                $expectedDecoratorFQN,
             );
         }
 
         return DecoratedObjectFactory::forItem(
             UncompressedObjectParser::parseObject($crossReferenceEntry, $objectNumber, $this->stream, ),
             $this->stream,
-            $expectedType,
+            $expectedDecoratorFQN,
         );
     }
 

@@ -4,12 +4,13 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document\Text;
 
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Document;
+use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextShowingOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextStateOperator;
+use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class TextObject {
     /** @var list<TextOperator> */
@@ -29,9 +30,10 @@ class TextObject {
                 $text .= ' ' . $textOperator->operator->displayOperands($textOperator->operands, $font);
             } elseif ($textOperator->operator instanceof TextStateOperator) {
                 $fontReference = $page->getFontDictionary($document)
-                    ->getValueForKey(new ExtendedDictionaryKey('F' . $textOperator->operator->getFontNumber($textOperator->operands)), ReferenceValue::class);
+                    ->getValueForKey(new ExtendedDictionaryKey('F' . $textOperator->operator->getFontNumber($textOperator->operands)), ReferenceValue::class)
+                    ?? throw new ParseFailureException();
 
-                $font = $document->getObject($fontReference->objectNumber, TypeNameValue::FONT);
+                $font = $document->getObject($fontReference->objectNumber, Font::class);
             }
         }
 

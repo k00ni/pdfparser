@@ -37,7 +37,7 @@ class Dictionary {
                 || ($dictionaryKey instanceof ExtendedDictionaryKey && $dictionaryEntry->key instanceof ExtendedDictionaryKey && $dictionaryEntry->key->value === $dictionaryKey->value)) {
                 $value = $dictionaryEntry->value;
                 if (is_a($value, $valueType) === false) {
-                    throw new InvalidArgumentException(sprintf('Expected value with key %s to be of type %s, got %s', $dictionaryKey->name, $valueType, get_class($value)));
+                    throw new InvalidArgumentException(sprintf('Expected value with value %s to be of type %s, got %s', $dictionaryKey->value, $valueType, get_class($value)));
                 }
 
                 return $value;

@@ -23,7 +23,7 @@ class Font extends DecoratedObject {
             ?->textStringValue;
     }
 
-    public function getToUnicode(): string {
+    public function getToUnicode(): ?string {
         return $this->getDictionary($this->stream)
             ->getValueForKey(DictionaryKey::TO_UNICODE, TextStringValue::class)
             ?->textStringValue;
@@ -41,6 +41,7 @@ class Font extends DecoratedObject {
             ?->value;
     }
 
+    /** @return array<mixed>|null */
     public function getWidths(): ?array {
         return $this->getDictionary($this->stream)
             ->getValueForKey(DictionaryKey::WIDTHS, ArrayValue::class)
