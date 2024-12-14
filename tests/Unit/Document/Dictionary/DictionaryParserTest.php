@@ -23,6 +23,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
+use PrinsFrank\PdfParser\Exception\RuntimeException;
 use PrinsFrank\PdfParser\Stream;
 
 #[CoversClass(DictionaryParser::class)]
@@ -195,12 +196,13 @@ class DictionaryParserTest extends TestCase {
     }
 
     public function testParseValuesEncapsulatedInParentheses(): void {
+        static::assertNotFalse($creationModificationDate = DateTimeImmutable::createFromFormat('Y-m-d H:i:s P', '2022-05-06 20:11:53 +02:00'));
         static::assertEquals(
             new Dictionary(
                 new DictionaryEntry(DictionaryKey::PRODUCER, new TextStringValue('(pdfTeX-1.40.18)')),
                 new DictionaryEntry(DictionaryKey::CREATOR, new TextStringValue('(TeX)')),
-                new DictionaryEntry(DictionaryKey::CREATION_DATE, new DateValue(DateTimeImmutable::createFromFormat('Y-m-d H:i:s P', '2022-05-06 20:11:53 +02:00'))),
-                new DictionaryEntry(DictionaryKey::MOD_DATE, new DateValue(DateTimeImmutable::createFromFormat('Y-m-d H:i:s P', '2022-05-06 20:11:53 +02:00'))),
+                new DictionaryEntry(DictionaryKey::CREATION_DATE, new DateValue($creationModificationDate)),
+                new DictionaryEntry(DictionaryKey::MOD_DATE, new DateValue($creationModificationDate)),
                 new DictionaryEntry(DictionaryKey::TRAPPED, TrappedNameValue::FALSE),
                 new DictionaryEntry(DictionaryKey::PTEX_FULLBANNER, new TextStringValue('(This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) kpathsea version 6.2.3)')),
             ),
