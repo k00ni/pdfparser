@@ -29,7 +29,6 @@ use PrinsFrank\PdfParser\Document\Object\Decorator\Pages;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Document\Version\Version;
 use PrinsFrank\PdfParser\PdfParser;
-use PrinsFrank\PdfParser\Stream;
 
 #[CoversNothing]
 class H7Stage1UpdatingTest extends TestCase {
