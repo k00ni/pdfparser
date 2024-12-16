@@ -17,4 +17,16 @@ final class PdfParser {
             CrossReferenceSourceParser::parse($stream),
         );
     }
+
+    public function parseFile(string $filePath): Document {
+        return $this->parse(
+            Stream::openFile($filePath)
+        );
+    }
+
+    public function parseString(string $content): Document {
+        return $this->parse(
+            Stream::fromString($content)
+        );
+    }
 }
