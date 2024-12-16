@@ -2,6 +2,7 @@
 
 namespace PrinsFrank\PdfParser;
 
+use PrinsFrank\PdfParser\Document\CMap\ToUnicode\ToUnicodeCMapOperator;
 use PrinsFrank\PdfParser\Document\Generic\Character\DelimiterCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
@@ -118,7 +119,7 @@ class Stream {
         }
     }
 
-    public function firstPos(WhitespaceCharacter|Marker|DelimiterCharacter $needle, int $offsetFromStart, int $before): ?int {
+    public function firstPos(WhitespaceCharacter|Marker|DelimiterCharacter|ToUnicodeCMapOperator $needle, int $offsetFromStart, int $before): ?int {
         $rollingCharBuffer = new RollingCharBuffer($needleLength = strlen($needle->value));
         while ($offsetFromStart < $before) {
             fseek($this->handle, $offsetFromStart);
@@ -136,7 +137,7 @@ class Stream {
         return null;
     }
 
-    public function getStartNextLineAfter(WhitespaceCharacter|Marker|DelimiterCharacter $needle, int $offsetFromStart, int $before): ?int {
+    public function getStartNextLineAfter(WhitespaceCharacter|Marker|DelimiterCharacter|ToUnicodeCMapOperator $needle, int $offsetFromStart, int $before): ?int {
         $markerPos = $this->firstPos($needle, $offsetFromStart, $before);
         if ($markerPos === null) {
             return null;
@@ -145,7 +146,7 @@ class Stream {
         return $this->getStartOfNextLine($markerPos, $before);
     }
 
-    public function lastPos(WhitespaceCharacter|Marker|DelimiterCharacter $needle, int $offsetFromEnd): ?int {
+    public function lastPos(WhitespaceCharacter|Marker|DelimiterCharacter|ToUnicodeCMapOperator $needle, int $offsetFromEnd): ?int {
         $rollingCharBuffer = new RollingCharBuffer(strlen($needle->value));
         $offsetFromEnd++;
         while (fseek($this->handle, - $offsetFromEnd, SEEK_END) !== -1) {
