@@ -35,7 +35,7 @@ use PrinsFrank\PdfParser\Stream;
 class H7Stage1UpdatingTest extends TestCase {
     public function testStructure(): void {
         $document = (new PdfParser())
-            ->parse(Stream::openFile(__DIR__ . '/samples/h7-updating-stage-1.pdf'));
+            ->parseFile(__DIR__ . '/samples/h7-updating-stage-1.pdf');
 
         static::assertSame(Version::V1_4, $document->version);
         static::assertEquals(

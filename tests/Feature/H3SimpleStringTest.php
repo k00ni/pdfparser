@@ -35,7 +35,7 @@ use PrinsFrank\PdfParser\Stream;
 class H3SimpleStringTest extends TestCase {
     public function testStructure(): void {
         $document = (new PdfParser())
-            ->parse(Stream::openFile(__DIR__ . '/samples/h3-simple-string.pdf'));
+            ->parseFile(__DIR__ . '/samples/h3-simple-string.pdf');
 
         static::assertSame(Version::V1_4, $document->version);
         static::assertEquals(

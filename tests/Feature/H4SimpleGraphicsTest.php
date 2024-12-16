@@ -31,7 +31,7 @@ use PrinsFrank\PdfParser\Stream;
 class H4SimpleGraphicsTest extends TestCase {
     public function testStructure(): void {
         $document = (new PdfParser())
-            ->parse(Stream::openFile(__DIR__ . '/samples/h4-simple-graphics.pdf'));
+            ->parseFile(__DIR__ . '/samples/h4-simple-graphics.pdf');
 
         static::assertSame(Version::V1_4, $document->version);
         static::assertEquals(

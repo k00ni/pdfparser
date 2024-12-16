@@ -29,7 +29,7 @@ class ParsedResultTest extends TestCase {
         ?DateTimeImmutable $expectedModificationDate,
         array $expectedPages
     ): void {
-        $document = (new PdfParser())->parse(Stream::openFile($pdfPath));
+        $document = (new PdfParser())->parseFile($pdfPath);
 
         static::assertSame($expectedVersion, $document->version);
         //        static::assertSame($expectedTitle, $document->getInformationDictionary()?->getTitle());
