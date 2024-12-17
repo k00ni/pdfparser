@@ -16,7 +16,7 @@ A low-memory, fast and maintainable conforming PDF Parser
 
 ## Why this library?
 
-Previously, there wasn't a PDF library that allows parsing of PDFs that was open source, MIT licensed and under active development. The PDFParser by smalot, while having been very useful over the years isn't under active development anymore. The parser of Setasign is not MIT licensed and not open source. And several other packages rely on java/js/python dependencies being installed that are called behind by php the scenes, losing any type information and underlying structure.
+Previously, there wasn't a PDF library that allows parsing of PDFs that was open source, MIT licensed and under active development. The PDFParser by smalot, while having been very useful over the years isn't under active development anymore. The parser of Setasign is not MIT licensed and not open source. And several other packages rely on java/js/python dependencies being installed that are called by PHP behind the scenes, losing any type information and underlying structure.
 
 Instead, this package allows for parsing of a wide variety of PDF files while not relying on external dependencies, all while being MIT licensed!
 
