@@ -12,7 +12,7 @@
 
 A low-memory, fast and maintainable conforming PDF Parser
 
-> :mega: [Call for testers](https://github.com/PrinsFrank/pdf-samples)
+> :mega: [Call for testers](https://github.com/PrinsFrank/pdfparser/issues/2)
 
 ## Why this library?
 
