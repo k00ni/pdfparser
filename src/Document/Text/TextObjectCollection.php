@@ -20,9 +20,9 @@ class TextObjectCollection {
     public function getText(Document $document, Page $page): string {
         $text = '';
         foreach ($this->textObjects as $textObject) {
-            $text .= $textObject->getText($document, $page);
+            $text .= ' ' . $textObject->getText($document, $page);
         }
 
-        return $text;
+        return trim($text);
     }
 }

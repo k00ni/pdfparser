@@ -8,6 +8,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\Reference
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
+use PrinsFrank\PdfParser\Document\Text\OperatorString\TextPositioningOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextShowingOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextStateOperator;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
@@ -26,8 +27,10 @@ class TextObject {
         $text = '';
         $font = null;
         foreach ($this->textOperators as $textOperator) {
-            if ($textOperator->operator instanceof TextShowingOperator) {
-                $text .= ' ' . $textOperator->operator->displayOperands($textOperator->operands, $font);
+            if ($textOperator->operator instanceof TextPositioningOperator) {
+                $text .= $textOperator->operator->display($textOperator->operands);
+            } elseif ($textOperator->operator instanceof TextShowingOperator) {
+                $text .= $textOperator->operator->displayOperands($textOperator->operands, $font, $document);
             } elseif ($textOperator->operator instanceof TextStateOperator) {
                 $fontReference = $page->getFontDictionary($document)
                     ->getValueForKey(new ExtendedDictionaryKey('F' . $textOperator->operator->getFontNumber($textOperator->operands)), ReferenceValue::class)

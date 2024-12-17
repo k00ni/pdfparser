@@ -14,4 +14,15 @@ class ToUnicodeCMap {
     ) {
         $this->bfCharRangeInfo = $bfCharRangeInfo;
     }
+
+    public function toUnicode(int $characterCode): ?string {
+        foreach ($this->bfCharRangeInfo as $bfCharRangeInfo) {
+            $unicodeChar = $bfCharRangeInfo->toUnicode($characterCode);
+            if ($unicodeChar !== null) {
+                return $unicodeChar;
+            }
+        }
+
+        return null;
+    }
 }

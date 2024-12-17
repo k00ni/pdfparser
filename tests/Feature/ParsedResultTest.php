@@ -40,7 +40,7 @@ class ParsedResultTest extends TestCase {
         static::assertSame(count($expectedPages), $document->getNumberOfPages());
         foreach ($expectedPages as $index => $expectedPage) {
             static::assertNotNull($page = $document->getPage($index + 1));
-            //            static::assertSame($expectedPage->content, $page->getText($document));
+            static::assertSame($expectedPage->content, $page->getText($document));
         }
     }
 
