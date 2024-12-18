@@ -3,13 +3,12 @@
 
 # Ignore all test and documentation with "export-ignore".
 /.github            export-ignore
-/docs/gifs          export-ignore
-/docs/images        export-ignore
+/docs               export-ignore
 /tests              export-ignore
+/.editorconfig      export-ignore
 /.gitattributes     export-ignore
-/CONTRIBUTING.md    export-ignore
 /.gitignore         export-ignore
 /.php-cs-fixer.php  export-ignore
+/.typos.toml        export-ignore
 /phpstan.neon       export-ignore
 /phpunit.xml.dist   export-ignore
-/.typos.toml        export-ignore
