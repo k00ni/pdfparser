@@ -20,7 +20,11 @@ class TextObjectCollection {
     public function getText(Document $document, Page $page): string {
         $text = '';
         foreach ($this->textObjects as $textObject) {
-            $text .= ' ' . $textObject->getText($document, $page);
+            if (($textObjectText = trim($textObject->getText($document, $page))) === '') {
+                continue;
+            }
+
+            $text .= ' ' . $textObjectText;
         }
 
         return trim($text);
