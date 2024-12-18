@@ -31,7 +31,7 @@ class TextObject {
                 $text .= $textOperator->operator->display($textOperator->operands);
             } elseif ($textOperator->operator instanceof TextShowingOperator) {
                 $text .= $textOperator->operator->displayOperands($textOperator->operands, $font, $document);
-            } elseif ($textOperator->operator instanceof TextStateOperator) {
+            } elseif ($textOperator->operator === TextStateOperator::FONT_SIZE) {
                 $fontReference = $page->getFontDictionary($document)
                     ->getValueForKey(new ExtendedDictionaryKey('F' . $textOperator->operator->getFontNumber($textOperator->operands)), ReferenceValue::class)
                     ?? throw new ParseFailureException();
