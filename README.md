@@ -28,3 +28,31 @@ To start right away, run the following command in your composer project;
 ```bash
 composer require prinsfrank/pdfparser
 ```
+
+## Opening a PDF
+
+To open a PDF file, you'll first need to load it and retrieve a "Document" object. That can be done by either parsing a file directly, or parsing a PDF from a string variable.
+
+### Parsing a PDF file
+
+Parsing a PDF from a file directly is the easiest option and also uses the least amount of memory. To do so, simply call the `parseFile` method on a `PdfParser` instance:
+
+```php
+use PrinsFrank\PdfParser;
+
+$document = (new PdfParser())
+    ->parseFile(dirname(__DIR__, 3) . '/path/to/file.pdf');
+```
+
+### Parsing PDF from string
+
+It is also possible to parse a PDF from a string in a variable. To do so, pass the string as an argument for the `parseFile` method on a `PdfParser` instance. This has a bigger memory footprint while loading the file into memory, but the file will be written to a temp file while processing.
+
+```php
+use PrinsFrank\PdfParser;
+
+$pdfAsString = file_get_contents(dirname(__DIR__, 3) . '/path/to/file.pdf');
+
+$document = (new PdfParser())
+    ->parseFile($pdfAsString);
+```
