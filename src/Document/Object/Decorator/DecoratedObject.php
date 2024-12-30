@@ -22,8 +22,8 @@ abstract class DecoratedObject {
         }
     }
 
-    public function getDictionary(Stream $stream): Dictionary {
-        return $this->objectItem->getDictionary($stream);
+    public function getDictionary(): Dictionary {
+        return $this->objectItem->getDictionary($this->stream);
     }
 
     abstract protected function getTypeName(): ?TypeNameValue;

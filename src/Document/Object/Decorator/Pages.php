@@ -19,7 +19,7 @@ class Pages extends DecoratedObject {
     /** @return list<Page> */
     public function getPageItems(Document $document): array {
         $kids = [];
-        foreach ($this->getDictionary($this->stream)->getValueForKey(DictionaryKey::KIDS, ReferenceValueArray::class)->referenceValues ?? [] as $referenceValue) {
+        foreach ($this->getDictionary()->getValueForKey(DictionaryKey::KIDS, ReferenceValueArray::class)->referenceValues ?? [] as $referenceValue) {
             $kidObject = $document->getObject($referenceValue->objectNumber)
                 ?? throw new ParseFailureException(sprintf('Child with number %d could not be found', $referenceValue->objectNumber));
             if ($kidObject instanceof Pages) {

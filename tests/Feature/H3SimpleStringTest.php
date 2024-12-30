@@ -79,7 +79,7 @@ class H3SimpleStringTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::OUTLINES, new ReferenceValue(2, 0)),
                 new DictionaryEntry(DictionaryKey::PAGES, new ReferenceValue(3, 0)),
             ),
-            $obj1?->getDictionary($document->stream)
+            $obj1?->getDictionary()
         );
         $obj2 = $document->getObject(2);
         static::assertEquals(
@@ -99,7 +99,7 @@ class H3SimpleStringTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::OUTLINES),
                 new DictionaryEntry(DictionaryKey::COUNT, new IntegerValue(0)),
             ),
-            $obj2?->getDictionary($document->stream),
+            $obj2?->getDictionary(),
         );
         $obj3 = $document->getObject(3);
         static::assertEquals(
@@ -120,7 +120,7 @@ class H3SimpleStringTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::KIDS, new ReferenceValueArray(new ReferenceValue(4, 0))),
                 new DictionaryEntry(DictionaryKey::COUNT, new IntegerValue(1)),
             ),
-            $obj3?->getDictionary($document->stream),
+            $obj3?->getDictionary(),
         );
         $obj4 = $document->getObject(4);
         static::assertEquals(
@@ -151,7 +151,7 @@ class H3SimpleStringTest extends TestCase {
                     ),
                 )),
             ),
-            $obj4?->getDictionary($document->stream),
+            $obj4?->getDictionary(),
         );
         $obj5 = $document->getObject(5);
         static::assertEquals(
@@ -170,7 +170,7 @@ class H3SimpleStringTest extends TestCase {
             new Dictionary(
                 new DictionaryEntry(DictionaryKey::LENGTH, new IntegerValue(73)),
             ),
-            $obj5?->getDictionary($document->stream),
+            $obj5?->getDictionary(),
         );
         $obj6 = $document->getObject(6);
         static::assertEquals(
@@ -187,7 +187,7 @@ class H3SimpleStringTest extends TestCase {
         );
         static::assertEquals(
             new Dictionary(),
-            $obj6?->getDictionary($document->stream)
+            $obj6?->getDictionary()
         );
         $obj7 = $document->getObject(7);
         static::assertEquals(
@@ -210,7 +210,7 @@ class H3SimpleStringTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::BASE_FONT, new TextStringValue('/Helvetica')),
                 new DictionaryEntry(DictionaryKey::ENCODING, new TextStringValue('/MacRomanEncoding')),
             ),
-            $obj7?->getDictionary($document->stream),
+            $obj7?->getDictionary(),
         );
         static::assertEquals(
             new Catalog(

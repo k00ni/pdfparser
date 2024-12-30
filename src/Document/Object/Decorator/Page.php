@@ -20,7 +20,7 @@ class Page extends DecoratedObject {
     }
 
     public function getTextObjectCollection(Document $document): TextObjectCollection {
-        $contentRef = $this->getDictionary($document->stream)->getValueForKey(DictionaryKey::CONTENTS, ReferenceValue::class)
+        $contentRef = $this->getDictionary()->getValueForKey(DictionaryKey::CONTENTS, ReferenceValue::class)
             ?? throw new ParseFailureException(sprintf('No Contents found for page'));
         $contentObject = $document->getObject($contentRef->objectNumber)
             ?? throw new ParseFailureException(sprintf('Unable to locate content object with object number %d', $contentRef->objectNumber));
@@ -32,7 +32,7 @@ class Page extends DecoratedObject {
     }
 
     public function getResourceDictionary(Document $document): Dictionary {
-        return $this->getDictionary($document->stream)
+        return $this->getDictionary()
             ->getSubDictionary($document, DictionaryKey::RESOURCES);
     }
 

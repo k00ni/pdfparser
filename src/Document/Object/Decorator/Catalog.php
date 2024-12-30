@@ -17,7 +17,7 @@ class Catalog extends DecoratedObject {
     }
 
     public function getPagesRoot(Document $document): Pages {
-        $catalogDictionary = $this->getDictionary($this->stream);
+        $catalogDictionary = $this->getDictionary();
         $pagesReference = $catalogDictionary->getValueForKey(DictionaryKey::PAGES, ReferenceValue::class)
             ?? throw new ParseFailureException('Every catalog dictionary should contain a pages reference, none found');
         $pages = $document->getObject($pagesReference->objectNumber)

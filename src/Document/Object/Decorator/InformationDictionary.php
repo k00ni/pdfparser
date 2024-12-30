@@ -11,37 +11,37 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStri
 
 class InformationDictionary extends DecoratedObject {
     public function getTitle(): ?string {
-        return $this->getDictionary($this->stream)
+        return $this->getDictionary()
             ->getValueForKey(DictionaryKey::TITLE, TextStringValue::class)
             ?->textStringValue;
     }
 
     public function getProducer(): ?string {
-        return $this->getDictionary($this->stream)
+        return $this->getDictionary()
             ->getValueForKey(DictionaryKey::PRODUCER, TextStringValue::class)
             ?->textStringValue;
     }
 
     public function getAuthor(): ?string {
-        return $this->getDictionary($this->stream)
+        return $this->getDictionary()
             ->getValueForKey(DictionaryKey::AUTHOR, TextStringValue::class)
             ?->textStringValue;
     }
 
     public function getCreator(): ?string {
-        return $this->getDictionary($this->stream)
+        return $this->getDictionary()
             ->getValueForKey(DictionaryKey::CREATOR, TextStringValue::class)
             ?->textStringValue;
     }
 
     public function getCreationDate(): ?DateTimeImmutable {
-        return $this->getDictionary($this->stream)
+        return $this->getDictionary()
             ->getValueForKey(DictionaryKey::CREATION_DATE, DateValue::class)
             ?->value;
     }
 
     public function getModificationDate(): ?DateTimeImmutable {
-        return $this->getDictionary($this->stream)
+        return $this->getDictionary()
             ->getValueForKey(DictionaryKey::MOD_DATE, DateValue::class)
             ?->value;
     }

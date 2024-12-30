@@ -18,19 +18,19 @@ use PrinsFrank\PdfParser\Stream;
 
 class Font extends DecoratedObject {
     public function getBaseFont(): ?string {
-        return $this->getDictionary($this->stream)
+        return $this->getDictionary()
             ->getValueForKey(DictionaryKey::BASE_FONT, TextStringValue::class)
             ?->textStringValue;
     }
 
     public function getEncoding(): ?string {
-        return $this->getDictionary($this->stream)
+        return $this->getDictionary()
             ->getValueForKey(DictionaryKey::ENCODING, TextStringValue::class)
             ?->textStringValue;
     }
 
     public function getToUnicodeCMap(Document $document): ?ToUnicodeCMap {
-        $toUnicodeObject = $this->getDictionary($this->stream)
+        $toUnicodeObject = $this->getDictionary()
             ->getObjectForReference($document, DictionaryKey::TO_UNICODE);
         if ($toUnicodeObject === null) {
             return null;
@@ -44,26 +44,26 @@ class Font extends DecoratedObject {
     }
 
     public function getFirstChar(): ?int {
-        return $this->getDictionary($this->stream)
+        return $this->getDictionary()
             ->getValueForKey(DictionaryKey::FIRST_CHAR, IntegerValue::class)
             ?->value;
     }
 
     public function getLastChar(): ?int {
-        return $this->getDictionary($this->stream)
+        return $this->getDictionary()
             ->getValueForKey(DictionaryKey::LAST_CHAR, IntegerValue::class)
             ?->value;
     }
 
     /** @return array<mixed>|null */
     public function getWidths(): ?array {
-        return $this->getDictionary($this->stream)
+        return $this->getDictionary()
             ->getValueForKey(DictionaryKey::WIDTHS, ArrayValue::class)
             ?->value;
     }
 
     public function getFontDescriptor(): ?ReferenceValue {
-        return $this->getDictionary($this->stream)
+        return $this->getDictionary()
             ->getValueForKey(DictionaryKey::FONT_DESCRIPTOR, ReferenceValue::class);
     }
 

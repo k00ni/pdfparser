@@ -66,7 +66,7 @@ class Dictionary {
 
         if ($subDictionaryType === ReferenceValue::class) {
             return ($this->getObjectForReference($document, $dictionaryKey) ?? throw new ParseFailureException())
-                ->getDictionary($document->stream);
+                ->getDictionary();
         }
 
         throw new ParseFailureException(sprintf('Invalid type %s for subDictionary', $subDictionaryType));
