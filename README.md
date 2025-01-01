@@ -92,6 +92,7 @@ If a PDF has an InformationDictionary, it can be retrieved using the `$document-
 To access information from the InformationDictionary, there are several methods available:
 
 ```php
+/** @var \PrinsFrank\PdfParser\Document\Document $document */
 $title = $document->getInformationDictionary()?->getTitle(); 
 $producer = $document->getInformationDictionary()?->getProducer(); 
 $author = $document->getInformationDictionary()?->getAuthor(); 
@@ -103,6 +104,7 @@ $modificationDate = $document->getInformationDictionary()?->getModificationDate(
 If you want to access non-standard data from the information dictionary, you can also retrieve the entire dictionary from the object:
 
 ```php
+/** @var \PrinsFrank\PdfParser\Document\Document $document */
 $dictionary = $document->getInformationDictionary()?->getDictionary();
 ```
 
