@@ -71,14 +71,14 @@ final class Document {
 
             return DecoratedObjectFactory::forItem(
                 $parentObject->objectItem->getCompressedObject($objectNumber, $this->stream),
-                $this->stream,
+                $this,
                 $expectedDecoratorFQN,
             );
         }
 
         return DecoratedObjectFactory::forItem(
             UncompressedObjectParser::parseObject($crossReferenceEntry, $objectNumber, $this->stream, ),
-            $this->stream,
+            $this,
             $expectedDecoratorFQN,
         );
     }
@@ -94,7 +94,7 @@ final class Document {
     /** @return list<Page> */
     public function getPages(): array {
         return $this->pages ??= $this->getCatalog()
-            ->getPagesRoot($this)
-            ->getPageItems($this);
+            ->getPagesRoot()
+            ->getPageItems();
     }
 }

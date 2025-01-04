@@ -94,7 +94,7 @@ class H7Stage1UpdatingTest extends TestCase {
                     9,
                     73,
                 ),
-                $document->stream
+                $document
             ),
             $obj1,
         );
@@ -115,7 +115,7 @@ class H7Stage1UpdatingTest extends TestCase {
                     74,
                     119,
                 ),
-                $document->stream
+                $document
             ),
             $obj2,
         );
@@ -135,7 +135,7 @@ class H7Stage1UpdatingTest extends TestCase {
                     120,
                     178,
                 ),
-                $document->stream
+                $document
             ),
             $obj3,
         );
@@ -156,7 +156,7 @@ class H7Stage1UpdatingTest extends TestCase {
                     604,
                     703,
                 ),
-                $document->stream,
+                $document,
             ),
             $obj4,
         );
@@ -179,7 +179,7 @@ class H7Stage1UpdatingTest extends TestCase {
                     300,
                     383,
                 ),
-                $document->stream,
+                $document,
             ),
             $obj5,
         );
@@ -198,7 +198,7 @@ class H7Stage1UpdatingTest extends TestCase {
                     384,
                     407,
                 ),
-                $document->stream,
+                $document,
             ),
             $obj6,
         );
@@ -215,7 +215,7 @@ class H7Stage1UpdatingTest extends TestCase {
                     811,
                     855,
                 ),
-                $document->stream,
+                $document,
             ),
             $obj7,
         );
@@ -232,7 +232,7 @@ class H7Stage1UpdatingTest extends TestCase {
                     856,
                     957,
                 ),
-                $document->stream,
+                $document,
             ),
             $obj8,
         );
@@ -255,7 +255,7 @@ class H7Stage1UpdatingTest extends TestCase {
                     958,
                     1061,
                 ),
-                $document->stream,
+                $document,
             ),
             $obj9,
         );
@@ -278,7 +278,7 @@ class H7Stage1UpdatingTest extends TestCase {
                     1062,
                     1165,
                 ),
-                $document->stream,
+                $document,
             ),
             $obj10,
         );
@@ -301,7 +301,7 @@ class H7Stage1UpdatingTest extends TestCase {
                     1165,
                     1269,
                 ),
-                $document->stream,
+                $document,
             ),
             $obj11,
         );
@@ -323,7 +323,7 @@ class H7Stage1UpdatingTest extends TestCase {
                     9,
                     73,
                 ),
-                $document->stream,
+                $document,
             ),
             $document->getCatalog()
         );

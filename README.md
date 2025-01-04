@@ -112,7 +112,7 @@ $dictionary = $document->getInformationDictionary()?->getDictionary();
 
 Page objects can be retrieved from a document by calling the `$document->getPage($pageNumber)` method for a single page, or `$document->getPages()` for all pages. Note that `$pageNumber` is zero-indexed, so even if different format page numbers are displayed at the bottom of a page, the first page in a document is still page 0, etc.
 
-Once you have a `Page` object, there are several methods available to retrieve information from that page. The main method of interest here is the `$page->getText($document)` method. To retrieve all text from all pages, you could do something like this:
+Once you have a `Page` object, there are several methods available to retrieve information from that page. The main method of interest here is the `$page->getText()` method. To retrieve all text from all pages, you could do something like this:
 
 ```php
 use PrinsFrank\PdfParser\PdfParser;
@@ -120,8 +120,8 @@ use PrinsFrank\PdfParser\PdfParser;
 $document = (new PdfParser())->parseFile('/path/to/file.pdf');
 
 foreach ($document->getPages() as $index => $page) {
-    echo 'Text on page ' . $index . ' : ' . $page->getText($document);
+    echo 'Text on page ' . $index . ' : ' . $page->getText();
 }
 ```
 
-There are also methods available to get the underlying textObjectCollection using `$page->getTextObjectCollection($document)`, the resource dictionary for a page using `$page->getResourceDictionary($document)` and the font dictionary using `$page->getFontDictionary($document)`.
+There are also methods available to get the underlying textObjectCollection using `$page->getTextObjectCollection()`, the resource dictionary for a page using `$page->getResourceDictionary()` and the font dictionary using `$page->getFontDictionary()`.

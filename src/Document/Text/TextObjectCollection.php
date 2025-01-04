@@ -5,6 +5,7 @@ namespace PrinsFrank\PdfParser\Document\Text;
 
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
+use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class TextObjectCollection {
     /** @var list<TextObject> */
@@ -27,6 +28,6 @@ class TextObjectCollection {
             $text .= ' ' . $textObjectText;
         }
 
-        return preg_replace('/\h+([.,!?])/', '$1', str_replace('  ', ' ', trim($text)));
+        return preg_replace('/\h+([.,!?])/', '$1', str_replace('  ', ' ', trim($text))) ?? throw new ParseFailureException();
     }
 }

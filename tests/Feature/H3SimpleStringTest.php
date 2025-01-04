@@ -69,7 +69,7 @@ class H3SimpleStringTest extends TestCase {
                     9,
                     73,
                 ),
-                $document->stream
+                $document
             ),
             $obj1,
         );
@@ -90,7 +90,7 @@ class H3SimpleStringTest extends TestCase {
                     74,
                     119,
                 ),
-                $document->stream,
+                $document,
             ),
             $obj2,
         );
@@ -110,7 +110,7 @@ class H3SimpleStringTest extends TestCase {
                     120,
                     178,
                 ),
-                $document->stream,
+                $document,
             ),
             $obj3,
         );
@@ -131,7 +131,7 @@ class H3SimpleStringTest extends TestCase {
                     179,
                     321,
                 ),
-                $document->stream,
+                $document,
             ),
             $obj4,
         );
@@ -162,7 +162,7 @@ class H3SimpleStringTest extends TestCase {
                     322,
                     416,
                 ),
-                $document->stream,
+                $document,
             ),
             $obj5,
         );
@@ -181,7 +181,7 @@ class H3SimpleStringTest extends TestCase {
                     417,
                     446,
                 ),
-                $document->stream,
+                $document,
             ),
             $obj6,
         );
@@ -198,7 +198,7 @@ class H3SimpleStringTest extends TestCase {
                     447,
                     554,
                 ),
-                $document->stream,
+                $document,
             ),
             $obj7,
         );
@@ -220,7 +220,7 @@ class H3SimpleStringTest extends TestCase {
                     9,
                     73,
                 ),
-                $document->stream,
+                $document,
             ),
             $document->getCatalog()
         );

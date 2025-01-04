@@ -11,7 +11,6 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValu
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
-use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream;
@@ -29,9 +28,9 @@ class Font extends DecoratedObject {
             ?->textStringValue;
     }
 
-    public function getToUnicodeCMap(Document $document): ?ToUnicodeCMap {
+    public function getToUnicodeCMap(): ?ToUnicodeCMap {
         $toUnicodeObject = $this->getDictionary()
-            ->getObjectForReference($document, DictionaryKey::TO_UNICODE);
+            ->getObjectForReference($this->document, DictionaryKey::TO_UNICODE);
         if ($toUnicodeObject === null) {
             return null;
         }
@@ -40,7 +39,7 @@ class Font extends DecoratedObject {
             throw new ParseFailureException();
         }
 
-        return ToUnicodeCMapParser::parse(($stream = Stream::fromString($toUnicodeObject->objectItem->getStreamContent($document->stream))), 0, $stream->getSizeInBytes());
+        return ToUnicodeCMapParser::parse(($stream = Stream::fromString($toUnicodeObject->objectItem->getStreamContent($this->document->stream))), 0, $stream->getSizeInBytes());
     }
 
     public function getFirstChar(): ?int {

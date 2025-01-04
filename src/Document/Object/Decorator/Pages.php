@@ -6,7 +6,6 @@ use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
-use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 
@@ -17,13 +16,13 @@ class Pages extends DecoratedObject {
     }
 
     /** @return list<Page> */
-    public function getPageItems(Document $document): array {
+    public function getPageItems(): array {
         $kids = [];
         foreach ($this->getDictionary()->getValueForKey(DictionaryKey::KIDS, ReferenceValueArray::class)->referenceValues ?? [] as $referenceValue) {
-            $kidObject = $document->getObject($referenceValue->objectNumber)
+            $kidObject = $this->document->getObject($referenceValue->objectNumber)
                 ?? throw new ParseFailureException(sprintf('Child with number %d could not be found', $referenceValue->objectNumber));
             if ($kidObject instanceof Pages) {
-                $kids = [...$kids, ...$kidObject->getPageItems($document)];
+                $kids = [...$kids, ...$kidObject->getPageItems()];
             } elseif ($kidObject instanceof Page) {
                 $kids[] = $kidObject;
             } else {
