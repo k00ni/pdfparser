@@ -97,4 +97,15 @@ final class Document {
             ->getPagesRoot()
             ->getPageItems();
     }
+
+    /** @param ?string $pageSeparator an optional string to put between text of different pages */
+    public function getText(?string $pageSeparator = null): string {
+        $text = '';
+        foreach ($this->getPages() as $page) {
+            $text .= ($pageSeparator !== null ? $pageSeparator : '')
+                . $page->getText();
+        }
+
+        return $text;
+    }
 }
