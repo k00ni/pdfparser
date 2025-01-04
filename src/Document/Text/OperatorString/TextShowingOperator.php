@@ -32,7 +32,7 @@ enum TextShowingOperator: string {
         }
 
         $characters = '';
-        if (($toUnicodeCMap = $font?->getToUnicodeCMap($document)) !== null) {
+        if (($toUnicodeCMap = $font?->getToUnicodeCMap()) !== null) {
             $characterSets = explode('><', rtrim(ltrim($operands, '<'), '>'));
             foreach ($characterSets as $characterSet) {
                 foreach (str_split($characterSet, 2) as $characterGroup) {
