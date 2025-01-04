@@ -27,6 +27,6 @@ class TextObjectCollection {
             $text .= ' ' . $textObjectText;
         }
 
-        return trim($text);
+        return preg_replace('/\h+([.,!?])/', '$1', str_replace('  ', ' ', trim($text)));
     }
 }
