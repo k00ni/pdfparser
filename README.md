@@ -69,6 +69,8 @@ While initially parsing the document, a small number of variables are populated 
 
 The document also contains several methods to retrieve specific objects from it. Those are discussed below.
 
+If you want to quickly retrieve all text from a document, you can use the `getText` method.
+
 ## Objects in a `Document` and their decorators
 
 A PDF is organized in objects. Not all objects are created equally. Some objects might be a Page, while others a Font. Some objects might be Generic and without a specific type. There are currently 18 specific types, and a generic object type. Some of those will be specified below.
@@ -123,5 +125,7 @@ foreach ($document->getPages() as $index => $page) {
     echo 'Text on page ' . $index . ' : ' . $page->getText();
 }
 ```
+
+There is also a `getText` method available on the Document to retrieve all text at once without even having to retrieve pages.
 
 There are also methods available to get the underlying textObjectCollection using `$page->getTextObjectCollection()`, the resource dictionary for a page using `$page->getResourceDictionary()` and the font dictionary using `$page->getFontDictionary()`.
