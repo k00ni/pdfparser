@@ -6,8 +6,10 @@ use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
+use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Document\Text\TextObjectCollection;
 use PrinsFrank\PdfParser\Document\Text\TextParser;
+use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class Page extends DecoratedObject {
     public function getText(): string {
@@ -20,7 +22,13 @@ class Page extends DecoratedObject {
     /** @return list<TextObjectCollection> */
     public function getTextObjectCollections(): array {
         return array_map(
-            fn (DecoratedObject $decoratedObject) => TextParser::parse($decoratedObject->objectItem->getStreamContent($this->document->stream)),
+            function (DecoratedObject $decoratedObject) {
+                if (!($objectItem = $decoratedObject->objectItem) instanceof UncompressedObject) {
+                    throw new ParseFailureException();
+                }
+
+                return TextParser::parse($objectItem->getStreamContent($this->document->stream));
+            },
             $this->document->getObjectsByDictionaryKey($this->getDictionary(), DictionaryKey::CONTENTS),
         );
     }
