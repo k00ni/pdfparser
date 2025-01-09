@@ -5,7 +5,11 @@ namespace PrinsFrank\PdfParser\Document;
 
 use PrinsFrank\PdfParser\Document\CrossReference\Source\CrossReferenceSource;
 use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry\CrossReferenceEntryCompressed;
+use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Catalog;
 use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObjectFactory;
 use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
@@ -48,6 +52,25 @@ final class Document {
         }
 
         return $catalog;
+    }
+
+    /**
+     * @template T of DecoratedObject
+     * @param class-string<T>|null $expectedDecoratorFQN
+     * @return ($expectedDecoratorFQN is null ? list<DecoratedObject> : list<T>)
+     */
+    public function getObjectsByDictionaryKey(Dictionary $dictionary, DictionaryKey $dictionaryKey, ?string $expectedDecoratorFQN = null): array {
+        $dictionaryValueType = $dictionary->getTypeForKey($dictionaryKey);
+        if ($dictionaryValueType === ReferenceValue::class) {
+            return [$this->getObject($dictionary->getValueForKey($dictionaryKey, ReferenceValue::class)->objectNumber, $expectedDecoratorFQN)];
+        } else if ($dictionaryValueType === ReferenceValueArray::class) {
+            return array_map(
+                fn (ReferenceValue $referenceValue) => $this->getObject($referenceValue->objectNumber, $expectedDecoratorFQN),
+                $dictionary->getValueForKey($dictionaryKey, ReferenceValueArray::class)->referenceValues,
+            );
+        }
+
+        throw new ParseFailureException(sprintf('Dictionary value with key "%s" is of type "%s", expected referencevalue(array)', $dictionaryKey->name, $dictionaryValueType));
     }
 
     /**
