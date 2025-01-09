@@ -37,6 +37,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\ViewNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\VisibilityPolicyNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
 use PrinsFrank\PdfParser\Document\Version\Version;
 
@@ -896,7 +897,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::IMAGE_I => [TextStringValue::class],
             self::IMAGE_MASK => [BooleanValue::class],
             self::IN => [TextStringValue::class],
-            self::IN_DESIGN => [TextStringValue::class],
+            self::IN_DESIGN => [TextStringValue::class, Dictionary::class],
             self::INDEX => [ArrayValue::class],
             self::INFO => [Dictionary::class],
             self::INK_LIST => [ArrayValue::class],
@@ -1183,7 +1184,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::TRUE_TYPE_FONTS => [IntegerValue::class],
             self::TT => [ArrayValue::class],
             self::TU => [TextStringValue::class],
-            self::TYPE => [TypeNameValue::class],
+            self::TYPE => [TypeNameValue::class, Dictionary::class],
             self::U => [TextStringValue::class, Dictionary::class],
             self::U3DPATH => [ArrayValue::class, TextStringValue::class],
             self::UC => [BooleanValue::class],
