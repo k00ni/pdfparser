@@ -30,14 +30,14 @@ class Page extends DecoratedObject {
         return TextParser::parse($contentObject->objectItem->getStreamContent($this->document->stream));
     }
 
-    public function getResourceDictionary(): Dictionary {
+    public function getResourceDictionary(): ?Dictionary {
         return $this->getDictionary()
             ->getSubDictionary($this->document, DictionaryKey::RESOURCES);
     }
 
-    public function getFontDictionary(): Dictionary {
+    public function getFontDictionary(): ?Dictionary {
         return $this->getResourceDictionary()
-            ->getSubDictionary($this->document, DictionaryKey::FONT);
+            ?->getSubDictionary($this->document, DictionaryKey::FONT);
     }
 
     #[Override]

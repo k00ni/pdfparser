@@ -58,8 +58,12 @@ class Dictionary {
         return null;
     }
 
-    public function getSubDictionary(Document $document, DictionaryKey $dictionaryKey): Dictionary {
+    public function getSubDictionary(Document $document, DictionaryKey $dictionaryKey): ?Dictionary {
         $subDictionaryType = $this->getTypeForKey($dictionaryKey);
+        if ($subDictionaryType === null) {
+            return null;
+        }
+
         if ($subDictionaryType === Dictionary::class) {
             return $this->getValueForKey($dictionaryKey, Dictionary::class) ?? throw new RuntimeException();
         }
@@ -69,7 +73,7 @@ class Dictionary {
                 ->getDictionary();
         }
 
-        throw new ParseFailureException(sprintf('Invalid type %s for subDictionary', $subDictionaryType));
+        throw new ParseFailureException(sprintf('Invalid type "%s" for subDictionary with key %s', $subDictionaryType, $dictionaryKey->name));
     }
 
     public function getObjectForReference(Document $document, DictionaryKey $dictionaryKey): ?DecoratedObject {
