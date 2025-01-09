@@ -16,7 +16,7 @@ enum TextShowingOperator: string {
     public function displayOperands(string $operands, ?Font $font, Document $document): string {
         if ($this === self::SHOW_ARRAY) {
             if (preg_match_all('/\((?<chars>[^)]+)\)(?<offset>-?[0-9]+(.[0-9]+)?)?/', rtrim(ltrim($operands, '['), ']'), $matches, PREG_SET_ORDER) === 0) {
-                throw new ParseFailureException();
+                throw new ParseFailureException($operands);
             }
 
             $string = '';

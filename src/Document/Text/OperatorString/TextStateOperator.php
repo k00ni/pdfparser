@@ -20,7 +20,7 @@ enum TextStateOperator: string {
         }
 
         if (preg_match('/^\/F(?<fontNumber>[0-9]+)\h+[0-9]+(\.[0-9]+)?$/', $operand, $matches) !== 1) {
-            throw new InvalidArgumentException('Invalid font operand');
+            throw new InvalidArgumentException(sprintf('Invalid font operand "%s"', substr($operand, 0, 200)));
         }
 
         return (int) $matches['fontNumber'];
