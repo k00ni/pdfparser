@@ -6,16 +6,13 @@ use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
-use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Document\Text\TextObjectCollection;
 use PrinsFrank\PdfParser\Document\Text\TextParser;
-use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class Page extends DecoratedObject {
     public function getText(): string {
         return implode(' ', array_map(
-            fn(TextObjectCollection $textObjectCollection) => $textObjectCollection->getText($this->document, $this),
+            fn (TextObjectCollection $textObjectCollection) => $textObjectCollection->getText($this->document, $this),
             $this->getTextObjectCollections(),
         ));
     }
