@@ -1017,7 +1017,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::P => [IntegerValue::class, TextStringValue::class, VisibilityPolicyNameValue::class, Dictionary::class, BooleanValue::class, ArrayValue::class],
             self::PA => [Dictionary::class],
             self::PAGE => [IntegerValue::class, TextStringValue::class],
-            self::PAGE_ELEMENT => [DictionaryValue::class],
+            self::PAGE_ELEMENT => [Dictionary::class],
             self::PAGE_LABELS => [TextStringValue::class, ArrayValue::class],
             self::PAGE_LAYOUT => [PageLayoutNameValue::class],
             self::PAGE_MODE => [PageModeNameValue::class],
