@@ -19,7 +19,7 @@ class ReferenceValueArray implements DictionaryValue {
     #[Override]
     public static function acceptsValue(string $value): bool {
         return str_starts_with($value, '[')
-            && str_starts_with($value, ']')
+            && str_ends_with($value, ']')
             && count(explode(' ', trim(rtrim(ltrim($value, '['), ']')))) % 3 === 0;
     }
 
