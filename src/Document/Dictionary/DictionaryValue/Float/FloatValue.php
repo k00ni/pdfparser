@@ -15,16 +15,16 @@ class FloatValue implements DictionaryValue {
 
     #[Override]
     public static function acceptsValue(string $value): bool {
-        return (string)(float) $value === $value;
+        return number_format((float) $value, (int) strpos(strrev($value), ".")) === $value;
     }
 
     #[Override]
     public static function fromValue(string $valueString): self {
-        $valueAsInt = (float) $valueString;
-        if ((string) $valueAsInt !== $valueString) {
+        $valueAsFloat = (float) $valueString;
+        if (number_format($valueAsFloat, (int) strpos(strrev($valueString), ".")) !== $valueString) {
             throw new InvalidDictionaryValueTypeFormatException('Non numerical value encountered for floatValue: "' . $valueString . '"');
         }
 
-        return new self($valueAsInt);
+        return new self($valueAsFloat);
     }
 }
