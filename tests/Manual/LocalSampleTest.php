@@ -27,7 +27,7 @@ class LocalSampleTest extends TestCase {
         }
 
         foreach ($files as $filePath) {
-            if (in_array($filePath, ['..', '.'], true)) {
+            if (in_array($filePath, ['..', '.', '.gitignore'], true)) {
                 continue;
             }
 
