@@ -1139,7 +1139,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::SUBJ => [TextStringValue::class],
             self::SUBJECT => [ArrayValue::class, TextStringValue::class],
             self::SUBJECT_DN => [ArrayValue::class],
-            self::SUBTYPE => [SubtypeNameValue::class, IntegerValue::class],
+            self::SUBTYPE => [SubtypeNameValue::class, TextStringValue::class],
             self::SUPPLEMENT => [IntegerValue::class],
             self::SUSPECTS => [BooleanValue::class],
             self::SV => [Dictionary::class],
