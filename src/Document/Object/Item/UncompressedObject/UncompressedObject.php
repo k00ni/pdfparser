@@ -34,7 +34,7 @@ class UncompressedObject implements ObjectItem {
 
     #[Override]
     public function getDictionary(Stream $stream): Dictionary {
-        if (isset($this->dictionary) === true) {
+        if (isset($this->dictionary)) {
             return $this->dictionary;
         }
 

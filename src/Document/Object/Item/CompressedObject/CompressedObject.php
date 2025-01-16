@@ -40,6 +40,10 @@ class CompressedObject implements ObjectItem {
             )
         );
 
-        return $this->dictionary = DictionaryParser::parse($objectContent, 0, $objectContent->getSizeInBytes());
+        if (($objectSize = $objectContent->getSizeInBytes()) === 0) {
+            return $this->dictionary = new Dictionary();
+        }
+
+        return $this->dictionary = DictionaryParser::parse($objectContent, 0, $objectSize);
     }
 }
