@@ -5,14 +5,24 @@ namespace PrinsFrank\PdfParser\Document\Object\Item\CompressedObject\CompressedO
 
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\FilterNameValue;
+use PrinsFrank\PdfParser\Exception\RuntimeException;
 use PrinsFrank\PdfParser\Stream;
 
 class CompressedObjectContentParser {
     public static function parse(Stream $stream, int $startPos, int $nrOfBytes, Dictionary $dictionary): string {
         $streamContent = $stream->read($startPos, $nrOfBytes);
-        if (($streamFilter = $dictionary->getValueForKey(DictionaryKey::FILTER, FilterNameValue::class)) !== null) {
-            $streamContent = $streamFilter->decode($streamContent, $dictionary->getValueForKey(DictionaryKey::DECODE_PARMS, Dictionary::class));
+        if (($filterType = $dictionary->getTypeForKey(DictionaryKey::FILTER)) === FilterNameValue::class) {
+            $streamContent = $dictionary->getValueForKey(DictionaryKey::FILTER, FilterNameValue::class)
+                ->decode($streamContent, $dictionary->getValueForKey(DictionaryKey::DECODE_PARMS, Dictionary::class));
+        } elseif ($filterType === ArrayValue::class) {
+            foreach ($dictionary->getValueForKey(DictionaryKey::FILTER, ArrayValue::class)->value as $filterValue) {
+                $streamContent = FilterNameValue::from(ltrim($filterValue, '/'))
+                    ->decode($streamContent, $dictionary->getValueForKey(DictionaryKey::DECODE_PARMS, Dictionary::class));
+            }
+        } elseif ($filterType !== null) {
+            throw new RuntimeException(sprintf('Expected filter to be a FilterNameValue or ArrayValue, got %s', $filterType));
         }
 
         return $streamContent;
