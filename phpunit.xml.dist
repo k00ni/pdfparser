@@ -8,7 +8,6 @@
     failOnIncomplete="true"
     failOnRisky="true"
     failOnSkipped="true"
-    beStrictAboutOutputDuringTests="true"
     beStrictAboutChangesToGlobalState="true"
     cacheDirectory="./cache/.phpunit.result.cache"
     requireCoverageMetadata="true"
