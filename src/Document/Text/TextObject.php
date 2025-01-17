@@ -30,7 +30,7 @@ class TextObject {
             if ($textOperator->operator instanceof TextPositioningOperator) {
                 $text .= $textOperator->operator->display($textOperator->operands);
             } elseif ($textOperator->operator instanceof TextShowingOperator) {
-                $text .= $textOperator->operator->displayOperands($textOperator->operands, $font, $document);
+                $text .= $textOperator->operator->displayOperands($textOperator->operands, $font);
             } elseif ($textOperator->operator === TextStateOperator::FONT_SIZE) {
                 $fontReference = $page->getFontDictionary()
                     ?->getValueForKey(new ExtendedDictionaryKey('F' . $textOperator->operator->getFontNumber($textOperator->operands)), ReferenceValue::class)
