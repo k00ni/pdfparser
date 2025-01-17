@@ -19,10 +19,10 @@ class Catalog extends DecoratedObject {
         $catalogDictionary = $this->getDictionary();
         $pagesReference = $catalogDictionary->getValueForKey(DictionaryKey::PAGES, ReferenceValue::class)
             ?? throw new ParseFailureException('Every catalog dictionary should contain a pages reference, none found');
-        $pages = $this->document->getObject($pagesReference->objectNumber)
+        $pages = $this->document->getObject($pagesReference->objectNumber, Pages::class)
             ?? throw new ParseFailureException(sprintf('Unable to retrieve pages root object with number %d', $pagesReference->objectNumber));
         if (!$pages instanceof Pages) {
-            throw new RuntimeException('Pages root should be a PAGES item');
+            throw new RuntimeException(sprintf('Pages root should be a PAGES item, got %s', get_class($pages)));
         }
 
         return $pages;
