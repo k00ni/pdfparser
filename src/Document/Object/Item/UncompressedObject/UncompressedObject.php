@@ -4,7 +4,6 @@ namespace PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject;
 
 use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Generic\Character\DelimiterCharacter;
