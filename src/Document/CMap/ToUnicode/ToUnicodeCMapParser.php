@@ -8,7 +8,7 @@ use PrinsFrank\PdfParser\Stream;
 class ToUnicodeCMapParser {
     public static function parse(Stream $stream, int $startOffset, int $nrOfBytes): ToUnicodeCMap {
         $beginCodeSpaceRangePos = $stream->getStartNextLineAfter(ToUnicodeCMapOperator::BeginCodeSpaceRange, $startOffset, $startOffset + $nrOfBytes)
-            ?? throw new ParseFailureException();
+            ?? throw new ParseFailureException(sprintf('Missing %s', ToUnicodeCMapOperator::BeginCodeSpaceRange->value));
         $endCodeSpaceRangePos = $stream->firstPos(ToUnicodeCMapOperator::EndCodeSpaceRange, $beginCodeSpaceRangePos, $startOffset + $nrOfBytes)
             ?? throw new ParseFailureException();
         if (preg_match('/^\s*<(?P<start>[0-9a-fA-F ]+)>\s*<(?P<end>[0-9a-fA-F ]+)>\s*$/', $stream->read($beginCodeSpaceRangePos, $endCodeSpaceRangePos - $beginCodeSpaceRangePos), $matchesSpaceRange) !== 1) {
