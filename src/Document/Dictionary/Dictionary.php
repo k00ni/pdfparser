@@ -90,7 +90,7 @@ class Dictionary {
     public function getType(): ?TypeNameValue {
         if ($this->getTypeForKey(DictionaryKey::TYPE) === Dictionary::class) {
             return $this->getValueForKey(DictionaryKey::TYPE, Dictionary::class)
-                ->getValueForKey(DictionaryKey::TYPE, TypeNameValue::class);
+                ?->getValueForKey(DictionaryKey::TYPE, TypeNameValue::class);
         }
 
         return $this->getValueForKey(DictionaryKey::TYPE, TypeNameValue::class);
