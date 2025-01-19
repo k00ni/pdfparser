@@ -17,10 +17,11 @@ class ToUnicodeCMap {
 
     public function toUnicode(int $characterCode): ?string {
         foreach ($this->bfCharRangeInfo as $bfCharRangeInfo) {
-            $unicodeChar = $bfCharRangeInfo->toUnicode($characterCode);
-            if ($unicodeChar !== null) {
-                return $unicodeChar;
+            if (!$bfCharRangeInfo->containsCharacterCode($characterCode)) {
+                continue;
             }
+
+            return $bfCharRangeInfo->toUnicode($characterCode);
         }
 
         return null;

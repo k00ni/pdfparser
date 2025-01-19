@@ -13,15 +13,19 @@ class BFRange {
     ) {
     }
 
-    public function toUnicode(int $characterCode): ?string {
-        if ($characterCode >= $this->sourceCodeStart && $characterCode <= $this->sourceCodeEnd) {
-            if (count($this->destinationString) === 1) {
-                return chr($characterCode - $this->sourceCodeStart + $this->destinationString[0]);
-            }
+    public function containsCharacterCode(int $characterCode): bool {
+        return $characterCode >= $this->sourceCodeStart
+            && $characterCode <= $this->sourceCodeEnd;
+    }
 
-            return chr($this->destinationString[$this->sourceCodeStart - $characterCode] ?? throw new RuntimeException());
+    public function toUnicode(int $characterCode): ?string {
+        if (count($this->destinationString) === 1) {
+            return chr($this->destinationString[0]);
         }
 
-        return null;
+        return chr(
+            $this->destinationString[$characterCode - $this->sourceCodeStart]
+                ?? throw new RuntimeException(sprintf('Character code %d was not found in BFRange of length %d with start %d and end %d', $characterCode, count($this->destinationString), $this->sourceCodeStart, $this->sourceCodeEnd))
+        );
     }
 }

@@ -2,6 +2,8 @@
 
 namespace PrinsFrank\PdfParser\Document\CMap\ToUnicode;
 
+use PrinsFrank\PdfParser\Exception\ParseFailureException;
+
 class BFChar {
     public function __construct(
         public readonly int $sourceCode,
@@ -9,9 +11,13 @@ class BFChar {
     ) {
     }
 
+    public function containsCharacterCode(int $characterCode): bool {
+        return $characterCode === $this->sourceCode;
+    }
+
     public function toUnicode(int $characterCode): ?string {
         if ($characterCode !== $this->sourceCode) {
-            return null;
+            throw new ParseFailureException();
         }
 
         $string = '';
