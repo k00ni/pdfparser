@@ -2,8 +2,6 @@
 
 namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\Item\ObjectItem;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
@@ -19,7 +17,7 @@ class DecoratedObjectFactory {
             return null;
         }
 
-        $typeNameValue = $objectItem->getDictionary($document->stream)->getValueForKey(DictionaryKey::TYPE, TypeNameValue::class);
+        $typeNameValue = $objectItem->getDictionary($document->stream)->getType();
         if ($expectedDecoratorFQN !== null && $typeNameValue !== null && $expectedDecoratorFQN !== $typeNameValue->getDecoratorFQN()) {
             throw new ParseFailureException(sprintf('Expected object of type %s, got %s', $expectedDecoratorFQN, $typeNameValue->getDecoratorFQN()));
         }

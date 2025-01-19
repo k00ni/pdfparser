@@ -3,7 +3,6 @@
 namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\Item\ObjectItem;
@@ -14,7 +13,7 @@ abstract class DecoratedObject {
         public readonly ObjectItem $objectItem,
         protected readonly Document $document
     ) {
-        $typeNameValue = $this->objectItem->getDictionary($document->stream)->getValueForKey(DictionaryKey::TYPE, TypeNameValue::class);
+        $typeNameValue = $this->objectItem->getDictionary($document->stream)->getType();
         if ($typeNameValue !== null && $typeNameValue !== $this->getTypeName()) {
             throw new InvalidArgumentException(
                 sprintf('Expected object item of type %s, got %s', $this->getTypeName()->name ?? 'UNKNOWN', $typeNameValue->name ?? 'UNKNOWN')

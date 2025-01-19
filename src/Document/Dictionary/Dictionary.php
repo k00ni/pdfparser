@@ -8,6 +8,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\NameValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
@@ -84,5 +85,14 @@ class Dictionary {
 
         return $document->getObject($reference->objectNumber)
             ?? throw new ParseFailureException();
+    }
+
+    public function getType(): ?TypeNameValue {
+        if ($this->getTypeForKey(DictionaryKey::TYPE) === Dictionary::class) {
+            return $this->getValueForKey(DictionaryKey::TYPE, Dictionary::class)
+                ->getValueForKey(DictionaryKey::TYPE, TypeNameValue::class);
+        }
+
+        return $this->getValueForKey(DictionaryKey::TYPE, TypeNameValue::class);
     }
 }

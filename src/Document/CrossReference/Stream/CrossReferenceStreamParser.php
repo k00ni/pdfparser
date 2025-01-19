@@ -28,8 +28,7 @@ class CrossReferenceStreamParser {
      */
     public static function parse(Stream $stream, int $startPos, int $nrOfBytes): CrossReferenceSection {
         $dictionary = DictionaryParser::parse($stream, $startPos, $nrOfBytes);
-        $dictionaryType = $dictionary->getValueForKey(DictionaryKey::TYPE, TypeNameValue::class);
-        if ($dictionaryType !== TypeNameValue::X_REF) {
+        if ($dictionary->getType() !== TypeNameValue::X_REF) {
             throw new ParseFailureException('Expected stream of type xref');
         }
 
