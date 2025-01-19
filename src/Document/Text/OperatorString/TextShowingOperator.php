@@ -31,7 +31,8 @@ enum TextShowingOperator: string {
                 $string .= implode(
                     '',
                     array_map(
-                        fn (string $characterGroup) => $font?->getToUnicodeCMap()?->toUnicode((int) hexdec($characterGroup)) ?? '',
+                        fn (string $characterGroup) => $font?->getToUnicodeCMap()?->toUnicode((int) hexdec($characterGroup))
+                            ?? throw new ParseFailureException(sprintf('Unable to map character group "%s" to a unicode character', $characterGroup)),
                         str_split(substr($match['chars'], 1, -1), 2)
                     )
                 );

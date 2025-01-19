@@ -24,6 +24,10 @@ class ToUnicodeCMap {
             return $bfCharRangeInfo->toUnicode($characterCode);
         }
 
+        if ($characterCode === 0) {
+            return '';
+        }
+
         return null;
     }
 }
