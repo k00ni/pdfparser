@@ -32,9 +32,13 @@ class TextObject {
             } elseif ($textOperator->operator instanceof TextShowingOperator) {
                 $text .= $textOperator->operator->displayOperands($textOperator->operands, $font);
             } elseif ($textOperator->operator === TextStateOperator::FONT_SIZE) {
+                if (($fontNumber = $textOperator->operator->getFontNumber($textOperator->operands)) === null) {
+                    continue;
+                }
+
                 $fontReference = $page->getFontDictionary()
-                    ?->getValueForKey(new ExtendedDictionaryKey('F' . $textOperator->operator->getFontNumber($textOperator->operands)), ReferenceValue::class)
-                    ?? throw new ParseFailureException(sprintf('Unable to locate font with number %s', $textOperator->operator->getFontNumber($textOperator->operands)));
+                    ?->getValueForKey(new ExtendedDictionaryKey('F' . $fontNumber), ReferenceValue::class)
+                    ?? throw new ParseFailureException(sprintf('Unable to locate font with number %d', $fontNumber));
 
                 $font = $document->getObject($fontReference->objectNumber, Font::class);
             }

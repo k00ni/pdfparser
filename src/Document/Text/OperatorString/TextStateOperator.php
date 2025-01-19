@@ -14,9 +14,13 @@ enum TextStateOperator: string {
     case RENDER = 'Tr';
     case RISE = 'Ts';
 
-    public function getFontNumber(string $operand): int {
+    public function getFontNumber(string $operand): ?int {
         if ($this !== self::FONT_SIZE) {
             throw new InvalidArgumentException('Can only retrieve font for Tf operator');
+        }
+
+        if (!str_starts_with($operand, '/F')) {
+            return null;
         }
 
         if (preg_match('/^\/F(?<fontNumber>[0-9]+)\h+[0-9]+(\.[0-9]+)?$/', $operand, $matches) !== 1) {
