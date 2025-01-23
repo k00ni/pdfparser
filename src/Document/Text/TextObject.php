@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Text;
 
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
@@ -32,15 +30,9 @@ class TextObject {
             } elseif ($textOperator->operator instanceof TextShowingOperator) {
                 $text .= $textOperator->operator->displayOperands($textOperator->operands, $font);
             } elseif ($textOperator->operator === TextStateOperator::FONT_SIZE) {
-                if (($fontNumber = $textOperator->operator->getFontNumber($textOperator->operands)) === null) {
-                    continue;
-                }
-
-                $fontReference = $page->getFontDictionary()
-                    ?->getValueForKey(new ExtendedDictionaryKey('F' . $fontNumber), ReferenceValue::class)
-                    ?? throw new ParseFailureException(sprintf('Unable to locate font with number %d', $fontNumber));
-
-                $font = $document->getObject($fontReference->objectNumber, Font::class);
+                $font = $page->getFontDictionary()
+                    ?->getObjectForReference($document, $fontReference = $textOperator->operator->getFontReference($textOperator->operands), Font::class)
+                    ?? throw new ParseFailureException(sprintf('Unable to locate font with reference "/%s"', $fontReference->value));
             }
         }
 

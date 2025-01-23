@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Text\OperatorString;
 
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 
 enum TextStateOperator: string {
@@ -14,19 +15,15 @@ enum TextStateOperator: string {
     case RENDER = 'Tr';
     case RISE = 'Ts';
 
-    public function getFontNumber(string $operand): ?int {
+    public function getFontReference(string $operand): ExtendedDictionaryKey {
         if ($this !== self::FONT_SIZE) {
             throw new InvalidArgumentException('Can only retrieve font for Tf operator');
         }
 
-        if (!str_starts_with($operand, '/F')) {
-            return null;
-        }
-
-        if (preg_match('/^\/F(?<fontNumber>[0-9]+)\h+[0-9]+(\.[0-9]+)?$/', $operand, $matches) !== 1) {
+        if (preg_match('/^\/(?<fontReference>[A-Z_0-9]+)\s+[0-9]+(\.[0-9]+)?$/', $operand, $matches) !== 1) {
             throw new InvalidArgumentException(sprintf('Invalid font operand "%s"', substr($operand, 0, 200)));
         }
 
-        return (int) $matches['fontNumber'];
+        return new ExtendedDictionaryKey($matches['fontReference']);
     }
 }

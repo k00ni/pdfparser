@@ -82,7 +82,7 @@ class Dictionary {
      * @param class-string<T>|null $expectedDecoratorFQN
      * @return ($expectedDecoratorFQN is null ? DecoratedObject : T)
      */
-    public function getObjectForReference(Document $document, DictionaryKey $dictionaryKey, ?string $expectedDecoratorFQN = null): ?DecoratedObject {
+    public function getObjectForReference(Document $document, DictionaryKey|ExtendedDictionaryKey $dictionaryKey, ?string $expectedDecoratorFQN = null): ?DecoratedObject {
         $reference = $this->getValueForKey($dictionaryKey, ReferenceValue::class);
         if ($reference === null) {
             return null;
