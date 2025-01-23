@@ -18,7 +18,18 @@ class ToUnicodeCMap {
         $this->bfCharRangeInfo = $bfCharRangeInfo;
     }
 
-    public function toUnicode(int $characterCode): ?string {
+    public function textToUnicode(string $characterCodes): string {
+        return implode(
+            '',
+            array_map(
+                fn (string $characterGroup) => $this->charToUnicode((int) hexdec($characterGroup))
+                    ?? throw new ParseFailureException(sprintf('Unable to map character group "%s" to a unicode character', $characterGroup)),
+                str_split(substr($characterCodes, 1, -1), $this->byteSize)
+            )
+        );
+    }
+
+    public function charToUnicode(int $characterCode): ?string {
         foreach ($this->bfCharRangeInfo as $bfCharRangeInfo) {
             if (!$bfCharRangeInfo->containsCharacterCode($characterCode)) {
                 continue;

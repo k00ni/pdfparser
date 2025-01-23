@@ -28,14 +28,8 @@ enum TextShowingOperator: string {
             if (str_starts_with($match['chars'], '(') && str_ends_with($match['chars'], ')')) {
                 $string .= substr($match['chars'], 1, -1);
             } elseif (str_starts_with($match['chars'], '<') && str_ends_with($match['chars'], '>')) {
-                $string .= implode(
-                    '',
-                    array_map(
-                        fn (string $characterGroup) => $font?->getToUnicodeCMap()?->toUnicode((int) hexdec($characterGroup))
-                            ?? throw new ParseFailureException(sprintf('Unable to map character group "%s" to a unicode character', $characterGroup)),
-                        str_split(substr($match['chars'], 1, -1), 2)
-                    )
-                );
+                $string .= $font->getToUnicodeCMap()?->textToUnicode($match['chars'])
+                    ?? throw new ParseFailureException(sprintf('Unable to map character group "%s" to a unicode character', $match['chars']));
             } else {
                 throw new ParseFailureException();
             }
