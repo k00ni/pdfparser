@@ -2,6 +2,8 @@
 
 namespace PrinsFrank\PdfParser\Document\CMap\ToUnicode;
 
+use PrinsFrank\PdfParser\Exception\ParseFailureException;
+
 class ToUnicodeCMap {
     /** @var list<BFRange|BFChar> */
     public readonly array $bfCharRangeInfo;
@@ -10,6 +12,7 @@ class ToUnicodeCMap {
     public function __construct(
         public readonly int $codeSpaceStart,
         public readonly int $codeSpaceEnd,
+        public readonly int $byteSize,
         BFRange|BFChar ...$bfCharRangeInfo,
     ) {
         $this->bfCharRangeInfo = $bfCharRangeInfo;

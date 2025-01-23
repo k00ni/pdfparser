@@ -18,6 +18,7 @@ class ToUnicodeCMapParserTest extends TestCase {
             new ToUnicodeCMap(
                 0x0000,
                 0xFFFF,
+                2,
                 new BFRange(0x0000, 0x005E, [0x0020]),
                 new BFRange(0x005F, 0x0061, [0x00660066, 0x00660069, 0x00660066006C]),
                 new BFChar(0x3A51, 0xD840DC3E),

@@ -15,6 +15,10 @@ class ToUnicodeCMapParser {
             throw new ParseFailureException();
         }
 
+        if (strlen($matchesSpaceRange['start']) !== strlen($matchesSpaceRange['end'])) {
+            throw new ParseFailureException();
+        }
+
         /** @var array<int, list<BFRange|BFChar>> $bfCharRangeInfo where the first index is used to track the position of the element in the CMap */
         $bfCharRangeInfo = [];
         $lastPos = $startOffset;
@@ -56,6 +60,7 @@ class ToUnicodeCMapParser {
         return new ToUnicodeCMap(
             (int) hexdec(trim($matchesSpaceRange['start'])),
             (int) hexdec(trim($matchesSpaceRange['end'])),
+            strlen(trim($matchesSpaceRange['start'])) / 2,
             ...array_merge(...$bfCharRangeInfo)
         );
     }
