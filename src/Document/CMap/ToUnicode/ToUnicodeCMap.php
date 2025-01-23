@@ -11,6 +11,7 @@ class ToUnicodeCMap {
 
     /**
      * @no-named-arguments
+     *
      * @param int<1, max> $byteSize
      */
     public function __construct(
