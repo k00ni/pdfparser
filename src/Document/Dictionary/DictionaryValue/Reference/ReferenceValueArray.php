@@ -18,6 +18,8 @@ class ReferenceValueArray implements DictionaryValue {
 
     #[Override]
     public static function acceptsValue(string $value): bool {
+        $value = str_replace(["\r", "\n", '  '], ' ', $value);
+
         return str_starts_with($value, '[')
             && str_ends_with($value, ']')
             && count(explode(' ', trim(rtrim(ltrim($value, '['), ']')))) % 3 === 0;
@@ -25,6 +27,7 @@ class ReferenceValueArray implements DictionaryValue {
 
     #[Override]
     public static function fromValue(string $valueString): self {
+        $valueString = str_replace(["\r", "\n", '  '], ' ', $valueString);
         $referenceParts = explode(' ', trim(rtrim(ltrim($valueString, '['), ']')));
         $nrOfReferenceParts = count($referenceParts);
         if ($nrOfReferenceParts % 3 !== 0) {
