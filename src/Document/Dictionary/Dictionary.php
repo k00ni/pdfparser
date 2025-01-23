@@ -77,13 +77,18 @@ class Dictionary {
         throw new ParseFailureException(sprintf('Invalid type "%s" for subDictionary with key %s', $subDictionaryType, $dictionaryKey->name));
     }
 
-    public function getObjectForReference(Document $document, DictionaryKey $dictionaryKey): ?DecoratedObject {
+    /**
+     * @template T of DecoratedObject
+     * @param class-string<T>|null $expectedDecoratorFQN
+     * @return ($expectedDecoratorFQN is null ? DecoratedObject : T)
+     */
+    public function getObjectForReference(Document $document, DictionaryKey $dictionaryKey, ?string $expectedDecoratorFQN = null): ?DecoratedObject {
         $reference = $this->getValueForKey($dictionaryKey, ReferenceValue::class);
         if ($reference === null) {
             return null;
         }
 
-        return $document->getObject($reference->objectNumber)
+        return $document->getObject($reference->objectNumber, $expectedDecoratorFQN)
             ?? throw new ParseFailureException();
     }
 

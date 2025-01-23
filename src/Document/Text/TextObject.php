@@ -25,7 +25,7 @@ class TextObject {
 
     public function getText(Document $document, Page $page): string {
         $text = '';
-        $font = null;
+        $font = $page->getFont();
         foreach ($this->textOperators as $textOperator) {
             if ($textOperator->operator instanceof TextPositioningOperator) {
                 $text .= $textOperator->operator->display($textOperator->operands);

@@ -6,6 +6,7 @@ use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Document\Text\TextObjectCollection;
 use PrinsFrank\PdfParser\Document\Text\TextParser;
@@ -36,6 +37,16 @@ class Page extends DecoratedObject {
     public function getResourceDictionary(): ?Dictionary {
         return $this->getDictionary()
             ->getSubDictionary($this->document, DictionaryKey::RESOURCES);
+    }
+
+    public function getFont(): ?Font {
+        $resourceDictionary = $this->getResourceDictionary();
+        if ($resourceDictionary === null || $resourceDictionary->getTypeForKey(DictionaryKey::FONT) !== ReferenceValue::class) {
+            return null;
+        }
+
+        return $this->getResourceDictionary()
+            ?->getObjectForReference($this->document, DictionaryKey::FONT, Font::class);
     }
 
     public function getFontDictionary(): ?Dictionary {
