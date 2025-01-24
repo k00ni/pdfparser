@@ -37,7 +37,7 @@ class ToUnicodeCMap {
         );
     }
 
-    public function charToUnicode(int $characterCode): ?string {
+    protected function charToUnicode(int $characterCode): ?string {
         foreach ($this->bfCharRangeInfo as $bfCharRangeInfo) {
             if (!$bfCharRangeInfo->containsCharacterCode($characterCode)) {
                 continue;
