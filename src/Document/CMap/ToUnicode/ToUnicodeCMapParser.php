@@ -60,7 +60,7 @@ class ToUnicodeCMapParser {
         return new ToUnicodeCMap(
             (int) hexdec(trim($matchesSpaceRange['start'])),
             (int) hexdec(trim($matchesSpaceRange['end'])),
-            ($byteSize = (strlen(trim($matchesSpaceRange['start'])) / 2)) > 1 && is_int($byteSize) ? $byteSize : throw new ParseFailureException(),
+            ($byteSize = (strlen(trim($matchesSpaceRange['start'])) / 2)) >= 1 && is_int($byteSize) ? $byteSize : throw new ParseFailureException(sprintf('Byte size should be an integer of 1 or higher, got %s', $byteSize)),
             ...array_merge(...$bfCharRangeInfo)
         );
     }
