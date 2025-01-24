@@ -23,7 +23,7 @@ class TextObject {
 
     public function getText(Document $document, Page $page): string {
         $text = '';
-        $font = $page->getFont();
+        $font = null;
         foreach ($this->textOperators as $textOperator) {
             if ($textOperator->operator instanceof TextPositioningOperator) {
                 $text .= $textOperator->operator->display($textOperator->operands);
