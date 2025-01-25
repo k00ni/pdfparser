@@ -21,14 +21,8 @@ enum TextShowingOperator: string {
             }
         }
 
-        $regex = match ($this) {
-            self::SHOW_ARRAY => '/(?<chars>(<(\\\\\>|[^>])+>)|(\((\\\\\)|[^)])+\)))(?<offset>-?[0-9]+(\.[0-9]+)?)?/',
-            self::SHOW => '/^(?<chars>(<(\\\\\>|[^>])+>)|(\((\\\\\)|[^)])+\)))$/',
-            default => throw new ParseFailureException(sprintf('Operater %s with operands "%s" is currently not supported', $this->name, $operands)),
-        };
-
-        if ($result = preg_match_all($regex, $operands, $matches, PREG_SET_ORDER) === false) {
-            throw new ParseFailureException(sprintf('Error with regex %s', $regex));
+        if (($result = preg_match_all('/(?<chars>(<(\\\\>|[^>])*>)|(\((\\\\\)|[^)])*\)))(?<offset>-?[0-9]+(\.[0-9]+)?)?/', $operands, $matches, PREG_SET_ORDER)) === false) {
+            throw new ParseFailureException(sprintf('Error with regex'));
         } elseif ($result === 0) {
             throw new ParseFailureException(sprintf('Operator %s with operands "%s" is not in a recognized format', $this->name, $operands));
         }
