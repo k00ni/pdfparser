@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Text;
 
+use PrinsFrank\PdfParser\Document\Generic\Operator\MarkedContentOperator;
 use PrinsFrank\PdfParser\Document\Generic\Parsing\InfiniteBuffer;
 use PrinsFrank\PdfParser\Document\Generic\Parsing\RollingCharBuffer;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\ColorOperator;
@@ -46,6 +47,13 @@ class TextParser {
             if ($operatorBuffer->seenBackedEnumValue(TextObjectOperator::END)) {
                 $operandBuffer->flush();
                 $textObject = null;
+                continue;
+            }
+
+            if ($operatorBuffer->seenBackedEnumValue(MarkedContentOperator::BeginMarkedContent)
+                || $operatorBuffer->seenBackedEnumValue(MarkedContentOperator::BeginMarkedContentWithProperties)
+                || $operatorBuffer->seenBackedEnumValue(MarkedContentOperator::EndMarkedContent)) {
+                $operandBuffer->flush();
                 continue;
             }
 
