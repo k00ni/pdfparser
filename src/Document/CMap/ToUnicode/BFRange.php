@@ -20,7 +20,7 @@ class BFRange {
 
     public function toUnicode(int $characterCode): ?string {
         if (count($this->destinationString) === 1) {
-            return chr($this->destinationString[0]);
+            return chr($this->destinationString[0] + $characterCode - $this->sourceCodeStart);
         }
 
         return chr(
