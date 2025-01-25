@@ -20,20 +20,25 @@ class TextParser {
         $operandBuffer = new InfiniteBuffer();
         $textObjects = [];
         $inValue = false;
+        file_put_contents('temp.txt', $text);
+        $previousChar = null;
         foreach (str_split($text) as $char) {
             $operandBuffer->addChar($char);
             $operatorBuffer->next($char);
-            if (in_array($char, ['[', '<', '('], true)) {
+            if (in_array($char, ['[', '<', '('], true) && $previousChar !== '\\') {
                 $inValue = true;
+                $previousChar = $char;
                 continue;
             }
 
-            if ($inValue && in_array($char, [']', '>', ')'], true)) {
+            if ($inValue && in_array($char, [']', '>', ')'], true) && $previousChar !== '\\') {
                 $inValue = false;
+                $previousChar = $char;
                 continue;
             }
 
             if ($inValue) {
+                $previousChar = $char;
                 continue;
             }
 
@@ -41,12 +46,14 @@ class TextParser {
                 $operandBuffer->flush();
                 $textObject = new TextObject();
                 $textObjects[] = $textObject;
+                $previousChar = $char;
                 continue;
             }
 
             if ($operatorBuffer->seenBackedEnumValue(TextObjectOperator::END)) {
                 $operandBuffer->flush();
                 $textObject = null;
+                $previousChar = $char;
                 continue;
             }
 
@@ -54,10 +61,12 @@ class TextParser {
                 || $operatorBuffer->seenBackedEnumValue(MarkedContentOperator::BeginMarkedContentWithProperties)
                 || $operatorBuffer->seenBackedEnumValue(MarkedContentOperator::EndMarkedContent)) {
                 $operandBuffer->flush();
+                $previousChar = $char;
                 continue;
             }
 
             if ($textObject === null) {
+                $previousChar = $char;
                 continue;
             }
 
@@ -65,6 +74,7 @@ class TextParser {
             if ($operator instanceof TextPositioningOperator || $operator instanceof TextShowingOperator || $operator instanceof TextStateOperator || $operator instanceof GraphicsStateOperator || $operator instanceof ColorOperator) {
                 $textObject->addTextOperator(new TextOperator($operator, trim($operandBuffer->removeChar(strlen($operator->value))->__toString())));
                 $operandBuffer->flush();
+                $previousChar = $char;
             }
         }
 
