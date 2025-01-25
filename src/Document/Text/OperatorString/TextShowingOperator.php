@@ -13,17 +13,26 @@ enum TextShowingOperator: string {
     case SHOW_ARRAY = 'TJ';
 
     public function displayOperands(string $operands, ?Font $font): string {
-        $regex = match ($this) {
-            self::SHOW_ARRAY => '/(?<chars>(<[^>]+>)|(\([^)]+\)))(?<offset>-?[0-9]+(\.[0-9]+)?)?/',
-            self::SHOW => '/^(?<chars>(<[^>]+>)|(\([^)]+\)))$/',
-            default => throw new ParseFailureException($this->name . ':' . $operands),
-        };
-
-        if (preg_match_all($regex, $operands, $matches, PREG_SET_ORDER) === 0) {
-            throw new ParseFailureException('"' . $operands . '"');
+        $string = '';
+        if ($this === self::MOVE_SHOW || $this === self::MOVE_SHOW_SPACING) {
+            $string .= PHP_EOL;
+            if ($operands === '') {
+                return $string;
+            }
         }
 
-        $string = '';
+        $regex = match ($this) {
+            self::SHOW_ARRAY => '/(?<chars>(<(\\\\\>|[^>])+>)|(\((\\\\\)|[^)])+\)))(?<offset>-?[0-9]+(\.[0-9]+)?)?/',
+            self::SHOW => '/^(?<chars>(<(\\\\\>|[^>])+>)|(\((\\\\\)|[^)])+\)))$/',
+            default => throw new ParseFailureException(sprintf('Operater %s with operands "%s" is currently not supported', $this->name, $operands)),
+        };
+
+        if ($result = preg_match_all($regex, $operands, $matches, PREG_SET_ORDER) === false) {
+            throw new ParseFailureException(sprintf('Error with regex %s', $regex));
+        } elseif ($result === 0) {
+            throw new ParseFailureException(sprintf('Operator %s with operands "%s" is not in a recognized format', $this->name, $operands));
+        }
+
         foreach ($matches as $match) {
             if (str_starts_with($match['chars'], '(') && str_ends_with($match['chars'], ')')) {
                 $string .= substr($match['chars'], 1, -1);
