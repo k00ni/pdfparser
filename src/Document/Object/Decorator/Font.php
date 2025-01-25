@@ -82,8 +82,7 @@ class Font extends DecoratedObject {
             throw new ParseFailureException('No ToUnicodeCMap available for this font');
         }
 
-        return $toUnicodeCMap->textToUnicode($characterGroup)
-            ?? throw new ParseFailureException(sprintf('Unable to map character group "%s" to a unicode string', $characterGroup));
+        return $toUnicodeCMap->textToUnicode($characterGroup);
     }
 
     #[Override]
