@@ -26,13 +26,13 @@ class ToUnicodeCMap {
         }
     }
 
-    public function textToUnicode(string $characterCodes): string {
+    public function textToUnicode(string $characterGroup): string {
         return implode(
             '',
             array_map(
-                fn (string $characterGroup) => $this->charToUnicode((int) hexdec($characterGroup))
-                    ?? throw new ParseFailureException(sprintf('Unable to map character group "%s" to a unicode character', $characterGroup)),
-                str_split($characterCodes, $this->byteSize)
+                fn (string $character) => $this->charToUnicode((int) hexdec($character))
+                    ?? throw new ParseFailureException(sprintf('Unable to map character "%s" character group "%s" to a unicode character (byte size: %d)', $character, $characterGroup, $this->byteSize)),
+                str_split($characterGroup, $this->byteSize * 2)
             )
         );
     }

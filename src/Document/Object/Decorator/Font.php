@@ -76,6 +76,16 @@ class Font extends DecoratedObject {
             ->getValueForKey(DictionaryKey::FONT_DESCRIPTOR, ReferenceValue::class);
     }
 
+    public function toUnicode(string $characterGroup): string {
+        $toUnicodeCMap = $this->getToUnicodeCMap();
+        if ($toUnicodeCMap === null) {
+            throw new ParseFailureException('No ToUnicodeCMap available for this font');
+        }
+
+        return $toUnicodeCMap->textToUnicode($characterGroup)
+            ?? throw new ParseFailureException(sprintf('Unable to map character group "%s" to a unicode string', $characterGroup));
+    }
+
     #[Override]
     protected function getTypeName(): ?TypeNameValue {
         return TypeNameValue::FONT;
