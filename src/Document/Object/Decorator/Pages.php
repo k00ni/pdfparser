@@ -27,10 +27,6 @@ class Pages extends DecoratedObject {
                 $kids = [...$kids, ...$kidObject->getPageItems()];
             } elseif ($kidObject instanceof Page) {
                 $kids[] = $kidObject;
-            } elseif ($kidObject instanceof Group) {
-                continue;
-            } else {
-                throw new RuntimeException(sprintf('Expected only nodes of PAGE or PAGES, got %s', $kidObject::class));
             }
         }
 
