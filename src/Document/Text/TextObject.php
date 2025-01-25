@@ -30,8 +30,11 @@ class TextObject {
             } elseif ($textOperator->operator instanceof TextShowingOperator) {
                 $text .= $textOperator->operator->displayOperands($textOperator->operands, $font);
             } elseif ($textOperator->operator === TextStateOperator::FONT_SIZE) {
-                $font = $page->getFontDictionary()
-                    ?->getObjectForReference($document, $fontReference = $textOperator->operator->getFontReference($textOperator->operands), Font::class)
+                if (($fontDictionary = $page->getFontDictionary()) === null) {
+                    throw new ParseFailureException('No font dictionary available');
+                }
+
+                $font = $fontDictionary->getObjectForReference($document, $fontReference = $textOperator->operator->getFontReference($textOperator->operands), Font::class)
                     ?? throw new ParseFailureException(sprintf('Unable to locate font with reference "/%s"', $fontReference->value));
             }
         }

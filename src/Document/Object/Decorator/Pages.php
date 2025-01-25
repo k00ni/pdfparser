@@ -3,6 +3,7 @@
 namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 
 use Override;
+use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
@@ -34,5 +35,10 @@ class Pages extends DecoratedObject {
         }
 
         return $kids;
+    }
+
+    public function getResourceDictionary(): ?Dictionary {
+        return $this->getDictionary()
+            ->getSubDictionary($this->document, DictionaryKey::RESOURCES);
     }
 }
