@@ -16,20 +16,21 @@ class DateValue implements DictionaryValue {
 
     #[Override]
     public static function acceptsValue(string $value): bool {
-        if (str_starts_with($value, '(D:') || str_starts_with($value, 'D:')) {
-            return true;
+        if (str_starts_with($value, '(') && str_ends_with($value, ')')) {
+            $value = substr($value, 1, -1);
         }
 
-        if (!str_starts_with($value, '<') || !str_ends_with($value, '>')) {
-            return false;
+        if (str_starts_with($value, '<') && str_ends_with($value, '>')) {
+            $value = hex2bin(substr($value, 1, -1));
+            if ($value === false) {
+                return false;
+            }
         }
 
-        if (($decodedValue = hex2bin(substr($value, 1, -1))) === false) {
-            return false;
-        }
-
-        return str_starts_with(mb_convert_encoding($decodedValue, 'UTF-8', 'UTF-16'), 'D:')
-            || str_starts_with(mb_convert_encoding($decodedValue, 'UTF-8', 'UTF-16'), '(D:');
+        return str_starts_with($value, 'D:')
+            || str_starts_with($value, '(D:')
+            || str_starts_with(mb_convert_encoding($value, 'UTF-8', 'UTF-16'), 'D:')
+            || str_starts_with(mb_convert_encoding($value, 'UTF-8', 'UTF-16'), '(D:');
     }
 
     #[Override]
@@ -40,12 +41,14 @@ class DateValue implements DictionaryValue {
             if ($valueString === false) {
                 throw new ParseFailureException();
             }
-
-            $valueString = mb_convert_encoding($valueString, 'UTF-8', 'UTF-16');
         }
 
-        if (str_starts_with($valueString, '(')) {
-            $valueString = substr($valueString, 1);
+        if (str_starts_with($valueString, '(') && str_ends_with($valueString, ')')) {
+            $valueString = substr($valueString, 1, -1);
+        }
+
+        if (!str_starts_with($valueString, 'D:')) {
+            $valueString = mb_convert_encoding($valueString, 'UTF-8', 'UTF-16');
         }
 
         $parsedDate = DateTimeImmutable::createFromFormat('\D\:YmdHisP', str_replace("'", '', $valueString));
