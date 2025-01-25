@@ -3,6 +3,7 @@
 namespace PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey;
 
 use Override;
+use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
 
@@ -18,6 +19,6 @@ class ExtendedDictionaryKey implements DictionaryKeyInterface {
 
     #[Override]
     public function getValueTypes(): array {
-        return [ReferenceValue::class, TextStringValue::class];
+        return [ReferenceValue::class, TextStringValue::class, Dictionary::class];
     }
 }
