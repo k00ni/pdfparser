@@ -4,7 +4,11 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document\Text;
 
 use PrinsFrank\PdfParser\Document\Document;
+use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
+use PrinsFrank\PdfParser\Document\Text\OperatorString\TextPositioningOperator;
+use PrinsFrank\PdfParser\Document\Text\OperatorString\TextShowingOperator;
+use PrinsFrank\PdfParser\Document\Text\OperatorString\TextStateOperator;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class TextObjectCollection {
@@ -20,12 +24,22 @@ class TextObjectCollection {
 
     public function getText(Document $document, Page $page): string {
         $text = '';
+        $font = null;
         foreach ($this->textObjects as $textObject) {
-            if (($textObjectText = trim($textObject->getText($document, $page))) === '') {
-                continue;
-            }
+            foreach ($textObject->textOperators as $textOperator) {
+                if ($textOperator->operator instanceof TextPositioningOperator) {
+                    $text .= $textOperator->operator->display($textOperator->operands);
+                } elseif ($textOperator->operator instanceof TextShowingOperator) {
+                    $text .= $textOperator->operator->displayOperands($textOperator->operands, $font);
+                } elseif ($textOperator->operator === TextStateOperator::FONT_SIZE) {
+                    if (($fontDictionary = $page->getFontDictionary()) === null) {
+                        throw new ParseFailureException('No font dictionary available');
+                    }
 
-            $text .= ' ' . $textObjectText;
+                    $font = $fontDictionary->getObjectForReference($document, $fontReference = $textOperator->operator->getFontReference($textOperator->operands), Font::class)
+                        ?? throw new ParseFailureException(sprintf('Unable to locate font with reference "/%s"', $fontReference->value));
+                }
+            }
         }
 
         return preg_replace('/\h+([.,!?])/', '$1', str_replace('  ', ' ', trim($text))) ?? throw new ParseFailureException();
