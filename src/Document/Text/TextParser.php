@@ -20,7 +20,6 @@ class TextParser {
         $operandBuffer = new InfiniteBuffer();
         $textObjects = [];
         $inValue = false;
-        file_put_contents('temp.txt', $text);
         $previousChar = null;
         foreach (str_split($text) as $char) {
             $operandBuffer->addChar($char);
