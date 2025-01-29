@@ -1215,7 +1215,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::VIEWER_PREFERENCES => [Dictionary::class],
             self::VOLUME => [IntegerValue::class, FloatValue::class],
             self::VP => [Dictionary::class],
-            self::W => [WValue::class, IntegerValue::class, FloatValue::class],
+            self::W => [WValue::class, IntegerValue::class, FloatValue::class, ReferenceValue::class],
             self::W2 => [ArrayValue::class],
             self::WC => [Dictionary::class],
             self::WHITE_POINT => [ArrayValue::class],
