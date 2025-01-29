@@ -5,6 +5,7 @@ namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 use Override;
 use PrinsFrank\PdfParser\Document\CMap\ToUnicode\ToUnicodeCMap;
 use PrinsFrank\PdfParser\Document\CMap\ToUnicode\ToUnicodeCMapParser;
+use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
@@ -78,11 +79,21 @@ class Font extends DecoratedObject {
 
     public function toUnicode(string $characterGroup): string {
         $toUnicodeCMap = $this->getToUnicodeCMap();
-        if ($toUnicodeCMap === null) {
-            throw new ParseFailureException('No ToUnicodeCMap available for this font');
+        if ($toUnicodeCMap !== null) {
+            return $toUnicodeCMap->textToUnicode($characterGroup);
         }
 
-        return $toUnicodeCMap->textToUnicode($characterGroup);
+        $descendantFonts = $this->getDictionary()->getObjectsForReference($this->document, DictionaryKey::DESCENDANT_FONTS, Font::class);
+        foreach ($descendantFonts as $descendantFont) {
+            if (($CIDSystemInfo = $descendantFont->getDictionary()->getValueForKey(DictionaryKey::CIDSYSTEM_INFO, Dictionary::class)) !== null) {
+                $registry = $CIDSystemInfo->getValueForKey(DictionaryKey::REGISTRY, TextStringValue::class);
+                $ordering = $CIDSystemInfo->getValueForKey(DictionaryKey::ORDERING, TextStringValue::class);
+                $supplement = $CIDSystemInfo->getValueForKey(DictionaryKey::SUPPLEMENT, IntegerValue::class);
+            }
+            var_dump($descendantFont->getDictionary());
+        }
+
+        throw new ParseFailureException('No ToUnicodeCMap available for this font');
     }
 
     #[Override]
