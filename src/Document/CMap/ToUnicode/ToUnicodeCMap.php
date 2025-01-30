@@ -31,7 +31,7 @@ class ToUnicodeCMap {
             '',
             array_map(
                 fn (string $character) => $this->charToUnicode((int) hexdec($character))
-                    ?? throw new ParseFailureException(sprintf('Unable to map character group "%s" to a unicode character (byte size: %d)', $character, $characterGroup, $this->byteSize)),
+                    ?? throw new ParseFailureException(sprintf('Unable to map character group "%s" to a unicode character (byte size: %d)', $character, $this->byteSize)),
                 str_split($characterGroup, $this->byteSize * 2)
             )
         );

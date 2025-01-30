@@ -13,25 +13,25 @@ class InformationDictionary extends DecoratedObject {
     public function getTitle(): ?string {
         return $this->getDictionary()
             ->getValueForKey(DictionaryKey::TITLE, TextStringValue::class)
-            ?->textStringValue;
+            ?->getText();
     }
 
     public function getProducer(): ?string {
         return $this->getDictionary()
             ->getValueForKey(DictionaryKey::PRODUCER, TextStringValue::class)
-            ?->textStringValue;
+            ?->getText();
     }
 
     public function getAuthor(): ?string {
         return $this->getDictionary()
             ->getValueForKey(DictionaryKey::AUTHOR, TextStringValue::class)
-            ?->textStringValue;
+            ?->getText();
     }
 
     public function getCreator(): ?string {
         return $this->getDictionary()
             ->getValueForKey(DictionaryKey::CREATOR, TextStringValue::class)
-            ?->textStringValue;
+            ?->getText();
     }
 
     public function getCreationDate(): ?DateTimeImmutable {

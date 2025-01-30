@@ -10,6 +10,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\NameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValueArray;
 use PrinsFrank\PdfParser\Document\Document;
 use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
@@ -90,6 +91,26 @@ class Dictionary {
 
         return $document->getObject($reference->objectNumber, $expectedDecoratorFQN)
             ?? throw new ParseFailureException();
+    }
+
+    /**
+     * @template T of DecoratedObject
+     * @param class-string<T>|null $expectedDecoratorFQN
+     * @return ($expectedDecoratorFQN is null ? array<DecoratedObject> : array<T>)
+     */
+    public function getObjectsForReference(Document $document, DictionaryKey|ExtendedDictionaryKey $dictionaryKey, ?string $expectedDecoratorFQN = null): array {
+        $references = $this->getValueForKey($dictionaryKey, ReferenceValueArray::class);
+        if ($references === null) {
+            return [];
+        }
+
+        $objects = [];
+        foreach ($references->referenceValues as $referenceValue) {
+            $objects[] = $document->getObject($referenceValue->objectNumber, $expectedDecoratorFQN)
+                ?? throw new ParseFailureException();
+        }
+
+        return $objects;
     }
 
     public function getType(): ?TypeNameValue {

@@ -3,6 +3,7 @@
 namespace PrinsFrank\PdfParser\Document\Object\Decorator;
 
 use Override;
+use PrinsFrank\PdfParser\Document\CMap\Registry\RegistryOrchestrator;
 use PrinsFrank\PdfParser\Document\CMap\ToUnicode\ToUnicodeCMap;
 use PrinsFrank\PdfParser\Document\CMap\ToUnicode\ToUnicodeCMapParser;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
@@ -22,13 +23,13 @@ class Font extends DecoratedObject {
     public function getBaseFont(): ?string {
         return $this->getDictionary()
             ->getValueForKey(DictionaryKey::BASE_FONT, TextStringValue::class)
-            ?->textStringValue;
+            ?->getText();
     }
 
     public function getEncoding(): ?string {
         return $this->getDictionary()
             ->getValueForKey(DictionaryKey::ENCODING, TextStringValue::class)
-            ?->textStringValue;
+            ?->getText();
     }
 
     public function getToUnicodeCMap(): ?ToUnicodeCMap {
@@ -86,11 +87,16 @@ class Font extends DecoratedObject {
         $descendantFonts = $this->getDictionary()->getObjectsForReference($this->document, DictionaryKey::DESCENDANT_FONTS, Font::class);
         foreach ($descendantFonts as $descendantFont) {
             if (($CIDSystemInfo = $descendantFont->getDictionary()->getValueForKey(DictionaryKey::CIDSYSTEM_INFO, Dictionary::class)) !== null) {
-                $registry = $CIDSystemInfo->getValueForKey(DictionaryKey::REGISTRY, TextStringValue::class);
-                $ordering = $CIDSystemInfo->getValueForKey(DictionaryKey::ORDERING, TextStringValue::class);
-                $supplement = $CIDSystemInfo->getValueForKey(DictionaryKey::SUPPLEMENT, IntegerValue::class);
+                $fontResource = RegistryOrchestrator::getForRegistryOrderingSupplement(
+                    $CIDSystemInfo->getValueForKey(DictionaryKey::REGISTRY, TextStringValue::class) ?? throw new ParseFailureException(),
+                    $CIDSystemInfo->getValueForKey(DictionaryKey::ORDERING, TextStringValue::class) ?? throw new ParseFailureException(),
+                    $CIDSystemInfo->getValueForKey(DictionaryKey::SUPPLEMENT, IntegerValue::class) ?? throw new ParseFailureException(),
+                );
+
+                if ($fontResource !== null) {
+                    return $fontResource->getToUnicodeCMap()->textToUnicode($characterGroup);
+                }
             }
-            var_dump($descendantFont->getDictionary());
         }
 
         throw new ParseFailureException('No ToUnicodeCMap available for this font');
