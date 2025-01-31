@@ -25,7 +25,7 @@ class ToUnicodeCMapParser {
         while (($beginBFCharPos = $stream->firstPos(ToUnicodeCMapOperator::BeginBFChar, $lastPos, $startOffset + $nrOfBytes)) !== null) {
             $endBFCharPos = $stream->firstPos(ToUnicodeCMapOperator::EndBFChar, $beginBFCharPos, $startOffset + $nrOfBytes)
                 ?? throw new ParseFailureException();
-            if (preg_match_all('/(*ANYCRLF)^\s*<(?P<start>[0-9a-fA-F ]+)>\s*<(?P<end>[0-9a-fA-F ]+)>\s*$/m', $stream->read($beginBFCharPos, $endBFCharPos - $beginBFCharPos), $matchesBFChar, PREG_SET_ORDER) === 0) {
+            if (preg_match_all('/(*ANYCRLF)^\s*<(?P<start>[^>]+)>\s*<(?P<end>[^>]+)>\s*$/m', $stream->read($beginBFCharPos, $endBFCharPos - $beginBFCharPos), $matchesBFChar, PREG_SET_ORDER) === 0) {
                 throw new ParseFailureException('Unrecognized bfchar format');
             }
 
@@ -39,7 +39,7 @@ class ToUnicodeCMapParser {
         while (($beginBFRangePos = $stream->firstPos(ToUnicodeCMapOperator::BeginBFRange, $lastPos, $startOffset + $nrOfBytes)) !== null) {
             $endBFRangePos = $stream->firstPos(ToUnicodeCMapOperator::EndBFRange, $beginBFRangePos, $startOffset + $nrOfBytes)
                 ?? throw new ParseFailureException();
-            if (preg_match_all('/(*ANYCRLF)^\s*<(?P<start>[0-9a-fA-F ]+)>\s*<(?P<end>[0-9a-fA-F ]+)>\s*(?P<targetString>(<[0-9a-fA-F ]+>)|(\[\s*(<[0-9a-fA-F ]+>\s*)+\]))$/m', $stream->read($beginBFRangePos, $endBFRangePos - $beginBFRangePos), $matchesBFRange, PREG_SET_ORDER) === 0) {
+            if (preg_match_all('/(*ANYCRLF)^\s*<(?P<start>[^>]+)>\s*<(?P<end>[^>]+)>\s*(?P<targetString>(<[^>]+>)|(\[\s*(<[^>]+>\s*)+\]))$/m', $stream->read($beginBFRangePos, $endBFRangePos - $beginBFRangePos), $matchesBFRange, PREG_SET_ORDER) === 0) {
                 throw new ParseFailureException('Unrecognized bfrange format');
             }
 
