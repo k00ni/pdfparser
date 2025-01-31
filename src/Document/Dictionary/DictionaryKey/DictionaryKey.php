@@ -808,7 +808,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::EMBEDDED_FILES => [Dictionary::class],
             self::ENCODE => [ArrayValue::class],
             self::ENCODED_BYTE_ALIGN => [BooleanValue::class],
-            self::ENCODING => [TextStringValue::class, Dictionary::class],
+            self::ENCODING => [EncodingNameValue::class, Dictionary::class],
             self::ENCRYPT => [Dictionary::class],
             self::ENCRYPT_METADATA => [BooleanValue::class],
             self::ENCRYPTION_REVISION => [IntegerValue::class],
