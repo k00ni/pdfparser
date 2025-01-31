@@ -25,6 +25,9 @@ final class Document {
     /** @var list<Page> */
     private readonly array $pages;
 
+    /** @var array<int, DecoratedObject> */
+    private array $objectCache = [];
+
     public function __construct(
         public readonly Stream               $stream,
         public readonly Version              $version,
@@ -78,6 +81,10 @@ final class Document {
      * @return ($expectedDecoratorFQN is null ? DecoratedObject : T)
      */
     public function getObject(int $objectNumber, ?string $expectedDecoratorFQN = null): ?DecoratedObject {
+        if (array_key_exists($objectNumber, $this->objectCache)) {
+            return $this->objectCache[$objectNumber];
+        }
+
         $crossReferenceEntry = $this->crossReferenceSource->getCrossReferenceEntry($objectNumber);
         if ($crossReferenceEntry === null) {
             return null;
@@ -91,14 +98,14 @@ final class Document {
                 throw new RuntimeException('Parents for stream items shouldn\'t be stream items themselves');
             }
 
-            return DecoratedObjectFactory::forItem(
+            return $this->objectCache[$objectNumber] = DecoratedObjectFactory::forItem(
                 $parentObject->objectItem->getCompressedObject($objectNumber, $this->stream),
                 $this,
                 $expectedDecoratorFQN,
             );
         }
 
-        return DecoratedObjectFactory::forItem(
+        return $this->objectCache[$objectNumber] = DecoratedObjectFactory::forItem(
             UncompressedObjectParser::parseObject($crossReferenceEntry, $objectNumber, $this->stream, ),
             $this,
             $expectedDecoratorFQN,
