@@ -20,7 +20,7 @@ enum TextStateOperator: string {
             throw new InvalidArgumentException('Can only retrieve font for Tf operator');
         }
 
-        if (preg_match('/^\/(?<fontReference>[A-Z_0-9]+)\s+[0-9]+(\.[0-9]+)?$/', $operand, $matches) !== 1) {
+        if (preg_match('/^\/(?<fontReference>[A-Za-z_0-9.]+)\s+[0-9]+(\.[0-9]+)?$/', $operand, $matches) !== 1) {
             throw new InvalidArgumentException(sprintf('Invalid font operand "%s"', substr($operand, 0, 200)));
         }
 

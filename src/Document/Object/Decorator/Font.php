@@ -29,7 +29,7 @@ class Font extends DecoratedObject {
 
     public function getEncoding(): ?EncodingNameValue {
         $encodingType = $this->getDictionary()->getTypeForKey(DictionaryKey::ENCODING);
-        if ($encodingType === null) {
+        if ($encodingType === null || $encodingType === Dictionary::class) {
             return null;
         }
 

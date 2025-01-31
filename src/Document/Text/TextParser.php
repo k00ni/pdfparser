@@ -15,7 +15,7 @@ use PrinsFrank\PdfParser\Document\Text\OperatorString\TextStateOperator;
 
 class TextParser {
     public static function parse(string $text): TextObjectCollection {
-        $operatorBuffer = new RollingCharBuffer(3);
+        $operatorBuffer = new RollingCharBuffer(4);
         $textObject = null;
         $operandBuffer = new InfiniteBuffer();
         $textObjects = [];
@@ -70,7 +70,8 @@ class TextParser {
             }
 
             $operator = $operatorBuffer->getBackedEnumValue(TextPositioningOperator::class, TextShowingOperator::class, TextStateOperator::class, GraphicsStateOperator::class, ColorOperator::class);
-            if ($operator instanceof TextPositioningOperator || $operator instanceof TextShowingOperator || $operator instanceof TextStateOperator || $operator instanceof GraphicsStateOperator || $operator instanceof ColorOperator) {
+            if (($operator instanceof TextPositioningOperator || $operator instanceof TextShowingOperator || $operator instanceof TextStateOperator || $operator instanceof GraphicsStateOperator || $operator instanceof ColorOperator)
+                && !$operatorBuffer->seenString('/' . $operator->value)) {
                 $textObject->addTextOperator(new TextOperator($operator, trim($operandBuffer->removeChar(strlen($operator->value))->__toString())));
                 $operandBuffer->flush();
                 $previousChar = $char;
