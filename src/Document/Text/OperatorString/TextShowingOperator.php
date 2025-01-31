@@ -29,7 +29,12 @@ enum TextShowingOperator: string {
 
         foreach ($matches as $match) {
             if (str_starts_with($match['chars'], '(') && str_ends_with($match['chars'], ')')) {
-                $string .= substr($match['chars'], 1, -1);
+                $chars = substr($match['chars'], 1, -1);
+                if ($font !== null && ($encoding = $font->getEncoding()) !== null) {
+                    $chars = $encoding->decodeString($chars);
+                }
+
+                $string .= $chars;
             } elseif (str_starts_with($match['chars'], '<') && str_ends_with($match['chars'], '>')) {
                 if ($font === null) {
                     throw new ParseFailureException('No font available');
