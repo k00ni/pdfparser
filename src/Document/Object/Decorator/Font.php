@@ -10,6 +10,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\EncodingNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Reference\ReferenceValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\TextString\TextStringValue;
@@ -18,7 +19,7 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Stream;
 
 class Font extends DecoratedObject {
-    private readonly ?ToUnicodeCMap $toUnicodeCMap;
+    private readonly ToUnicodeCMap|false $toUnicodeCMap;
 
     public function getBaseFont(): ?string {
         return $this->getDictionary()
@@ -26,21 +27,38 @@ class Font extends DecoratedObject {
             ?->getText();
     }
 
-    public function getEncoding(): ?string {
-        return $this->getDictionary()
-            ->getValueForKey(DictionaryKey::ENCODING, TextStringValue::class)
-            ?->getText();
+    public function getEncoding(): ?EncodingNameValue {
+        $encodingType = $this->getDictionary()->getTypeForKey(DictionaryKey::ENCODING);
+        if ($encodingType === null) {
+            return null;
+        }
+
+        if ($encodingType === EncodingNameValue::class) {
+            return $this->getDictionary()->getValueForKey(DictionaryKey::ENCODING, EncodingNameValue::class);
+        }
+
+        if ($encodingType === ReferenceValue::class) {
+            return $this->getDictionary()->getObjectForReference($this->document, DictionaryKey::ENCODING)->getDictionary()->getValueForKey(DictionaryKey::BASE_ENCODING, EncodingNameValue::class);
+        }
+
+        throw new ParseFailureException(sprintf('Unrecognized encoding type %s', $encodingType));
     }
 
     public function getToUnicodeCMap(): ?ToUnicodeCMap {
         if (isset($this->toUnicodeCMap)) {
+            if ($this->toUnicodeCMap === false) {
+                return null;
+            }
+
             return $this->toUnicodeCMap;
         }
 
         $toUnicodeObject = $this->getDictionary()
             ->getObjectForReference($this->document, DictionaryKey::TO_UNICODE);
         if ($toUnicodeObject === null) {
-            return $this->toUnicodeCMap = null;
+            $this->toUnicodeCMap = false;
+
+            return null;
         }
 
         if ($toUnicodeObject->objectItem instanceof UncompressedObject === false) {
