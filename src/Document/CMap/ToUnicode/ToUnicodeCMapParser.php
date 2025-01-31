@@ -32,7 +32,7 @@ class ToUnicodeCMapParser {
             foreach ($matchesBFChar as $matchBFChar) {
                 $bfCharRangeInfo[$beginBFCharPos][] = new BFChar((int) hexdec(trim($matchBFChar['start'])), (int) hexdec(trim($matchBFChar['end'])));
             }
-            $lastPos = $beginBFCharPos;
+            $lastPos = $endBFCharPos;
         }
 
         $lastPos = $startOffset;
@@ -53,7 +53,7 @@ class ToUnicodeCMapParser {
                     )
                 );
             }
-            $lastPos = $beginBFRangePos;
+            $lastPos = $endBFRangePos;
         }
 
         ksort($bfCharRangeInfo); // Make sure that Char and Range are in order they occur in the CMap
