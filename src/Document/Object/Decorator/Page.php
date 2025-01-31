@@ -39,8 +39,12 @@ class Page extends DecoratedObject {
     }
 
     public function getFontDictionary(): ?Dictionary {
-        if (($pageFont = $this->getResourceDictionary()?->getSubDictionary($this->document, DictionaryKey::FONT)) !== null) {
-            return $pageFont;
+        if (($pageFontDictionary = $this->getDictionary()->getSubDictionary($this->document, DictionaryKey::FONT)) !== null) {
+            return $pageFontDictionary;
+        }
+
+        if (($pageResourceFontDictionary = $this->getResourceDictionary()?->getSubDictionary($this->document, DictionaryKey::FONT)) !== null) {
+            return $pageResourceFontDictionary;
         }
 
         if (($pagesParent = $this->getDictionary()->getObjectForReference($this->document, DictionaryKey::PARENT, Pages::class)) === null) {
