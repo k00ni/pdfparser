@@ -95,15 +95,19 @@ class UncompressedObject implements ObjectItem {
             $this->getDictionary($stream),
         );
 
-        return implode(
-            '',
-            array_map(
-                fn (string $char) => chr((int) hexdec($char)),
-                str_split(
-                    $decodedBytes,
-                    2
+        if (strlen($decodedBytes) % 2 === 0 && ctype_xdigit($decodedBytes)) {
+            return implode(
+                '',
+                array_map(
+                    fn(string $char) => chr((int)hexdec($char)),
+                    str_split(
+                        $decodedBytes,
+                        2
+                    )
                 )
-            )
-        );
+            );
+        }
+
+        return $decodedBytes;
     }
 }
