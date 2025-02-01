@@ -42,12 +42,11 @@ class UncompressedObject implements ObjectItem {
             return $this->dictionary = new Dictionary();
         }
 
-        $endDictionaryPos = $stream->lastPos(DelimiterCharacter::GREATER_THAN_SIGN, $stream->getSizeInBytes() - $this->endOffset);
-        if ($endDictionaryPos === null || $endDictionaryPos < $startDictionaryPos) {
-            throw new ParseFailureException(sprintf('Couldn\'t find the end of the dictionary in "%s"', $stream->read($startDictionaryPos, $stream->getSizeInBytes() - $this->endOffset)));
-        }
+        $endDictionaryPos = $stream->firstPos(Marker::STREAM, $startDictionaryPos, $this->endOffset)
+            ?? $stream->firstPos(Marker::END_OBJ, $startDictionaryPos, $this->endOffset)
+            ?? throw new ParseFailureException('Unable to locate start of stream or end of current object');
 
-        return $this->dictionary = DictionaryParser::parse($stream, $startDictionaryPos, $endDictionaryPos - $startDictionaryPos + strlen(DelimiterCharacter::GREATER_THAN_SIGN->value . DelimiterCharacter::GREATER_THAN_SIGN->value));
+        return $this->dictionary = DictionaryParser::parse($stream, $startDictionaryPos, $endDictionaryPos - $startDictionaryPos);
     }
 
     public function getCompressedObject(int $objectNumber, Stream $stream): CompressedObject {
