@@ -14,6 +14,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryEntry\DictionaryEntry;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\EncodingNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\SubtypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Rectangle\Rectangle;
@@ -208,7 +209,7 @@ class H3SimpleStringTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::SUBTYPE, SubtypeNameValue::TYPE_1),
                 new DictionaryEntry(DictionaryKey::NAME, new TextStringValue('/F1')),
                 new DictionaryEntry(DictionaryKey::BASE_FONT, new TextStringValue('/Helvetica')),
-                new DictionaryEntry(DictionaryKey::ENCODING, new TextStringValue('/MacRomanEncoding')),
+                new DictionaryEntry(DictionaryKey::ENCODING, EncodingNameValue::MacRomanEncoding),
             ),
             $obj7?->getDictionary(),
         );
