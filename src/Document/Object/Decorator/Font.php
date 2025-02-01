@@ -38,7 +38,8 @@ class Font extends DecoratedObject {
         }
 
         if ($encodingType === ReferenceValue::class) {
-            return $this->getDictionary()->getObjectForReference($this->document, DictionaryKey::ENCODING)->getDictionary()->getValueForKey(DictionaryKey::BASE_ENCODING, EncodingNameValue::class);
+            return ($this->getDictionary()->getObjectForReference($this->document, DictionaryKey::ENCODING) ?? throw new ParseFailureException('Unable to locate object for encoding dictionary'))
+                ->getDictionary()->getValueForKey(DictionaryKey::BASE_ENCODING, EncodingNameValue::class);
         }
 
         throw new ParseFailureException(sprintf('Unrecognized encoding type %s', $encodingType));

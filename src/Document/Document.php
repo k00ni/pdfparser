@@ -25,7 +25,7 @@ final class Document {
     /** @var list<Page> */
     private readonly array $pages;
 
-    /** @var array<int, DecoratedObject> */
+    /** @var array<int, DecoratedObject|null> */
     private array $objectCache = [];
 
     public function __construct(

@@ -99,7 +99,7 @@ class UncompressedObject implements ObjectItem {
             return implode(
                 '',
                 array_map(
-                    fn(string $char) => chr((int)hexdec($char)),
+                    fn (string $char) => chr((int)hexdec($char)),
                     str_split(
                         $decodedBytes,
                         2

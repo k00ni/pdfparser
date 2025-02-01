@@ -3,7 +3,6 @@
 namespace PrinsFrank\PdfParser\Document\CMap\ToUnicode;
 
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
-use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class ToUnicodeCMap {
     /** @var list<BFRange|BFChar> */
