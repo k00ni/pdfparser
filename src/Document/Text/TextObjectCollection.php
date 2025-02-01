@@ -25,11 +25,12 @@ class TextObjectCollection {
     public function getText(Document $document, Page $page, ?Font &$font): string {
         $text = '';
         foreach ($this->textObjects as $textObject) {
+            $textObjectText = '';
             foreach ($textObject->textOperators as $textOperator) {
                 if ($textOperator->operator instanceof TextPositioningOperator) {
-                    $text .= $textOperator->operator->display($textOperator->operands);
+                    $textObjectText .= $textOperator->operator->display($textOperator->operands);
                 } elseif ($textOperator->operator instanceof TextShowingOperator) {
-                    $text .= $textOperator->operator->displayOperands($textOperator->operands, $font);
+                    $textObjectText .= $textOperator->operator->displayOperands($textOperator->operands, $font);
                 } elseif ($textOperator->operator === TextStateOperator::FONT_SIZE) {
                     if (($fontDictionary = $page->getFontDictionary()) === null) {
                         throw new ParseFailureException('No font dictionary available');
@@ -38,6 +39,10 @@ class TextObjectCollection {
                     $font = $fontDictionary->getObjectForReference($document, $fontReference = $textOperator->operator->getFontReference($textOperator->operands), Font::class)
                         ?? throw new ParseFailureException(sprintf('Unable to locate font with reference "/%s"', $fontReference->value));
                 }
+            }
+
+            if (trim($textObjectText) !== '') {
+                $text .= ' ' . trim($textObjectText);
             }
         }
 
