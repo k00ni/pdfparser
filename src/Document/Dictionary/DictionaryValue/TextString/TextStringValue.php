@@ -18,7 +18,7 @@ class TextStringValue implements DictionaryValue {
             return substr($this->textStringValue, 1, -1);
         }
 
-        throw new ParseFailureException(sprintf('Unrecognize format %s', $this->textStringValue));
+        throw new ParseFailureException(sprintf('Unrecognized format %s', $this->textStringValue));
     }
 
     #[Override]
