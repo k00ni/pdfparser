@@ -9,7 +9,7 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class TextStringValue implements DictionaryValue {
     public function __construct(
-        protected readonly string $textStringValue
+        public readonly string $textStringValue
     ) {
     }
 

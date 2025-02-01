@@ -24,7 +24,7 @@ class Font extends DecoratedObject {
     public function getBaseFont(): ?string {
         return $this->getDictionary()
             ->getValueForKey(DictionaryKey::BASE_FONT, TextStringValue::class)
-            ?->getText();
+            ?->textStringValue;
     }
 
     public function getEncoding(): ?EncodingNameValue {
