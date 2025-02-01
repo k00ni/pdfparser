@@ -22,9 +22,8 @@ class TextObjectCollection {
         $this->textObjects = $textObjects;
     }
 
-    public function getText(Document $document, Page $page): string {
+    public function getText(Document $document, Page $page, ?Font &$font): string {
         $text = '';
-        $font = null;
         foreach ($this->textObjects as $textObject) {
             foreach ($textObject->textOperators as $textOperator) {
                 if ($textOperator->operator instanceof TextPositioningOperator) {

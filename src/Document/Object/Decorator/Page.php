@@ -13,8 +13,11 @@ use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 class Page extends DecoratedObject {
     public function getText(): string {
+        $font = null;
         return implode(' ', array_map(
-            fn (TextObjectCollection $textObjectCollection) => $textObjectCollection->getText($this->document, $this),
+            function (TextObjectCollection $textObjectCollection) use (&$font) {
+                return $textObjectCollection->getText($this->document, $this, $font);
+            },
             $this->getTextObjectCollections(),
         ));
     }
