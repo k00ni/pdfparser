@@ -51,6 +51,6 @@ class CompressedObjectByteOffsetParser {
             $buffer->addChar($decodedChar);
         }
 
-        return new CompressedObjectByteOffsets($byteOffsets, $eolPos);
+        return new CompressedObjectByteOffsets($byteOffsets);
     }
 }

@@ -9,6 +9,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
 use PrinsFrank\PdfParser\Document\Object\Item\ObjectItem;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
+use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 use PrinsFrank\PdfParser\Stream;
 
@@ -19,8 +20,11 @@ class CompressedObject implements ObjectItem {
         public readonly int $objectNumber,
         public readonly UncompressedObject $storedInObject,
         public readonly int $startByteOffsetInDecodedStream,
-        public readonly int $endByteOffsetInDecodedStream,
+        public readonly ?int $endByteOffsetInDecodedStream,
     ) {
+        if ($this->endByteOffsetInDecodedStream !== null && $this->startByteOffsetInDecodedStream > $this->endByteOffsetInDecodedStream) {
+            throw new InvalidArgumentException(sprintf('Start offset %d should be before end offset %d', $this->startByteOffsetInDecodedStream, $this->endByteOffsetInDecodedStream));
+        }
     }
 
     #[Override]
@@ -36,7 +40,7 @@ class CompressedObject implements ObjectItem {
             substr(
                 $this->storedInObject->getStreamContent($stream),
                 $first->value + $this->startByteOffsetInDecodedStream,
-                $this->endByteOffsetInDecodedStream - $this->startByteOffsetInDecodedStream
+                $this->endByteOffsetInDecodedStream !== null ? $this->endByteOffsetInDecodedStream - $this->startByteOffsetInDecodedStream : null
             )
         );
 
