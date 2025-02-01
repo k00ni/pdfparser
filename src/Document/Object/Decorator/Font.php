@@ -117,7 +117,11 @@ class Font extends DecoratedObject {
             }
         }
 
-        throw new ParseFailureException('No ToUnicodeCMap available for this font');
+        if (($encoding = $this->getEncoding()) !== null) {
+            return $encoding->decodeString(implode('', array_map(fn (string $character) => chr((int) hexdec($character)), str_split($characterGroup, 2))));
+        }
+
+        throw new ParseFailureException('No ToUnicodeCMap or encoding information available for this font');
     }
 
     #[Override]
