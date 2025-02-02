@@ -23,10 +23,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PHP_VERSION: '8.3'
-      PHP_VERSIONS: '["8.2", "8.3", "8.4"]'
     strategy:
       matrix:
-        php-version: ${{ fromJSON(env.PHP_VERSIONS) }}
+        php-version: ["8.2", "8.3", "8.4"]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
