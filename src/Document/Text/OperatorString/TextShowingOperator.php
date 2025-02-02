@@ -30,7 +30,8 @@ enum TextShowingOperator: string {
         foreach ($matches as $match) {
             if (str_starts_with($match['chars'], '(') && str_ends_with($match['chars'], ')')) {
                 $chars = str_replace(['\(', '\)', '\n', '\r'], ['(', ')', "\n", "\r"], substr($match['chars'], 1, -1));
-                $chars = preg_replace_callback('/\\\\([0-7]{3})/', fn (array $matches) => mb_chr(octdec($matches[1])), $chars);
+                $chars = preg_replace_callback('/\\\\([0-7]{3})/', fn (array $matches) => mb_chr((int) octdec($matches[1])), $chars)
+                    ?? throw new ParseFailureException();
                 if ($font !== null && ($encoding = $font->getEncoding()) !== null) {
                     $chars = $encoding->decodeString($chars);
                 }
