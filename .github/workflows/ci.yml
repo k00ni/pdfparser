@@ -26,7 +26,7 @@ jobs:
       PHP_VERSIONS: '["8.2", "8.3", "8.4"]'
     strategy:
       matrix:
-        php-version: ${{ fromJSON(inputs.PHP_VERSIONS) }}
+        php-version: ${{ fromJSON(env.PHP_VERSIONS) }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
