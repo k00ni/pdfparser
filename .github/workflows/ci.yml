@@ -17,3 +17,25 @@ jobs:
       PHP_VERSION: '8.3'
       PHP_VERSIONS: '["8.2", "8.3", "8.4"]'
     secrets: inherit
+
+  feature:
+    name: PHP Tests - Feature
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: ${{ fromJSON(inputs.PHP_VERSIONS) }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: none
+
+      - name: Install dependencies
+        uses: ramsey/composer-install@v3
+
+      - name: Run Feature tests
+        run: composer run feature
