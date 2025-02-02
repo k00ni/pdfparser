@@ -29,7 +29,7 @@ class CompressedObjectByteOffsetParser {
         $previousObjectNumber = null;
         $byteOffsets = [];
         foreach (str_split(substr($content, 0, $first->value * 2), 2) as $char) {
-            $decodedChar = chr((int) hexdec($char));
+            $decodedChar = mb_chr((int) hexdec($char));
             if (WhitespaceCharacter::tryFrom($decodedChar) !== null) {
                 $numberInBuffer = $buffer->__toString();
                 if ($numberInBuffer !== (string)(int) $numberInBuffer) {

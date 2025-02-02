@@ -20,10 +20,10 @@ class BFRange {
 
     public function toUnicode(int $characterCode): ?string {
         if (count($this->destinationString) === 1) {
-            return chr($this->destinationString[0] + $characterCode - $this->sourceCodeStart);
+            return mb_chr($this->destinationString[0] + $characterCode - $this->sourceCodeStart);
         }
 
-        return chr(
+        return mb_chr(
             $this->destinationString[$characterCode - $this->sourceCodeStart]
                 ?? throw new RuntimeException(sprintf('Character code %d was not found in BFRange of length %d with start %d and end %d', $characterCode, count($this->destinationString), $this->sourceCodeStart, $this->sourceCodeEnd))
         );

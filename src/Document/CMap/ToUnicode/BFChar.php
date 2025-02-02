@@ -24,7 +24,7 @@ class BFChar {
         $hexString = dechex($this->destinationString);
         $hexString = str_pad($hexString, (int) ceil(strlen($hexString) / 4) * 4, '0', STR_PAD_LEFT);
         foreach (str_split($hexString, 4) as $char) {
-            $string .= chr((int) hexdec($char));
+            $string .= mb_chr((int) hexdec($char));
         }
 
         return $string;
