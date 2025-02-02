@@ -21,6 +21,9 @@ jobs:
   feature:
     name: PHP Tests - Feature
     runs-on: ubuntu-latest
+    env:
+      PHP_VERSION: '8.3'
+      PHP_VERSIONS: '["8.2", "8.3", "8.4"]'
     strategy:
       matrix:
         php-version: ${{ fromJSON(inputs.PHP_VERSIONS) }}
