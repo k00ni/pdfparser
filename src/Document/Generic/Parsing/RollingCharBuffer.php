@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace PrinsFrank\PdfParser\Document\Generic\Parsing;
 
 use BackedEnum;
-use InvalidArgumentException;
 use PrinsFrank\PdfParser\Exception\BufferTooSmallException;
+use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 
 class RollingCharBuffer {
     /** @var int<1, max> $length */
@@ -52,10 +52,18 @@ class RollingCharBuffer {
         return $this->buffer[($this->currentIndex - $nAgo) % $this->length] ?? null;
     }
 
-    /** @throws BufferTooSmallException */
+    /**
+     * @throws BufferTooSmallException
+     *
+     * @phpstan-assert non-empty-string $string
+     */
     public function seenString(string $string): bool {
+        if (strlen($string) === 0) {
+            throw new InvalidArgumentException('Cannot assert if non empty string has been encountered');
+        }
+
         if (strlen($string) > $this->length) {
-            throw new BufferTooSmallException(sprintf('Buffer length of %d configured, but enum with length %d requested', $this->length, strlen($string)));
+            throw new BufferTooSmallException(sprintf('Buffer length of %d configured, but value with length %d requested', $this->length, strlen($string)));
         }
 
         foreach (array_reverse(str_split($string)) as $index => $char) {

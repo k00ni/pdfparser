@@ -7,6 +7,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Document\Generic\Parsing\RollingCharBuffer;
+use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 
 #[CoversClass(RollingCharBuffer::class)]
 class RollingCharBufferTest extends TestCase {
@@ -43,5 +44,22 @@ class RollingCharBufferTest extends TestCase {
         static::assertFalse($charBuffer->seenBackedEnumValue(Marker::STREAM));
         $charBuffer->next('m');
         static::assertTrue($charBuffer->seenBackedEnumValue(Marker::STREAM));
+    }
+
+    public function testSeenStringThrowsExceptionWithEmptyString(): void {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Cannot assert if non empty string has been encountered');
+        static::assertFalse((new RollingCharBuffer(3))->seenString(''));
+    }
+
+    public function testSeenString(): void {
+        $buffer = new RollingCharBuffer(2);
+        static::assertFalse($buffer->seenString('a'));
+        $buffer->next('a');
+        static::assertTrue($buffer->seenString('a'));
+        static::assertFalse($buffer->seenString('b'));
+        $buffer->next('b');
+        static::assertFalse($buffer->seenString('a'));
+        static::assertTrue($buffer->seenString('b'));
     }
 }
