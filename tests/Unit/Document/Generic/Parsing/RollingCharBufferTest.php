@@ -61,5 +61,28 @@ class RollingCharBufferTest extends TestCase {
         $buffer->next('b');
         static::assertFalse($buffer->seenString('a'));
         static::assertTrue($buffer->seenString('b'));
+        static::assertTrue($buffer->seenString('ab'));
+        static::assertFalse($buffer->seenString('ba'));
+
+        $buffer = new RollingCharBuffer(strlen('startxref'));
+        static::assertFalse($buffer->seenString('startxref'));
+        $buffer->next('s');
+        static::assertFalse($buffer->seenString('startxref'));
+        $buffer->next('t');
+        static::assertFalse($buffer->seenString('startxref'));
+        $buffer->next('a');
+        static::assertFalse($buffer->seenString('startxref'));
+        $buffer->next('r');
+        static::assertFalse($buffer->seenString('startxref'));
+        $buffer->next('t');
+        static::assertFalse($buffer->seenString('startxref'));
+        $buffer->next('x');
+        static::assertFalse($buffer->seenString('startxref'));
+        $buffer->next('r');
+        static::assertFalse($buffer->seenString('startxref'));
+        $buffer->next('e');
+        static::assertFalse($buffer->seenString('startxref'));
+        $buffer->next('f');
+        static::assertTrue($buffer->seenString('startxref'));
     }
 }

@@ -66,8 +66,9 @@ class RollingCharBuffer {
             throw new BufferTooSmallException(sprintf('Buffer length of %d configured, but value with length %d requested', $this->length, strlen($string)));
         }
 
-        foreach (array_reverse(str_split($string)) as $index => $char) {
-            $previousChar = $this->getPreviousCharacter($index);
+        $strlen = strlen($string);
+        foreach (str_split($string) as $index => $char) {
+            $previousChar = $this->getPreviousCharacter($strlen - $index - 1);
             if ($previousChar !== $char) {
                 return false;
             }
