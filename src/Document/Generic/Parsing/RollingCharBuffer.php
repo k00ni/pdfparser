@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Generic\Parsing;
 
-use BackedEnum;
 use PrinsFrank\PdfParser\Exception\BufferTooSmallException;
 use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 
+/** @deprecated */
 class RollingCharBuffer {
     /** @var int<1, max> $length */
     private int $length;
@@ -58,15 +58,15 @@ class RollingCharBuffer {
      * @phpstan-assert non-empty-string $string
      */
     public function seenString(string $string): bool {
-        if (strlen($string) === 0) {
+        $strlen = strlen($string);
+        if ($strlen === 0) {
             throw new InvalidArgumentException('Cannot assert if non empty string has been encountered');
         }
 
-        if (strlen($string) > $this->length) {
+        if ($strlen > $this->length) {
             throw new BufferTooSmallException(sprintf('Buffer length of %d configured, but value with length %d requested', $this->length, strlen($string)));
         }
 
-        $strlen = strlen($string);
         foreach (str_split($string) as $index => $char) {
             $previousChar = $this->getPreviousCharacter($strlen - $index - 1);
             if ($previousChar !== $char) {
@@ -91,29 +91,5 @@ class RollingCharBuffer {
         }
 
         return true;
-    }
-
-    /** @throws BufferTooSmallException */
-    public function seenBackedEnumValue(BackedEnum $backedEnum): bool {
-        return $this->seenString((string) $backedEnum->value);
-    }
-
-    /**
-     * @template T of \BackedEnum
-     * @param class-string<T> ...$enumClasses
-     * @return T|null
-     *
-     * @no-named-arguments
-     */
-    public function getBackedEnumValue(string... $enumClasses): ?BackedEnum {
-        foreach ($enumClasses as $enumClass) {
-            foreach ($enumClass::cases() as $case) {
-                if ($this->seenBackedEnumValue($case)) {
-                    return $case;
-                }
-            }
-        }
-
-        return null;
     }
 }

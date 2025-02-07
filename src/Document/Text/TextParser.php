@@ -3,81 +3,62 @@ declare(strict_types=1);
 
 namespace PrinsFrank\PdfParser\Document\Text;
 
-use PrinsFrank\PdfParser\Document\Generic\Operator\MarkedContentOperator;
-use PrinsFrank\PdfParser\Document\Generic\Parsing\InfiniteBuffer;
-use PrinsFrank\PdfParser\Document\Generic\Parsing\RollingCharBuffer;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\ColorOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\GraphicsStateOperator;
-use PrinsFrank\PdfParser\Document\Text\OperatorString\TextObjectOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextPositioningOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextShowingOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextStateOperator;
 
 class TextParser {
     public static function parse(string $text): TextObjectCollection {
-        $operatorBuffer = new RollingCharBuffer(4);
-        $textObject = null;
-        $operandBuffer = new InfiniteBuffer();
+        $operandBuffer = '';
         $textObjects = [];
         $inValue = false;
-        $previousChar = null;
-        foreach (str_split($text) as $char) {
-            $operandBuffer->addChar($char);
-            $operatorBuffer->next($char);
+        $textObject = $previousChar = $secondToLastChar = $thirdToLastChar = null;
+        foreach (mb_str_split($text) as $char) {
+            $operandBuffer .= $char;
             if (in_array($char, ['[', '<', '('], true) && $previousChar !== '\\') {
                 $inValue = true;
-                $previousChar = $char;
-                continue;
-            }
-
-            if ($inValue && in_array($char, [']', '>', ')'], true) && $previousChar !== '\\') {
-                $inValue = false;
-                $previousChar = $char;
-                continue;
-            }
-
-            if ($inValue) {
-                $previousChar = $char;
-                continue;
-            }
-
-            if ($operatorBuffer->seenBackedEnumValue(TextObjectOperator::BEGIN)) {
-                $operandBuffer->flush();
+            } elseif ($inValue) {
+                if (in_array($char, [']', '>', ')'], true) && $previousChar !== '\\') {
+                    $inValue = false;
+                }
+            } elseif ($char === 'T' && $previousChar === 'B') { // TextObjectOperator::BEGIN
+                $operandBuffer = '';
                 $textObject = new TextObject();
                 $textObjects[] = $textObject;
-                $previousChar = $char;
-                continue;
-            }
-
-            if ($operatorBuffer->seenBackedEnumValue(TextObjectOperator::END)) {
-                $operandBuffer->flush();
+            } elseif ($char === 'T' && $previousChar === 'E') { // TextObjectOperator::END
+                $operandBuffer = '';
                 $textObject = null;
-                $previousChar = $char;
-                continue;
+            } elseif ($char === 'C'
+                && (($secondToLastChar === 'B' && ($previousChar === 'M' || $previousChar === 'D')) || ($secondToLastChar === 'E' && $previousChar === 'M'))) { // MarkedContentOperator::BeginMarkedContent, MarkedContentOperator::EndMarkedContent, MarkedContentOperator::BeginMarkedContentWithProperties
+                $operandBuffer = '';
+            } elseif ($textObject !== null && ($operator = self::getOperator($char, $previousChar, $secondToLastChar, $thirdToLastChar)) !== null) {
+                $textObject->addTextOperator(new TextOperator($operator, trim(substr($operandBuffer, 0, -strlen($operator->value)))));
+                $operandBuffer = '';
             }
 
-            if ($operatorBuffer->seenBackedEnumValue(MarkedContentOperator::BeginMarkedContent)
-                || $operatorBuffer->seenBackedEnumValue(MarkedContentOperator::BeginMarkedContentWithProperties)
-                || $operatorBuffer->seenBackedEnumValue(MarkedContentOperator::EndMarkedContent)) {
-                $operandBuffer->flush();
-                $previousChar = $char;
-                continue;
-            }
-
-            if ($textObject === null) {
-                $previousChar = $char;
-                continue;
-            }
-
-            $operator = $operatorBuffer->getBackedEnumValue(TextPositioningOperator::class, TextShowingOperator::class, TextStateOperator::class, GraphicsStateOperator::class, ColorOperator::class);
-            if (($operator instanceof TextPositioningOperator || $operator instanceof TextShowingOperator || $operator instanceof TextStateOperator || $operator instanceof GraphicsStateOperator || $operator instanceof ColorOperator)
-                && !$operatorBuffer->seenString('/' . $operator->value)) {
-                $textObject->addTextOperator(new TextOperator($operator, trim($operandBuffer->removeChar(strlen($operator->value))->__toString())));
-                $operandBuffer->flush();
-                $previousChar = $char;
-            }
+            $thirdToLastChar = $secondToLastChar;
+            $secondToLastChar = $previousChar;
+            $previousChar = $char;
         }
 
         return new TextObjectCollection(...$textObjects);
+    }
+
+    private static function getOperator(string $currentChar, ?string $previousChar, ?string $secondToLastChar, ?string $thirdToLastChar): TextPositioningOperator|TextShowingOperator|TextStateOperator|GraphicsStateOperator|ColorOperator|null {
+        foreach ([TextPositioningOperator::class, TextShowingOperator::class, TextStateOperator::class, GraphicsStateOperator::class, ColorOperator::class] as $enumClass) {
+            if (($case = $enumClass::tryFrom($secondToLastChar . $previousChar . $currentChar)) !== null && $thirdToLastChar !== '\\') {
+                return $case;
+            }
+            if (($case = $enumClass::tryFrom($previousChar . $currentChar)) !== null && $secondToLastChar !== '\\') {
+                return $case;
+            }
+            if (($case = $enumClass::tryFrom($currentChar)) !== null && $previousChar !== '\\') {
+                return $case;
+            }
+        }
+
+        return null;
     }
 }
