@@ -15,7 +15,7 @@ use PrinsFrank\PdfParser\Document\Text\TextObject;
 use PrinsFrank\PdfParser\Document\Text\TextObjectCollection;
 use PrinsFrank\PdfParser\Document\Text\TextOperator;
 use PrinsFrank\PdfParser\Document\Text\TextParser;
-use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
+use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 #[CoversClass(TextParser::class)]
 class TextParserTest extends TestCase {
@@ -47,7 +47,6 @@ class TextParserTest extends TestCase {
                 1 => TextParser::getOperator($enumCase->value, null, null, null),
                 2 => TextParser::getOperator(substr($enumCase->value, 1, 1), substr($enumCase->value, 0, 1), null, null),
                 3 => TextParser::getOperator(substr($enumCase->value, 2, 1), substr($enumCase->value, 1, 1), substr($enumCase->value, 0, 1), null),
-                default => throw new InvalidArgumentException('Currently not supported'),
             }
         );
     }
@@ -69,8 +68,6 @@ class TextParserTest extends TestCase {
                 match (strlen($enumCase->value)) {
                     1 => TextParser::getOperator($enumCase->value, '\\', null, null),
                     2 => TextParser::getOperator(substr($enumCase->value, 1, 1), substr($enumCase->value, 0, 1), '\\', null),
-                    3 => TextParser::getOperator(substr($enumCase->value, 2, 1), substr($enumCase->value, 1, 1), substr($enumCase->value, 0, 1), '\\'),
-                    default => throw new InvalidArgumentException('Currently not supported'),
                 }
             );
         } else {
@@ -79,17 +76,20 @@ class TextParserTest extends TestCase {
                     1 => TextParser::getOperator($enumCase->value, '\\', null, null),
                     2 => TextParser::getOperator(substr($enumCase->value, 1, 1), substr($enumCase->value, 0, 1), '\\', null),
                     3 => TextParser::getOperator(substr($enumCase->value, 2, 1), substr($enumCase->value, 1, 1), substr($enumCase->value, 0, 1), '\\'),
-                    default => throw new InvalidArgumentException('Currently not supported'),
                 }
             );
         }
     }
 
-    /** @return iterable<TextPositioningOperator|TextShowingOperator|TextStateOperator|GraphicsStateOperator|ColorOperator> */
+    /** @return iterable<string, array{0: TextPositioningOperator|TextShowingOperator|TextStateOperator|GraphicsStateOperator|ColorOperator}> */
     public static function provideTextOperators(): iterable {
         foreach ([TextPositioningOperator::class, TextShowingOperator::class, TextStateOperator::class, GraphicsStateOperator::class, ColorOperator::class] as $enumClass) {
             foreach ($enumClass::cases() as $enumCase) {
-                yield substr($enumClass, strrpos($enumClass, '\\') + 1) . '::' .  $enumCase->name => [$enumCase];
+                if (($lastNamespacePos = strrpos($enumClass, '\\')) === false) {
+                    throw new RuntimeException();
+                }
+
+                yield substr($enumClass, $lastNamespacePos + 1) . '::' . $enumCase->name => [$enumCase];
             }
         }
     }
