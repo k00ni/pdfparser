@@ -46,7 +46,7 @@ class TextParser {
         return new TextObjectCollection(...$textObjects);
     }
 
-    private static function getOperator(string $currentChar, ?string $previousChar, ?string $secondToLastChar, ?string $thirdToLastChar): TextPositioningOperator|TextShowingOperator|TextStateOperator|GraphicsStateOperator|ColorOperator|null {
+    public static function getOperator(string $currentChar, ?string $previousChar, ?string $secondToLastChar, ?string $thirdToLastChar): TextPositioningOperator|TextShowingOperator|TextStateOperator|GraphicsStateOperator|ColorOperator|null {
         foreach ([TextPositioningOperator::class, TextShowingOperator::class, TextStateOperator::class, GraphicsStateOperator::class, ColorOperator::class] as $enumClass) {
             if (($case = $enumClass::tryFrom($secondToLastChar . $previousChar . $currentChar)) !== null && $thirdToLastChar !== '\\') {
                 return $case;
