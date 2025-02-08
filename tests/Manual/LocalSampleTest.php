@@ -23,7 +23,7 @@ class LocalSampleTest extends TestCase {
     public static function samples(): iterable {
         $files = scandir($folder = __DIR__ . '/private-samples');
         if ($files === false) {
-            throw new RuntimeException('Unable to retrieve files from samples-extra directory');
+            throw new RuntimeException('Unable to retrieve files from private-samples directory');
         }
 
         foreach ($files as $filePath) {
