@@ -33,7 +33,7 @@ To open a PDF file, you'll first need to load it and retrieve a `Document` objec
 
 ### Parsing a PDF file
 
-Parsing a PDF from a file directly is the easiest option and also uses the least amount of memory. To do so, simply call the `parseFile` method on a `PdfParser` instance:
+Parsing a PDF from a file directly is the easiest option. To do so, simply call the `parseFile` method on a `PdfParser` instance:
 
 ```php
 use PrinsFrank\PdfParser;
@@ -42,9 +42,11 @@ $document = (new PdfParser())
     ->parseFile(dirname(__DIR__, 3) . '/path/to/file.pdf');
 ```
 
+By default, this loads the file into memory while parsing. This greatly improves parsing speed, at the cost of a bigger memory footprint. If you want to reduce the base memory footprint and use a file handle instead, you can set the second parameter `useInMemoryStream` to `false`.
+
 ### Parsing PDF from string
 
-It is also possible to parse a PDF from a string in a variable. To do so, pass the string as an argument for the `parseFile` method on a `PdfParser` instance. This has a bigger memory footprint while loading the file into memory, but the file will be written to a temp file while processing.
+It is also possible to parse a PDF from a string in a variable. To do so, pass the string as an argument for the `parseFile` method on a `PdfParser` instance.
 
 ```php
 use PrinsFrank\PdfParser;
@@ -55,12 +57,14 @@ $document = (new PdfParser())
     ->parseString($pdfAsString);
 ```
 
+If you want to decrease the average memory footprint, you can also do so here, by setting the `useFileCache` parameter to `true`. This will result in the file content being written to a temporary file and the parser using the handle to that file from then on. This will be at the cost of speed.
+
 ## The `Document`
 
 Once you have opened a file from the filesystem with `parseFile` or from a string variable using `parseString`, you'll get back an instance of a `Document`.
 
 While initially parsing the document, a small number of variables are populated in the `Document` instance that allow for further accessing of that document. This includes:
-- The public `$stream` property: a PHP stream handle to the file on the filesystem, or - if a string is supplied - a handle to a temporary file.
+- The public `$stream` property: a PHP stream handle to the file in memory or on the filesystem.
 - The public `$version` property: Information about the PDF version of the file.
 - the public `$crossReferenceSource` property: A parsed crossReference table or stream, containing several crossReference(Sub)Sections that contain information about objects stored in the document and where to find them.
 - The private `$pages` property to cache any pages that have already been retrieved. This property is only set when the pages are actually retrieved using the `getPages` method. (See below)
