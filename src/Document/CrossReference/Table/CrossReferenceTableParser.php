@@ -10,9 +10,11 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Generic\Character\WhitespaceCharacter;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
+use PrinsFrank\PdfParser\Exception\PdfParserException;
 use PrinsFrank\PdfParser\Stream\Stream;
 
 class CrossReferenceTableParser {
+    /** @throws PdfParserException */
     public static function parse(Stream $stream, int $startPos, int $nrOfBytes): CrossReferenceSection {
         $startTrailerPos = $stream->firstPos(Marker::TRAILER, $startPos, $startPos + $nrOfBytes)
             ?? throw new ParseFailureException('Unable to locate trailer for crossReferenceTable');
@@ -37,9 +39,10 @@ class CrossReferenceTableParser {
                     $nrOfEntries = (int) $sections[1];
                     break;
                 case 3:
-                    $crossReferenceEntries[] = match (CrossReferenceTableInUseOrFree::from(trim($sections[2]))) {
+                    $crossReferenceEntries[] = match (CrossReferenceTableInUseOrFree::tryFrom(trim($sections[2]))) {
                         CrossReferenceTableInUseOrFree::IN_USE => new CrossReferenceEntryInUseObject((int) $sections[0], (int) $sections[1]),
                         CrossReferenceTableInUseOrFree::FREE => new CrossReferenceEntryFreeObject((int) $sections[0], (int) $sections[1]),
+                        null => throw new ParseFailureException(sprintf('Unrecognized crossReference table record type %s', trim($sections[2])))
                     };
                     break;
                 default:
