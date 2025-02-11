@@ -1,6 +1,6 @@
 {
     "name": "prinsfrank/pdfparser",
-    "description": "A low-memory, fast and maintainable conforming pdfparser to read PDF files",
+    "description": "maintainable, fast & low-memory; built from scratch ",
     "type": "library",
     "license": "MIT",
     "autoload": {
