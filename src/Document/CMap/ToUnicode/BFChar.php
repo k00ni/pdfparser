@@ -19,7 +19,7 @@ class BFChar {
     /** @throws ParseFailureException */
     public function toUnicode(int $characterCode): ?string {
         if ($characterCode !== $this->sourceCode) {
-            throw new ParseFailureException();
+            throw new ParseFailureException(sprintf('This BFChar does not contain character code %d', $characterCode));
         }
 
         $string = '';

@@ -29,7 +29,7 @@ class RollingCharBuffer {
     /** @phpstan-assert int<1, max> $length */
     public function __construct(int $length) {
         if ($length < 1) {
-            throw new InvalidArgumentException('A negative or zero buffer length doesn\'t make sense, "' . $length . '" provided');
+            throw new InvalidArgumentException(sprintf('A negative or zero buffer length doesn\'t make sense, %d provided', $length));
         }
 
         $this->length = $length;

@@ -11,7 +11,7 @@ class WinAnsi implements Encoding {
     public static function textToUnicode(string $string): string {
         $string = iconv(
             'Windows-1252',
-            'UTF-8//IGNORE',
+            'UTF-8//TRANSLIT',
             $string
         );
 

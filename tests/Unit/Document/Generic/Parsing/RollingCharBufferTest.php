@@ -10,6 +10,12 @@ use PrinsFrank\PdfParser\Exception\InvalidArgumentException;
 
 #[CoversClass(RollingCharBuffer::class)]
 class RollingCharBufferTest extends TestCase {
+    public function testThrowsExceptionWhenZeroLengthBuffer(): void {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('A negative or zero buffer length doesn\'t make sense, 0 provided');
+        new RollingCharBuffer(0);
+    }
+
     public function testGetPreviousCharacter(): void {
         $charBuffer = new RollingCharBuffer(3);
         $charBuffer->next('a');
