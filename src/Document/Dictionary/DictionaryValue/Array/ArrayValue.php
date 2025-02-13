@@ -37,7 +37,7 @@ class ArrayValue implements DictionaryValue {
                 $array[] = self::fromValue($value);
             } elseif ((string) (int) $value === $value) {
                 $array[] = (int) $value;
-            } else {
+            } elseif ($value !== '') {
                 $array[] = $value;
             }
         }
