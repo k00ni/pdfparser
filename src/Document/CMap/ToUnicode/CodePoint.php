@@ -12,25 +12,6 @@ class CodePoint {
             throw new InvalidArgumentException(sprintf('Expected hex string, got "%s"', $hexString));
         }
 
-        if (strlen($hexString) <= 4 && ($codepoint = (int) hexdec($hexString)) < 0xFFFF) { // BMP
-            if (($char = mb_chr($codepoint)) === false) {
-                throw new ParseFailureException();
-            }
-
-            return $char;
-        }
-
-        if (($highSurrogate = ($codepoint = hexdec($hexString) >> 16) & 0xFFFF) >= 0xD800
-            && $highSurrogate <= 0xDBFF
-            && ($lowSurrogate = $codepoint & 0xFFFF) >= 0xDC00
-            && $lowSurrogate <= 0xDFFF) {
-            if (($char = mb_chr((($highSurrogate - 0xD800) << 10) + ($lowSurrogate - 0xDC00) + 0x10000)) === false) {
-                throw new ParseFailureException();
-            }
-
-            return $char;
-        }
-
         $chars = [];
         for ($i = 0; $i < strlen($hexString);) {
             if (($highSurrogate = (($surrogateCodePoint = (int) hexdec(substr($hexString, $i, 8))) >> 16) & 0xFFFF) >= 0xD800
