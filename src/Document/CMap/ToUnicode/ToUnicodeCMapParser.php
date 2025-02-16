@@ -30,12 +30,12 @@ class ToUnicodeCMapParser {
             $beginBFCharPos += strlen(ToUnicodeCMapOperator::BeginBFChar->value);
             $endBFCharPos = $stream->firstPos(ToUnicodeCMapOperator::EndBFChar, $beginBFCharPos, $startOffset + $nrOfBytes)
                 ?? throw new ParseFailureException();
-            if (preg_match_all('/\s*<(?P<start>[^>]+)>\s*<(?P<end>[^>]+)>\s*/', $stream->read($beginBFCharPos, $endBFCharPos - $beginBFCharPos), $matchesBFChar, PREG_SET_ORDER) === 0) {
+            if (preg_match_all('/\s*<(?P<source>[^>]+)>\s*<(?P<destination>[^>]+)>\s*/', $stream->read($beginBFCharPos, $endBFCharPos - $beginBFCharPos), $matchesBFChar, PREG_SET_ORDER) === 0) {
                 throw new ParseFailureException('Unrecognized bfchar format');
             }
 
             foreach ($matchesBFChar as $matchBFChar) {
-                $bfCharRangeInfo[$beginBFCharPos][] = new BFChar((int) hexdec(trim($matchBFChar['start'])), trim($matchBFChar['end']));
+                $bfCharRangeInfo[$beginBFCharPos][] = new BFChar((int) hexdec(trim($matchBFChar['source'])), trim($matchBFChar['destination']));
             }
             $lastPos = $endBFCharPos;
         }
