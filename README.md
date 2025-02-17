@@ -11,7 +11,7 @@
 [![PHPStan Level](https://img.shields.io/badge/PHPStan-level%2010-brightgreen.svg?style=flat)](https://github.com/PrinsFrank/pdfparser/blob/main/phpstan.neon)
 [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/PrinsFrank)
 
-A low-memory, fast and maintainable conforming PDF Parser
+Maintainable, fast & low-memory; built from scratch
 
 ## Why this library?
 
