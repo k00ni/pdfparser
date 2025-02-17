@@ -35,6 +35,10 @@ composer require prinsfrank/pdfparser
     <p>This needs to point to the <code>.al-custom.php</code> file in the directory that the contents of this package is in.</p>
 </details>
 
+## Support
+
+This is one of my biggest projects I've ever worked on, and over the past few months I spent hundreds of hours working on this. Please consider [Sponsoring me on GitHub](https://github.com/sponsors/PrinsFrank) to support this project. Thanks!!
+
 ## Opening a PDF
 
 To open a PDF file, you'll first need to load it and retrieve a `Document` object. That can be done by either parsing a file directly, or parsing a PDF from a string variable.
