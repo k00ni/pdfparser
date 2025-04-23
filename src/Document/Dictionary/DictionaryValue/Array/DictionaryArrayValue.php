@@ -19,7 +19,7 @@ class DictionaryArrayValue implements DictionaryValue {
 
     #[Override]
     /** @throws PdfParserException */
-    public static function fromValue(string $valueString): null|self {
+    public static function fromValue(string $valueString): ?self {
         if (!str_starts_with($valueString, '[') || !str_ends_with($valueString, ']')) {
             return null;
         }
