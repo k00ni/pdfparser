@@ -1026,7 +1026,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::ORDERING => [TextStringValue::class],
             self::OS => [ArrayValue::class, IntegerValue::class, FloatValue::class],
             self::OUTLINES => [Dictionary::class],
-            self::OUTPUT_INTENTS => [DictionaryArrayValue::class],
+            self::OUTPUT_INTENTS => [ReferenceValue::class, DictionaryArrayValue::class],
             self::OVERLAY_TEXT => [TextStringValue::class],
             self::P => [IntegerValue::class, TextStringValue::class, VisibilityPolicyNameValue::class, Dictionary::class, BooleanValue::class, ArrayValue::class, DictionaryArrayValue::class],
             self::PA => [Dictionary::class],
