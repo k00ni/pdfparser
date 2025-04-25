@@ -60,4 +60,33 @@ class PdfParserTest extends TestCase {
         $this->expectExceptionMessage('Failed to open file at path "oeuoeu"');
         (new PdfParser())->parseFile('oeuoeu');
     }
+
+    /**
+      * @see https://github.com/PrinsFrank/pdfparser/issues/40
+      */
+      public function testIssue40(): void {
+        /*
+         * Running the following code should lead to the exception:
+         *
+         *      TypeError: array_slice(): Argument #3 ($length) must be of type ?int, string given
+         *
+         * Stack trace:
+         *
+         * 1) PrinsFrank\PdfParser\Tests\Unit\PdfParserTest::testIssue40
+         *
+         * /var/www/html/src/Document/CrossReference/Stream/CrossReferenceStreamParser.php:73
+         * /var/www/html/src/Document/CrossReference/CrossReferenceSourceParser.php:48
+         * /var/www/html/src/PdfParser.php:22
+         * /var/www/html/src/PdfParser.php:42
+         * /var/www/html/tests/Unit/PdfParserTest.php:81
+         */
+
+        $parser = new PdfParser();
+        static::assertSame(
+            '',
+            $parser
+                ->parseFile(__DIR__ . '/mbl-2025-198.pdf')
+                ->getText(PHP_EOL)
+        );
+    }
 }
