@@ -791,7 +791,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::DIGEST_METHOD => [ArrayValue::class, TextStringValue::class],
             self::DIRECTION => [DirectionNameValue::class],
             self::DIS => [TextStringValue::class],
-            self::DISPLAY_DOC_TITLE => [BooleanValue::class],
+            self::DISPLAY_DOC_TITLE => [BooleanValue::class, ReferenceValue::class],
             self::DL => [IntegerValue::class],
             self::DM => [TextStringValue::class],
             self::DOC => [ArrayValue::class],
