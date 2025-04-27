@@ -8,15 +8,16 @@ use PrinsFrank\PdfParser\Document\Text\OperatorString\GraphicsStateOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextPositioningOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextShowingOperator;
 use PrinsFrank\PdfParser\Document\Text\OperatorString\TextStateOperator;
+use PrinsFrank\PdfParser\Exception\ParseFailureException;
 
 /** @internal */
 class ContentStreamParser {
+    /** @throws ParseFailureException */
     public static function parse(string $contentStream): ContentStream {
         $operandBuffer = '';
-        $textObjects = [];
-        $textObject = new TextObject();
+        $content = [];
         $inArrayLevel = $inStringLevel = $inStringLiteralLevel = 0;
-        $previousChar = $secondToLastChar = $thirdToLastChar = null;
+        $textObject = $previousChar = $secondToLastChar = $thirdToLastChar = null;
         foreach (mb_str_split($contentStream) as $char) {
             $operandBuffer .= $char;
             if ($char === '[' && $previousChar !== '\\') {
@@ -36,15 +37,24 @@ class ContentStreamParser {
             } elseif ($char === 'T' && $previousChar === 'B') { // TextObjectOperator::BEGIN
                 $operandBuffer = '';
                 $textObject = new TextObject();
-                $textObjects[] = $textObject;
             } elseif ($char === 'T' && $previousChar === 'E') { // TextObjectOperator::END
                 $operandBuffer = '';
-                $textObject = new TextObject();
+                if ($textObject === null) {
+                    throw new ParseFailureException('Encountered TextObjectOperator::END without preceding TextObjectOperator::BEGIN');
+                }
+
+                $content[] = $textObject;
+                $textObject = null;
             } elseif ($char === 'C'
                 && (($secondToLastChar === 'B' && ($previousChar === 'M' || $previousChar === 'D')) || ($secondToLastChar === 'E' && $previousChar === 'M'))) { // MarkedContentOperator::BeginMarkedContent, MarkedContentOperator::EndMarkedContent, MarkedContentOperator::BeginMarkedContentWithProperties
                 $operandBuffer = '';
             } elseif (($operator = self::getOperator($char, $previousChar, $secondToLastChar, $thirdToLastChar)) !== null) {
-                $textObject->addContentStreamCommand(new ContentStreamCommand($operator, trim(substr($operandBuffer, 0, -strlen($operator->value)))));
+                $command = new ContentStreamCommand($operator, trim(substr($operandBuffer, 0, -strlen($operator->value))));
+                if ($textObject !== null) {
+                    $textObject->addContentStreamCommand($command);
+                } else {
+                    $content[] = $command;
+                }
                 $operandBuffer = '';
             }
 
@@ -53,9 +63,7 @@ class ContentStreamParser {
             $previousChar = $char;
         }
 
-        return new ContentStream(
-            ...array_filter($textObjects, fn (TextObject $textObject) => $textObject->isEmpty() === false)
-        );
+        return new ContentStream(...$content);
     }
 
     /**
