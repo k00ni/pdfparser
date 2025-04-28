@@ -7,11 +7,16 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\ContentStreamCommand;
+use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\ClippingPathOperator;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\ColorOperator;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\GraphicsStateOperator;
+use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\PathConstructionOperator;
+use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\PathPaintingOperator;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\TextPositioningOperator;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\TextShowingOperator;
 use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\TextStateOperator;
+use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\Type3FontOperator;
+use PrinsFrank\PdfParser\Document\ContentStream\Command\Operator\State\XObjectOperator;
 use PrinsFrank\PdfParser\Document\ContentStream\ContentStream;
 use PrinsFrank\PdfParser\Document\ContentStream\ContentStreamParser;
 use PrinsFrank\PdfParser\Document\ContentStream\Object\TextObject;
@@ -39,8 +44,8 @@ class ContentStreamParserTest extends TestCase {
         );
     }
 
-    #[DataProvider('provideTextOperators')]
-    public function testGetOperator(TextPositioningOperator|TextShowingOperator|TextStateOperator|GraphicsStateOperator|ColorOperator $enumCase): void {
+    #[DataProvider('provideOperators')]
+    public function testGetOperator(ClippingPathOperator|ColorOperator|GraphicsStateOperator|PathConstructionOperator|PathPaintingOperator|TextPositioningOperator|TextShowingOperator|TextStateOperator|Type3FontOperator|XObjectOperator $enumCase): void {
         static::assertSame(
             $enumCase,
             match (strlen($enumCase->value)) {
@@ -51,8 +56,8 @@ class ContentStreamParserTest extends TestCase {
         );
     }
 
-    #[DataProvider('provideTextOperators')]
-    public function testGetOperatorWithLeadingEscapeValue(TextPositioningOperator|TextShowingOperator|TextStateOperator|GraphicsStateOperator|ColorOperator $enumCase): void {
+    #[DataProvider('provideOperators')]
+    public function testGetOperatorWithLeadingEscapeValue(ClippingPathOperator|ColorOperator|GraphicsStateOperator|PathConstructionOperator|PathPaintingOperator|TextPositioningOperator|TextShowingOperator|TextStateOperator|Type3FontOperator|XObjectOperator $enumCase): void {
         if (in_array($enumCase, [TextPositioningOperator::MOVE_OFFSET, TextShowingOperator::SHOW, TextShowingOperator::SHOW_ARRAY, TextStateOperator::WORD_SPACE, GraphicsStateOperator::SetIntent, ColorOperator::SetStrokingColorDeviceRGB, ColorOperator::SetColorDeviceRGB], true)) {
             // If a enum case matches, but there is an escape character in front, it will match partially a different enum case or none at all
             static::assertSame(
@@ -81,9 +86,9 @@ class ContentStreamParserTest extends TestCase {
         }
     }
 
-    /** @return iterable<string, array{0: TextPositioningOperator|TextShowingOperator|TextStateOperator|GraphicsStateOperator|ColorOperator}> */
-    public static function provideTextOperators(): iterable {
-        foreach ([TextPositioningOperator::class, TextShowingOperator::class, TextStateOperator::class, GraphicsStateOperator::class, ColorOperator::class] as $enumClass) {
+    /** @return iterable<string, array{0: ClippingPathOperator|ColorOperator|GraphicsStateOperator|PathConstructionOperator|PathPaintingOperator|TextPositioningOperator|TextShowingOperator|TextStateOperator|Type3FontOperator|XObjectOperator}> */
+    public static function provideOperators(): iterable {
+        foreach ([ClippingPathOperator::class, ColorOperator::class, GraphicsStateOperator::class, PathConstructionOperator::class, PathPaintingOperator::class, TextPositioningOperator::class, TextShowingOperator::class, TextStateOperator::class, Type3FontOperator::class, XObjectOperator::class] as $enumClass) {
             foreach ($enumClass::cases() as $enumCase) {
                 if (($lastNamespacePos = strrpos($enumClass, '\\')) === false) {
                     throw new RuntimeException();
