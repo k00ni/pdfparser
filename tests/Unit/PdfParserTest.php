@@ -60,4 +60,13 @@ class PdfParserTest extends TestCase {
         $this->expectExceptionMessage('Failed to open file at path "oeuoeu"');
         (new PdfParser())->parseFile('oeuoeu');
     }
+
+    public function testIssue80(): void {
+        (new PdfParser())
+            ->parseFile(
+                __DIR__.'/mbl-2025-33.pdf',
+                false
+            )
+            ->getText();
+    }
 }
