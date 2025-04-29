@@ -81,15 +81,14 @@ class ContentStream {
         );
 
         $text = '';
-        $previousOffsetY = null;
+        $previousPositionedTextElement = null;
         foreach ($positionedTextElements as $positionedTextElement) {
-            $currentOffsetY = $positionedTextElement->absoluteMatrix->offsetY;
-            if ($previousOffsetY !== null && $previousOffsetY !== $currentOffsetY) {
+            if ($previousPositionedTextElement !== null && $previousPositionedTextElement->absoluteMatrix->offsetY !== $positionedTextElement->absoluteMatrix->offsetY) {
                 $text .= "\n";
             }
 
-            $previousOffsetY = $currentOffsetY;
             $text .= $positionedTextElement->getText($document, $page->getFontDictionary());
+            $previousPositionedTextElement = $positionedTextElement;
         }
 
         return $text;

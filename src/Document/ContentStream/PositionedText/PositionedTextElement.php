@@ -47,6 +47,10 @@ class PositionedTextElement {
             } else {
                 throw new ParseFailureException(sprintf('Unrecognized character group format "%s"', $match['chars']));
             }
+
+            if (isset($match['offset']) && (float) $match['offset'] < -100) {
+                $string .= ' ';
+            }
         }
 
         return $string;
