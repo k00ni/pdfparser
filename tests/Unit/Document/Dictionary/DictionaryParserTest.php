@@ -13,7 +13,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\ExtendedDictionaryKey
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\DictionaryArrayValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\WValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\CrossReferenceStreamByteSizes;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Date\DateValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\EventNameValue;
@@ -53,7 +53,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::X_REF),
                 new DictionaryEntry(DictionaryKey::INDEX, new ArrayValue([0, 16])),
                 new DictionaryEntry(DictionaryKey::SIZE, new IntegerValue(16)),
-                new DictionaryEntry(DictionaryKey::W, new WValue(1, 2, 1)),
+                new DictionaryEntry(DictionaryKey::W, new CrossReferenceStreamByteSizes(1, 2, 1)),
                 new DictionaryEntry(DictionaryKey::ROOT, new ReferenceValue(13, 0)),
                 new DictionaryEntry(DictionaryKey::INFO, new ReferenceValue(14, 0)),
                 new DictionaryEntry(DictionaryKey::ID, new ArrayValue(['<F7F55EED423E47B1F3E311DE7CFCE2E5>', '<F7F55EED423E47B1F3E311DE7CFCE2E5>'])),
@@ -115,7 +115,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::ROOT, new ReferenceValue(4320, 0)),
                 new DictionaryEntry(DictionaryKey::SIZE, new IntegerValue(4738)),
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::X_REF),
-                new DictionaryEntry(DictionaryKey::W, new WValue(1, 4, 0)),
+                new DictionaryEntry(DictionaryKey::W, new CrossReferenceStreamByteSizes(1, 4, 0)),
             ),
             DictionaryParser::parse($stream, 0, $stream->getSizeInBytes())
         );
@@ -138,7 +138,7 @@ class DictionaryParserTest extends TestCase {
                 new DictionaryEntry(DictionaryKey::ROOT, new ReferenceValue(4320, 0)),
                 new DictionaryEntry(DictionaryKey::SIZE, new IntegerValue(4738)),
                 new DictionaryEntry(DictionaryKey::TYPE, TypeNameValue::X_REF),
-                new DictionaryEntry(DictionaryKey::W, new WValue(1, 4, 0)),
+                new DictionaryEntry(DictionaryKey::W, new CrossReferenceStreamByteSizes(1, 4, 0)),
             ),
             DictionaryParser::parse($stream, 0, $stream->getSizeInBytes())
         );

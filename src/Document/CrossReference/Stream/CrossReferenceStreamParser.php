@@ -10,7 +10,7 @@ use PrinsFrank\PdfParser\Document\CrossReference\Source\Section\SubSection\Entry
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryKey\DictionaryKey;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryParser;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\WValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\CrossReferenceStreamByteSizes;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Integer\IntegerValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Name\TypeNameValue;
 use PrinsFrank\PdfParser\Document\Generic\Marker;
@@ -35,7 +35,7 @@ class CrossReferenceStreamParser {
             throw new ParseFailureException('Expected stream of type xref');
         }
 
-        $wValue = $dictionary->getValueForKey(DictionaryKey::W, WValue::class)
+        $wValue = $dictionary->getValueForKey(DictionaryKey::W, CrossReferenceStreamByteSizes::class)
             ?? throw new ParseFailureException('Cross reference streams should have a dictionary entry for "W"');
         $startStream = $stream->getStartNextLineAfter(Marker::STREAM, $startPos, $startPos + $nrOfBytes)
             ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::STREAM->value));

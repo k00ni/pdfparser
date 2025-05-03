@@ -7,7 +7,7 @@ use Override;
 use PrinsFrank\PdfParser\Document\Dictionary\Dictionary;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\ArrayValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\DictionaryArrayValue;
-use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\WValue;
+use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Array\CrossReferenceStreamByteSizes;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Boolean\BooleanValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Date\DateValue;
 use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\Float\FloatValue;
@@ -1231,7 +1231,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::VIEWER_PREFERENCES => [Dictionary::class],
             self::VOLUME => [IntegerValue::class, FloatValue::class],
             self::VP => [Dictionary::class, DictionaryArrayValue::class, ArrayValue::class],
-            self::W => [WValue::class, IntegerValue::class, FloatValue::class, ReferenceValue::class],
+            self::W => [CrossReferenceStreamByteSizes::class, IntegerValue::class, FloatValue::class, ReferenceValue::class],
             self::W2 => [ArrayValue::class],
             self::WC => [Dictionary::class],
             self::WHITE_POINT => [ArrayValue::class],

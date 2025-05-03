@@ -7,7 +7,7 @@ use PrinsFrank\PdfParser\Document\Dictionary\DictionaryValue\DictionaryValue;
 use PrinsFrank\PdfParser\Exception\RuntimeException;
 
 /** @api */
-class WValue implements DictionaryValue {
+class CrossReferenceStreamByteSizes implements DictionaryValue {
     public function __construct(
         public readonly int $lengthRecord1InBytes,
         public readonly int $lengthRecord2InBytes,
@@ -36,6 +36,12 @@ class WValue implements DictionaryValue {
 
         $values = explode(' ', trim(rtrim(ltrim($valueString, '['), ']')));
         if (count($values) !== 3) {
+            return null;
+        }
+
+        if ((string) (int) trim($values[0]) !== trim($values[0])
+            || (string) (int) trim($values[1]) !== trim($values[1])
+            || (string) (int) trim($values[2]) !== trim($values[2])) {
             return null;
         }
 
