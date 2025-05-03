@@ -12,6 +12,7 @@ use PrinsFrank\PdfParser\Document\ContentStream\Object\TextObject;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\PositionedTextElement;
 use PrinsFrank\PdfParser\Document\ContentStream\PositionedText\TransformationMatrix;
 use PrinsFrank\PdfParser\Document\Document;
+use PrinsFrank\PdfParser\Document\Object\Decorator\Font;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
 use PrinsFrank\PdfParser\Exception\ParseFailureException;
 use PrinsFrank\PdfParser\Exception\PdfParserException;
@@ -57,7 +58,7 @@ class ContentStream {
                     $textMatrix = $contentStreamCommand->operator->applyToTransformationMatrix($contentStreamCommand->operands, $textMatrix);
                 }
 
-                if ($contentStreamCommand->operator instanceof ProducesPositionedTextElements) {
+                if ($contentStreamCommand->operator instanceof ProducesPositionedTextElements && $textState !== null) {
                     $positionedTextElements[] = $contentStreamCommand->operator->getPositionedTextElement($contentStreamCommand->operands, $textMatrix, $transformationMatrix, $textState);
                 }
             }
@@ -83,11 +84,22 @@ class ContentStream {
         $text = '';
         $previousPositionedTextElement = null;
         foreach ($positionedTextElements as $positionedTextElement) {
-            if ($previousPositionedTextElement !== null && $previousPositionedTextElement->absoluteMatrix->offsetY !== $positionedTextElement->absoluteMatrix->offsetY) {
-                $text .= "\n";
+            if ($positionedTextElement->textState->fontName === null) {
+                throw new ParseFailureException('Unable to locate font for text element');
             }
 
-            $text .= $positionedTextElement->getText($document, $page->getFontDictionary());
+            $font = $page->getFontDictionary()?->getObjectForReference($document, $positionedTextElement->textState->fontName, Font::class)
+                ?? throw new ParseFailureException(sprintf('Unable to locate font with reference "/%s"', $positionedTextElement->textState->fontName->value));
+
+            if ($previousPositionedTextElement !== null) {
+                if ($previousPositionedTextElement->absoluteMatrix->offsetY !== $positionedTextElement->absoluteMatrix->offsetY) {
+                    $text .= "\n";
+                } elseif (($positionedTextElement->absoluteMatrix->offsetX - $previousPositionedTextElement->absoluteMatrix->offsetX - $font->getWidthForChars($previousPositionedTextElement->getCodePoints(), $previousPositionedTextElement->textState, $previousPositionedTextElement->absoluteMatrix)) >= ($previousPositionedTextElement->textState->fontSize ?? 10) * $previousPositionedTextElement->absoluteMatrix->scaleX * 0.30) {
+                    $text .= ' ';
+                }
+            }
+
+            $text .= $positionedTextElement->getText($font);
             $previousPositionedTextElement = $positionedTextElement;
         }
 

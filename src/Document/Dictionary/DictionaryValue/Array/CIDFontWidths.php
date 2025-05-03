@@ -18,7 +18,7 @@ class CIDFontWidths implements DictionaryValue {
         $this->widths = $widths;
     }
 
-    public function getWidthForCharacterCode(int $characterCode): ?float {
+    public function getWidthForCharacter(int $characterCode): ?float {
         foreach ($this->widths as $widthItem) {
             if (($widthForCharacterCode = $widthItem->getWidthForCharacterCode($characterCode)) !== null) {
                 return $widthForCharacterCode;
@@ -30,7 +30,7 @@ class CIDFontWidths implements DictionaryValue {
 
     #[Override]
     public static function fromValue(string $valueString): ?self {
-        if (preg_match_all('/(?<startingCID>[0-9]+)\s+(?<CIDS>[0-9]+\s*[0-9.]+|\[[0-9. ]+\])/', $valueString, $matches, PREG_SET_ORDER) <= 0) {
+        if (preg_match_all('/(?<startingCID>[0-9]+)\s*(?<CIDS>[0-9]+\s*[0-9.]+|\[[0-9. ]+\])/', $valueString, $matches, PREG_SET_ORDER) <= 0) {
             return null;
         }
 
