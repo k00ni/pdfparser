@@ -35,6 +35,17 @@ composer require prinsfrank/pdfparser
     <p>This needs to point to the <code>.al-custom.php</code> file in the directory that the contents of this package is in.</p>
 </details>
 
+The most common use case - extracting text from a document - is then just as simple as this;
+
+```php
+use PrinsFrank\PdfParser\PdfParser;
+
+$document = (new PdfParser())
+    ->parseFile($path);
+
+$document->getText();
+```
+
 ## Support
 
 This is one of my biggest projects I've ever worked on, and over the past few months I spent hundreds of hours working on this. Please consider [Sponsoring me on GitHub](https://github.com/sponsors/PrinsFrank) to support this project. Thanks!!
