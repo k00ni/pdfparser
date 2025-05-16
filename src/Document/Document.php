@@ -14,6 +14,7 @@ use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObject;
 use PrinsFrank\PdfParser\Document\Object\Decorator\DecoratedObjectFactory;
 use PrinsFrank\PdfParser\Document\Object\Decorator\InformationDictionary;
 use PrinsFrank\PdfParser\Document\Object\Decorator\Page;
+use PrinsFrank\PdfParser\Document\Object\Decorator\XObject;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObject;
 use PrinsFrank\PdfParser\Document\Object\Item\UncompressedObject\UncompressedObjectParser;
 use PrinsFrank\PdfParser\Document\Version\Version;
@@ -152,5 +153,18 @@ final class Document {
         }
 
         return $text;
+    }
+
+    /**
+     * @throws PdfParserException
+     * @return list<XObject>
+     */
+    public function getImages(): array {
+        $images = [];
+        foreach ($this->getPages() as $page) {
+            $images = [... $images, ...$page->getImages()];
+        }
+
+        return $images;
     }
 }
