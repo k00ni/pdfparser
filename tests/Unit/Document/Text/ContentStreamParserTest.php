@@ -48,6 +48,29 @@ class ContentStreamParserTest extends TestCase {
         );
     }
 
+    public function testParseWithOperatorOnNewLine(): void {
+        static::assertEquals(
+            new ContentStream(
+                (new TextObject())
+                    ->addContentStreamCommand(new ContentStreamCommand(TextStateOperator::FONT_SIZE, '/F1 24'))
+                    ->addContentStreamCommand(new ContentStreamCommand(TextPositioningOperator::MOVE_OFFSET, '100 100'))
+                    ->addContentStreamCommand(new ContentStreamCommand(TextShowingOperator::SHOW, '( Hello World )'))
+            ),
+            ContentStreamParser::parse(
+                <<<EOD
+                BT
+                /F1 24
+                Tf
+                100 100
+                Td
+                ( Hello World )
+                Tj
+                ET
+                EOD
+            )
+        );
+    }
+
     public function testParseWithArrayDelimiterInStringLiteral(): void {
         static::assertEquals(
             new ContentStream(
