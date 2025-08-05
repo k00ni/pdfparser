@@ -21,7 +21,7 @@ class CrossReferenceTableParser {
             ?? throw new ParseFailureException('Unable to locate trailer for crossReferenceTable');
         $dictionary = DictionaryParser::parse($stream, $startTrailerPos + Marker::TRAILER->length(), $nrOfBytes - ($startTrailerPos + Marker::TRAILER->length() - $startPos));
 
-        $objectNumber = $nrOfEntries = null;
+        $firstObjectNumber = $nrOfEntries = null;
         $crossReferenceSubSections = $crossReferenceEntries = [];
         $content = trim($stream->read($startPos, $startTrailerPos - $startPos));
         $content = str_replace([WhitespaceCharacter::CARRIAGE_RETURN->value, WhitespaceCharacter::LINE_FEED->value . WhitespaceCharacter::LINE_FEED->value], WhitespaceCharacter::LINE_FEED->value, $content);
@@ -29,11 +29,11 @@ class CrossReferenceTableParser {
             $sections = explode(WhitespaceCharacter::SPACE->value, trim($line));
             switch (count($sections)) {
                 case 2:
-                    if ($objectNumber !== null && $nrOfEntries !== null) {
-                        $crossReferenceSubSections[] = new CrossReferenceSubSection($objectNumber, $nrOfEntries, ... $crossReferenceEntries); // Use previous objectNr and nrOfEntries
+                    if ($firstObjectNumber !== null && $nrOfEntries !== null) {
+                        $crossReferenceSubSections[] = new CrossReferenceSubSection($firstObjectNumber, $nrOfEntries, ... $crossReferenceEntries); // Use previous objectNr and nrOfEntries
                     }
                     $crossReferenceEntries = [];
-                    $objectNumber = (int) $sections[0];
+                    $firstObjectNumber = (int) $sections[0];
                     $nrOfEntries = (int) $sections[1];
                     break;
                 case 3:
@@ -48,8 +48,8 @@ class CrossReferenceTableParser {
             }
         }
 
-        if ($objectNumber !== null && $nrOfEntries !== null) {
-            $crossReferenceSubSections[] = new CrossReferenceSubSection($objectNumber, $nrOfEntries, ... $crossReferenceEntries);
+        if ($firstObjectNumber !== null && $nrOfEntries !== null) {
+            $crossReferenceSubSections[] = new CrossReferenceSubSection($firstObjectNumber, $nrOfEntries, ... $crossReferenceEntries);
         }
 
         return new CrossReferenceSection($dictionary, ... $crossReferenceSubSections);
