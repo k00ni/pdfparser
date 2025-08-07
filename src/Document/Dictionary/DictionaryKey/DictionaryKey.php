@@ -1234,7 +1234,7 @@ enum DictionaryKey: string implements DictionaryKeyInterface {
             self::VIEW_CLIP => [TextStringValue::class],
             self::VIEWER_PREFERENCES => [Dictionary::class],
             self::VOLUME => [IntegerValue::class, FloatValue::class],
-            self::VP => [Dictionary::class, DictionaryArrayValue::class, ArrayValue::class],
+            self::VP => [Dictionary::class, DictionaryArrayValue::class, ReferenceValueArray::class, ArrayValue::class],
             self::W => [CrossReferenceStreamByteSizes::class, CIDFontWidths::class, IntegerValue::class, FloatValue::class, ReferenceValue::class],
             self::W2 => [ArrayValue::class],
             self::WC => [Dictionary::class],
