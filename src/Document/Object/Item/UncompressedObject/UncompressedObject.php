@@ -82,22 +82,26 @@ class UncompressedObject implements ObjectItem {
 
     #[Override]
     public function getContent(Document $document): string {
-        if (($startStreamPos = $document->stream->getStartNextLineAfter(Marker::STREAM, $this->startOffset, $this->endOffset)) === null
-            || ($endStreamPos = $document->stream->firstPos(Marker::END_STREAM, $startStreamPos, $this->endOffset)) === null) {
-            $startMarkerLen = strlen(sprintf('%d %d obj', $this->objectNumber, $this->generationNumber));
-
-            return $document->stream->read(
-                $this->startOffset + $startMarkerLen,
-                $this->endOffset - $this->startOffset - $startMarkerLen - strlen(Marker::END_STREAM->value),
+        if (($startStreamPos = $document->stream->getStartNextLineAfter(Marker::STREAM, $this->startOffset, $this->endOffset)) !== null
+            && ($endStreamPos = $document->stream->firstPos(Marker::END_STREAM, $startStreamPos, $this->endOffset)) !== null) {
+            return CompressedObjectContentParser::parseBinary(
+                $document,
+                $startStreamPos,
+                ($document->stream->getEndOfCurrentLine($endStreamPos - 1, $this->endOffset)
+                    ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', WhitespaceCharacter::LINE_FEED->value))) - $startStreamPos,
+                $this->getDictionary($document),
             );
         }
 
-        return CompressedObjectContentParser::parseBinary(
-            $document,
-            $startStreamPos,
-            ($document->stream->getEndOfCurrentLine($endStreamPos - 1, $this->endOffset)
-            ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', WhitespaceCharacter::LINE_FEED->value))) - $startStreamPos,
-            $this->getDictionary($document),
+        $nextLineAfterStartObj = $document->stream->getStartNextLineAfter(Marker::OBJ, $this->startOffset, $this->endOffset)
+            ?? throw new ParseFailureException(sprintf('Unable to locate newline after marker %s', Marker::OBJ->value));
+        $endObjPos = $document->stream->firstPos(Marker::END_OBJ, $nextLineAfterStartObj, $this->endOffset)
+            ?? throw new ParseFailureException(sprintf('Unable to locate marker %s', Marker::END_OBJ->value));
+        $eolObjContent = $document->stream->getEndOfCurrentLine($endObjPos - 2, $this->endOffset)
+            ?? throw new ParseFailureException(sprintf('Unable to locate newline after marker %s', Marker::END_OBJ->value));
+        return $document->stream->read(
+            $nextLineAfterStartObj,
+            $eolObjContent - $nextLineAfterStartObj,
         );
     }
 }
