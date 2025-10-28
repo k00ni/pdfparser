@@ -22,9 +22,7 @@ class SamplesTest extends TestCase {
         $document = (new PdfParser())->parseFile($fileInfo->pdfPath);
 
         // PDF version
-        if (null !== $document->version) {
-            static::assertSame(Version::from(number_format($fileInfo->version / 10, 1)), $document->version);
-        }
+        static::assertSame(Version::from(number_format($fileInfo->version / 10, 1)), $document->version);
 
         // title
         if (null !== $fileInfo->title) {
